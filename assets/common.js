@@ -31,14 +31,34 @@
         bar.appendChild(a);
       });
     }
-    // 교사 모드
+    // file:// 로 열면 localStorage 가 막힐 수 있으므로 감싸 둔다
+    var store = {
+      get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+      set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) { } }
+    };
+    // 화면 밝기 (어두운 화면 / 밝은 화면)
     var tg = document.querySelector(".tmode");
     if (tg) {
-      // file:// 로 열면 localStorage 가 막힐 수 있으므로 감싸 둔다
-      var store = {
-        get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-        set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) { } }
+      var th = document.createElement("button");
+      th.type = "button";
+      th.className = "theme-btn";
+      var paint = function () {
+        var light = document.documentElement.getAttribute("data-theme") === "light";
+        th.innerHTML = light ? '<span class="ic">🌙</span>어두운 화면' : '<span class="ic">☀</span>밝은 화면';
+        th.title = light ? "어두운 화면으로 바꾸기" : "밝은 화면으로 바꾸기";
       };
+      th.addEventListener("click", function () {
+        var light = document.documentElement.getAttribute("data-theme") !== "light";
+        if (light) document.documentElement.setAttribute("data-theme", "light");
+        else document.documentElement.removeAttribute("data-theme");
+        store.set("suj-theme", light ? "light" : "dark");
+        paint();
+      });
+      paint();
+      tg.parentNode.insertBefore(th, tg);
+    }
+    // 교사 모드
+    if (tg) {
       if (store.get("suj-teacher") === "1") document.body.classList.add("teacher-on");
       tg.addEventListener("click", function () {
         var on = document.body.classList.toggle("teacher-on");
@@ -96,6 +116,8 @@
     var t0 = performance.now();
     (function tick(now) {
       var t = (now - t0) / 1000;
+      // 밝은 화면에서는 배경 별을 숨기므로 그리지 않는다
+      if (document.documentElement.getAttribute("data-theme") === "light") { requestAnimationFrame(tick); return; }
       ctx.clearRect(0, 0, W, H);
       for (var i = 0; i < stars.length; i++) {
         var s = stars[i];

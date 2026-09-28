@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>03 별의 표면 온도와 색 | Ⅷ. 별과 우주</title>
 <link rel="stylesheet" href="assets/style.css">
+<script>try{if(localStorage.getItem("suj-theme")==="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
 <style>
   .hotspot { position: relative; }
   .hotspot .mk {
     position: absolute; transform: translate(-50%, -50%);
     width: 30px; height: 30px; border-radius: 50%;
-    border: 2px solid var(--accent-2); box-shadow: 0 0 0 4px rgba(255,209,102,.16);
+    border: 2px solid #ffd166; box-shadow: 0 0 0 4px rgba(255,209,102,.16);
     animation: ping 2.4s ease-out infinite;
   }
   .hotspot .mk.blue { border-color: #8fc0ff; box-shadow: 0 0 0 4px rgba(143,192,255,.16); animation-delay: 1.2s; }
   .hotspot .tag {
     position: absolute; transform: translate(-50%, 0); white-space: nowrap;
     font-size: .76rem; font-weight: 800; padding: 3px 9px; border-radius: 8px;
-    background: rgba(6,10,24,.82); border: 1px solid var(--accent-2); color: var(--accent-2);
+    background: rgba(6,10,24,.82); border: 1px solid #ffd166; color: #ffd166;
   }
   .hotspot .tag.blue { border-color: #8fc0ff; color: #b9d7ff; }
   @keyframes ping { 0% { transform: translate(-50%,-50%) scale(.75); opacity: 1 } 70%,100% { transform: translate(-50%,-50%) scale(1.5); opacity: 0 } }
@@ -128,13 +129,13 @@
     <table class="data">
       <thead><tr><th style="width:22%">색</th><th style="width:30%">대략적인 표면 온도</th><th>별의 예</th></tr></thead>
       <tbody>
-        <tr><td class="name" style="color:#9fc0ff">청색</td><td class="tnum">30000 K 이상</td><td>나오스</td></tr>
-        <tr><td class="name" style="color:#c3d6ff">청백색</td><td class="tnum">10000 ~ 30000 K</td><td>리겔, 스피카</td></tr>
-        <tr><td class="name" style="color:#eef0ff">백색</td><td class="tnum">7500 ~ 10000 K</td><td>시리우스, 베가</td></tr>
-        <tr><td class="name" style="color:#fff3d8">황백색</td><td class="tnum">6000 ~ 7500 K</td><td>카노푸스, 프로키온</td></tr>
-        <tr><td class="name" style="color:#ffe08a">황색</td><td class="tnum">5000 ~ 6000 K</td><td>태양, 카펠라</td></tr>
-        <tr><td class="name" style="color:#ffb066">주황색</td><td class="tnum">3500 ~ 5000 K</td><td>아르크투루스, 알데바란</td></tr>
-        <tr><td class="name" style="color:#ff8a6b">적색</td><td class="tnum">3500 K 미만</td><td>베텔게우스, 안타레스</td></tr>
+        <tr><td class="name" style="color:var(--sc-blue)">청색</td><td class="tnum">30000 K 이상</td><td>나오스</td></tr>
+        <tr><td class="name" style="color:var(--sc-bluewhite)">청백색</td><td class="tnum">10000 ~ 30000 K</td><td>리겔, 스피카</td></tr>
+        <tr><td class="name" style="color:var(--sc-white)">백색</td><td class="tnum">7500 ~ 10000 K</td><td>시리우스, 베가</td></tr>
+        <tr><td class="name" style="color:var(--sc-yellowwhite)">황백색</td><td class="tnum">6000 ~ 7500 K</td><td>카노푸스, 프로키온</td></tr>
+        <tr><td class="name" style="color:var(--sc-yellow)">황색</td><td class="tnum">5000 ~ 6000 K</td><td>태양, 카펠라</td></tr>
+        <tr><td class="name" style="color:var(--sc-orange)">주황색</td><td class="tnum">3500 ~ 5000 K</td><td>아르크투루스, 알데바란</td></tr>
+        <tr><td class="name" style="color:var(--sc-red)">적색</td><td class="tnum">3500 K 미만</td><td>베텔게우스, 안타레스</td></tr>
       </tbody>
     </table>
     </div>
@@ -151,7 +152,7 @@
       </figure>
       <div class="card">
         <h3>색만 보고도 알 수 있는 것</h3>
-        <p style="color:var(--dim)">알비레오 A는 <b style="color:#ffb066">주황색</b>, 알비레오 B는 <b style="color:#c3d6ff">청백색</b>입니다.
+        <p style="color:var(--dim)">알비레오 A는 <b style="color:var(--sc-orange)">주황색</b>, 알비레오 B는 <b style="color:var(--sc-bluewhite)">청백색</b>입니다.
           따라서 <b style="color:var(--txt)">알비레오 B가 알비레오 A보다 표면 온도가 높습니다.</b></p>
         <p style="color:var(--dim); margin-bottom:0">황색인 태양(약 6000 K)과 비교하면 표면 온도는
           <b style="color:var(--accent-2)">알비레오 A → 태양 → 알비레오 B</b> 순으로 높아집니다.</p>
