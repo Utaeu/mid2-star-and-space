@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>단원 정리 · 평가 | Ⅷ. 별과 우주</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .fill { display:inline-block; min-width:74px; text-align:center; padding:1px 10px; margin:0 2px;
+    border-bottom:2px dotted var(--accent-2); color:transparent; cursor:pointer; font-weight:800;
+    border-radius:4px; transition:.18s; user-select:none; }
+  .fill::before { content:attr(data-ph); color:var(--dim-2); font-weight:600; }
+  .fill.on { color:var(--accent-2); background:rgba(255,209,102,.12); }
+  .fill.on::before { content:""; }
+  .cluelist { display:grid; gap:8px; }
+  .clue { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 15px;
+    display:flex; gap:12px; align-items:center; cursor:pointer; transition:.16s; }
+  .clue:hover { border-color:var(--accent); }
+  .clue .no { font-weight:900; color:var(--accent-3); flex:none; min-width:22px; }
+  .clue .tx { flex:1; font-size:.93rem; }
+  .clue .an { font-weight:900; color:var(--accent-2); opacity:0; transition:.2s; }
+  .clue.on .an { opacity:1; }
+</style>
+</head>
+<body>
+<canvas id="bg-stars"></canvas><div id="bg-glow"></div>
+<div id="progress"></div>
+
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><span class="dot"></span><span>Ⅷ. 별과 우주 <small>중2 과학</small></span></a>
+  <nav class="chips"></nav>
+  <div class="tmode"><span class="sw"></span>교사 모드</div>
+</div></header>
+
+<main class="wrap">
+
+  <div class="page-head">
+    <span class="eyebrow">중단원 점검 · 대단원 마무리</span>
+    <h1>단원 <em>정리</em>와 평가</h1>
+    <p class="lede">개념 정리 쏙쏙 · 생각 그물 쓱쓱 · 꿀잼 퀴즈 도전 · 문제로 확인 콕콕 · 실력 향상 쑥쑥을
+      한곳에 모았습니다. 빈칸과 문항을 눌러 스스로 점검해 보세요.</p>
+  </div>
+
+  <!-- 생각 그물 -->
+  <section class="block" id="map">
+    <h2 class="sec"><span class="num">쓱쓱</span> 생각 그물 <span class="qq">교과서 308쪽</span></h2>
+    <p class="sec-sub">단원 전체의 개념이 어떻게 연결되는지 한눈에 살펴보세요. 마디를 누르면 설명이 나타납니다.</p>
+    <div class="sim">
+      <div class="sim-head">
+        <h4>Ⅷ. 별과 우주 — 개념 지도</h4>
+        <span class="hint">마디를 클릭하세요</span>
+      </div>
+      <canvas id="cvMap"></canvas>
+      <div class="readout">
+        <div class="stat"><div class="k">선택한 개념</div><div class="v" id="mpN">별과 우주</div></div>
+        <div class="stat amber" style="flex:1; min-width:320px"><div class="k">설명</div>
+          <div class="v" id="mpD" style="font-size:.93rem; color:var(--txt); font-weight:700; line-height:1.55">
+            별의 특징과 우주의 구조·팽창·탐사를 다루는 단원입니다.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 개념 정리 -->
+  <section class="block" id="summary">
+    <h2 class="sec"><span class="num">쏙쏙</span> 개념 정리 <span class="qq">교과서 290 · 306쪽</span></h2>
+    <p class="sec-sub">노란 빈칸을 누르면 답이 나타납니다.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>Ⅷ-1. 별</h3>
+        <ul style="margin:0; padding-left:20px; color:var(--dim); line-height:2.1">
+          <li><b style="color:var(--txt)">별의 연주 시차</b> : 지구에서 <span class="fill" data-ph="①" data-a="6개월"></span> 간격으로 별을 관측했을 때 나타나는 시차의 ½</li>
+          <li>연주 시차가 1″인 별의 거리는 <span class="fill" data-ph="②" data-a="1 pc"></span>이다.</li>
+          <li><b style="color:var(--txt)">별의 밝기와 거리</b> : 별의 밝기는 거리의 <span class="fill" data-ph="③" data-a="제곱"></span>에 반비례</li>
+          <li><b style="color:var(--txt)">겉보기 등급</b> : 우리 눈에 보이는 별의 밝기를 등급으로 나타낸 것.
+            1등급은 6등급보다 <span class="fill" data-ph="④" data-a="100배"></span> 밝다.</li>
+          <li><b style="color:var(--txt)">절대 등급</b> : 모든 별이 <span class="fill" data-ph="⑤" data-a="10"></span> pc의 거리에 있다고 가정했을 때의 밝기</li>
+          <li><b style="color:var(--txt)">등급과 거리</b> : 별이 10 pc보다 가까이 있으면 겉보기 등급이 절대 등급보다
+            <span class="fill" data-ph="⑥" data-a="작고"></span>, 10 pc보다 멀리 있으면 겉보기 등급이 절대 등급보다
+            <span class="fill" data-ph="⑦" data-a="크다"></span>.</li>
+          <li><b style="color:var(--txt)">표면 온도와 색</b> : 청색 → 청백색 → 백색 → 황백색 → 황색 → 주황색 → 적색 순으로 온도가 낮아진다.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Ⅷ-2. 우주</h3>
+        <ul style="margin:0; padding-left:20px; color:var(--dim); line-height:2.1">
+          <li><b style="color:var(--txt)">우리은하</b> : 태양계가 속해 있는 은하. 지름 약 30000 pc, 태양은 중심에서 약 8500 pc 떨어진 나선팔에 위치</li>
+          <li><b style="color:var(--txt)">성단</b> : 수십~수만 개의 별이 일정한 모양 없이 모인 <b>산개 성단</b>,
+            수만~수십만 개의 별이 빽빽하게 모여 공 모양을 이루는 <span class="fill" data-ph="①" data-a="구상"></span> 성단</li>
+          <li><b style="color:var(--txt)">성운</b> : 붉은빛의 <b>방출 성운</b>, 파란빛의 <b>반사 성운</b>,
+            뒤에서 오는 별빛을 가려 검게 보이는 <span class="fill" data-ph="②" data-a="암흑 성운"></span></li>
+          <li><b style="color:var(--txt)">우주 팽창</b> : 외부 은하들이 서로 <span class="fill" data-ph="③" data-a="멀어"></span>지고 있음을 관측하여
+            우주가 팽창하는 것을 알 수 있다.</li>
+          <li><b style="color:var(--txt)">우주 탐사의 성과</b> : 스푸트니크 1호, 아폴로 11호, 허블 우주 망원경, 국제 우주 정거장[ISS], 누리호, 다누리호</li>
+          <li><b style="color:var(--txt)">우주 탐사의 의의</b> : 우주에 대한 지식과 이해 / 우주 탐사 과정에서 과학 기술의 발전</li>
+          <li><b style="color:var(--txt)">인류에게 미친 영향</b> : 인공위성(통신·GPS), 전자레인지, 기능성 옷감, 형상 기억 합금, MRI</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 꿀잼 퀴즈 -->
+  <section class="block" id="fun">
+    <h2 class="sec"><span class="num">도전</span> 꿀잼 퀴즈 <span class="qq">교과서 290 · 306쪽</span></h2>
+
+    <h3 class="mini">Ⅷ-1. 별 — 암호 해독</h3>
+    <div class="cluelist" id="clue1">
+      <div class="clue" data-a="6개월"><span class="no">1</span><span class="tx">별의 연주 시차는 지구에서 □□□ 간격으로 별을 관측했을 때 나타나는 시차의 ½ 값이다.</span><span class="an"></span></div>
+      <div class="clue" data-a="1 pc"><span class="no">2</span><span class="tx">연주 시차가 1″인 별의 거리는 □□이다.</span><span class="an"></span></div>
+      <div class="clue" data-a="4배"><span class="no">3</span><span class="tx">광원까지 거리가 2배 멀어지면 밝기는 □□ 어두워진다.</span><span class="an"></span></div>
+      <div class="clue" data-a="절대"><span class="no">4</span><span class="tx">별이 10 pc에 있을 때 별의 밝기를 □□ 등급이라고 한다.</span><span class="an"></span></div>
+      <div class="clue" data-a="작다"><span class="no">5</span><span class="tx">별이 10 pc보다 멀리 떨어져 있으면 절대 등급이 겉보기 등급보다 □□.</span><span class="an"></span></div>
+      <div class="clue" data-a="높다"><span class="no">6</span><span class="tx">청색 별은 적색 별보다 별의 표면 온도가 □□.</span><span class="an"></span></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p style="margin:0">완성된 암호문은?
+        <button class="btn amber" data-reveal="codeA" data-label="암호문 확인">암호문 확인</button></p>
+      <div class="reveal" id="codeA"><b class="kw2" style="font-size:1.2rem">나는 별 전문가</b>
+        <div class="note-sm" style="margin-top:8px">
+          해설 · 1. 지구 공전 궤도의 양 끝에서 측정하므로 6개월이다. 2. 1 pc은 연주 시차가 1″인 별까지의 거리이다.
+          3. 밝기는 거리의 제곱에 반비례한다. 4. 절대 등급은 별이 10 pc에 있을 때의 밝기를 말한다.
+          5. 10 pc보다 멀리 있는 별을 10 pc에 두면 더 밝아지므로 절대 등급이 더 작게 된다.
+          6. 별의 색이 청색, 청백색, 백색, 황백색, 황색, 주황색, 적색 순으로 표면 온도가 낮아진다.
+        </div>
+      </div>
+    </div>
+
+    <h3 class="mini">Ⅷ-2. 우주 — 낱말 퍼즐</h3>
+    <div class="grid g2">
+      <div>
+        <p class="note-sm" style="margin:0 0 8px"><b>가로 열쇠</b></p>
+        <div class="cluelist" id="clue2">
+          <div class="clue" data-a="우리은하"><span class="no">①</span><span class="tx">태양계가 속한 은하</span><span class="an"></span></div>
+          <div class="clue" data-a="반사 성운"><span class="no">②</span><span class="tx">주변의 별빛을 반사하여 파란빛을 내는 성운</span><span class="an"></span></div>
+          <div class="clue" data-a="구상 성단"><span class="no">③</span><span class="tx">수만~수십만 개의 별들이 빽빽하게 모여 공 모양을 이루는 성단</span><span class="an"></span></div>
+          <div class="clue" data-a="우주복"><span class="no">④</span><span class="tx">우주인이 우주에서 입는 옷</span><span class="an"></span></div>
+          <div class="clue" data-a="암흑 성운"><span class="no">⑤</span><span class="tx">뒤에서 오는 별빛을 가려 검게 보이는 성운</span><span class="an"></span></div>
+        </div>
+      </div>
+      <div>
+        <p class="note-sm" style="margin:0 0 8px"><b>세로 열쇠</b></p>
+        <div class="cluelist" id="clue3">
+          <div class="clue" data-a="은하수"><span class="no">㉮</span><span class="tx">밤하늘을 가로지르는 별 무리 띠</span><span class="an"></span></div>
+          <div class="clue" data-a="우주 탐사"><span class="no">㉯</span><span class="tx">우주에 대한 지식과 이해를 위한 인류의 탐사 활동</span><span class="an"></span></div>
+          <div class="clue" data-a="성간 물질"><span class="no">㉰</span><span class="tx">별과 별 사이의 공간에 퍼져 있는 기체와 먼지</span><span class="an"></span></div>
+          <div class="clue" data-a="형상 기억 합금"><span class="no">㉱</span><span class="tx">우주선 안테나에 쓰기 위해 개발된 합금으로 안경테에도 쓰임</span><span class="an"></span></div>
+          <div class="clue" data-a="산개 성단"><span class="no">㉲</span><span class="tx">우리은하 나선팔에 주로 분포하며 젊은 별로 구성된 성단</span><span class="an"></span></div>
+          <div class="clue" data-a="우주 망원경"><span class="no">㉳</span><span class="tx">우주 공간에서 천체를 관측하는 망원경</span><span class="an"></span></div>
+          <div class="clue" data-a="방출 성운"><span class="no">㉴</span><span class="tx">근처에 있는 고온의 별로부터 에너지를 받아 붉은빛을 내는 성운</span><span class="an"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 평가 문항 -->
+  <section class="block" id="test">
+    <h2 class="sec"><span class="num">콕콕</span> 문제로 확인 &amp; 실력 향상 <span class="qq">교과서 291 · 307 · 309~311쪽</span></h2>
+    <p class="sec-sub">모두 <b>12문항</b>입니다. 답을 고르면 바로 채점되고 해설이 나타납니다.</p>
+
+    <div class="quiz">
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">1</span><span class="qt">시차와 연주 시차에 대한 설명으로 옳은 것은?</span></div>
+        <div class="opts">
+          <button class="opt">멀리 떨어진 물체일수록 시차가 크다.</button>
+          <button class="opt">시차를 이용하여 거리를 비교할 수 있다.</button>
+          <button class="opt">별의 연주 시차를 구하려면 지구에서 1년 간격으로 별을 관측해야 한다.</button>
+        </div>
+        <div class="sol">시차는 물체와의 거리가 멀어질수록 <b>작아집니다</b>. 시차와 거리는 반비례 관계가 있어 시차로 거리를 비교할 수 있습니다.
+          연주 시차는 <b>6개월 간격</b>으로 별을 관측해서 구합니다.</div>
+      </div>
+
+      <div class="q" data-a="2">
+        <div class="qh"><span class="qn">2</span><span class="qt">그림은 지구에서 6개월 간격으로 별 S를 관측한 시차가 1″임을 나타낸 것이다. 옳은 설명은?<br>
+          <span class="note-sm">ㄱ. 별 S의 연주 시차는 1″이다. · ㄴ. 시차가 1″인 별까지의 거리는 1 pc이다. · ㄷ. 지구로부터 멀리 있는 별일수록 연주 시차가 작아진다.</span></span></div>
+        <div class="opts">
+          <button class="opt">ㄱ, ㄴ</button><button class="opt">ㄱ, ㄷ</button><button class="opt">ㄷ</button><button class="opt">ㄱ, ㄴ, ㄷ</button>
+        </div>
+        <div class="sol">ㄱ. 별 S는 <b>시차</b>가 1″이므로 연주 시차는 그 절반인 0.5″입니다.
+          ㄴ. <b>연주 시차</b>가 1″인 별까지의 거리가 1 pc입니다. → 옳은 것은 <b>ㄷ</b>뿐입니다.</div>
+      </div>
+
+      <div class="q" data-a="4">
+        <div class="qh"><span class="qn">3</span><span class="qt">겉보기 등급과 절대 등급에 대한 설명으로 옳은 것은?</span></div>
+        <div class="opts">
+          <button class="opt">① 절대 등급은 관측자에게 보이는 별의 밝기이다.</button>
+          <button class="opt">② 절대 등급이 작을수록 실제로 어두운 별이다.</button>
+          <button class="opt">③ 겉보기 등급으로 별의 실제 밝기를 비교할 수 있다.</button>
+          <button class="opt">④ 겉보기 등급은 별이 10 pc의 거리에 있다고 가정할 때의 등급이다.</button>
+          <button class="opt">⑤ 절대 등급이 같을 때 멀리 있는 별의 겉보기 등급이 크다.</button>
+        </div>
+        <div class="sol">같은 밝기의 별은 거리가 멀어질수록 어둡게 관측되므로 겉보기 등급이 커집니다. → <b>⑤</b></div>
+      </div>
+
+      <div class="q" data-a="4">
+        <div class="qh"><span class="qn">4</span><span class="qt">표는 별들의 겉보기 등급과 절대 등급이다. 옳은 설명은?<br>
+          <span class="note-sm">시리우스 −1.5 / +1.4 · 베가 +0.0 / +0.5 · 리겔 +0.1 / −6.8 · 베텔게우스 +0.6 / −5.9</span></span></div>
+        <div class="opts">
+          <button class="opt">① 실제로 가장 밝은 별은 시리우스이다.</button>
+          <button class="opt">② 베가는 10 pc보다 멀리 있다.</button>
+          <button class="opt">③ 베텔게우스는 10 pc보다 가까이 있다.</button>
+          <button class="opt">④ 지구에서 가장 밝게 관측되는 별은 리겔이다.</button>
+          <button class="opt">⑤ 지구에서 가장 어둡게 보이는 별은 베텔게우스이다.</button>
+        </div>
+        <div class="sol">① 실제로 가장 밝은 별은 절대 등급이 가장 작은 <b>리겔</b> ② 베가는 겉보기 등급이 절대 등급보다 작으므로 10 pc보다 <b>가까운</b> 별
+          ③ 베텔게우스는 겉보기 등급이 절대 등급보다 크므로 10 pc보다 <b>멀리</b> 있음 ④ 가장 밝게 관측되는 별은 겉보기 등급이 가장 작은 <b>시리우스</b>
+          ⑤ 겉보기 등급이 가장 큰 베텔게우스가 가장 어둡게 보임 → <b>⑤</b></div>
+      </div>
+
+      <div class="q" data-a="2">
+        <div class="qh"><span class="qn">5</span><span class="qt">별 A~D 중 지구로부터 가장 가까운 별과 가장 먼 별을 옳게 짝지은 것은?<br>
+          <span class="note-sm">A : 연주 시차가 1″ · B : 지구로부터 5 pc · C : 겉보기 등급과 절대 등급이 같음 · D : 절대 등급이 겉보기 등급보다 작음</span></span></div>
+        <div class="opts">
+          <button class="opt">① 가장 가까운 별 A — 가장 먼 별 B</button>
+          <button class="opt">② 가장 가까운 별 A — 가장 먼 별 C</button>
+          <button class="opt">③ 가장 가까운 별 A — 가장 먼 별 D</button>
+          <button class="opt">④ 가장 가까운 별 B — 가장 먼 별 C</button>
+          <button class="opt">⑤ 가장 가까운 별 B — 가장 먼 별 D</button>
+        </div>
+        <div class="sol">A는 연주 시차가 1″이므로 1 pc, B는 5 pc, C는 두 등급이 같으므로 10 pc,
+          D는 절대 등급이 겉보기 등급보다 작으므로 10 pc보다 멉니다. 거리는 <b>A – B – C – D</b> 순 → <b>③</b></div>
+      </div>
+
+      <div class="q" data-a="2">
+        <div class="qh"><span class="qn">6</span><span class="qt"><span class="pill">창의력·코딩</span> “만약 별까지의 거리가 3배로 (조건)” → “별의 밝기는 거리의 (A)에 (과정)하므로” → “별의 밝기는 원래 밝기의 (B)배로 변하기”.
+          조건, A, 과정, B에 들어갈 내용으로 옳은 것은?</span></div>
+        <div class="opts">
+          <button class="opt">① 멀어지면 / 두 배 / 비례 / 6</button>
+          <button class="opt">② 멀어지면 / 제곱 / 비례 / ⅙</button>
+          <button class="opt">③ 멀어지면 / 제곱 / 반비례 / ⅑</button>
+          <button class="opt">④ 가까워지면 / 두 배 / 반비례 / 6</button>
+          <button class="opt">⑤ 가까워지면 / 제곱 / 비례 / ⅑</button>
+        </div>
+        <div class="sol">별의 밝기는 거리의 제곱에 반비례합니다. 거리의 변화가 3배이므로 밝기는 <b>⅑배</b>가 됩니다. → <b>③</b></div>
+      </div>
+
+      <div class="q" data-a="4">
+        <div class="qh"><span class="qn">7</span><span class="qt"><span class="pill">사고력</span> 겉보기 등급과 색을 나타낸 그림에서, 별 A~E 중 표면 온도가 가장 낮고 지구에서 가장 어둡게 보이는 별은?
+          <span class="note-sm">(가장 적색에 가까운 두 별은 D와 E이며, 겉보기 등급은 E가 D보다 크다.)</span></span></div>
+        <div class="opts"><button class="opt">① A</button><button class="opt">② B</button><button class="opt">③ C</button><button class="opt">④ D</button><button class="opt">⑤ E</button></div>
+        <div class="sol">표면 온도가 낮을수록 적색에 가깝고, 지구에서 볼 때 어두울수록 겉보기 등급이 큽니다.
+          따라서 적색에 가장 가까운 D와 E 중 겉보기 등급이 더 큰 <b>E</b>가 더 어둡게 보이는 별입니다.</div>
+      </div>
+
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">8</span><span class="qt">그림은 우리은하를 위에서 본 모습이다. A(은하 중심 부근), B(중심에서 약 8500 pc 떨어진 나선팔), C(가장 바깥쪽) 중 태양계의 위치는?</span></div>
+        <div class="opts"><button class="opt">A</button><button class="opt">B</button><button class="opt">C</button></div>
+        <div class="sol">우리은하는 지름이 30000 pc이며 태양계는 중심으로부터 <b>8500 pc 떨어진 나선팔</b>에 위치합니다. → <b>B</b></div>
+      </div>
+
+      <div class="q" data-a="0">
+        <div class="qh"><span class="qn">9</span><span class="qt">여름철의 은하수처럼 더 밝고 두껍게 관측될 때는 어느 방향을 바라볼 때인가?</span></div>
+        <div class="opts">
+          <button class="opt">㉠ 우리은하 중심 방향</button>
+          <button class="opt">㉡ 우리은하 중심의 반대쪽 방향</button>
+        </div>
+        <div class="sol">여름철에는 우리은하의 <b>중심부</b>를 바라보기 때문에 은하수가 더 밝고 폭이 두껍습니다.</div>
+      </div>
+
+      <div class="q" data-a="3">
+        <div class="qh"><span class="qn">10</span><span class="qt">산개 성단에 비해 구상 성단에서 대체로 더 큰 값을 갖는 것을 모두 고른 것은?<br>
+          <span class="note-sm">ㄱ. 구성 별의 수 · ㄴ. 구성 별의 나이 · ㄷ. 중심부의 별의 밀도 · ㄹ. 구성 별의 표면 온도</span></span></div>
+        <div class="opts">
+          <button class="opt">① ㄱ, ㄴ</button><button class="opt">② ㄱ, ㄹ</button><button class="opt">③ ㄷ, ㄹ</button>
+          <button class="opt">④ ㄱ, ㄴ, ㄷ</button><button class="opt">⑤ ㄴ, ㄷ, ㄹ</button>
+        </div>
+        <div class="sol">구성 별의 표면 온도는 파란 별이 더 많은 <b>산개 성단</b>이 높습니다. → <b>④ ㄱ, ㄴ, ㄷ</b></div>
+      </div>
+
+      <div class="q" data-a="2">
+        <div class="qh"><span class="qn">11</span><span class="qt">뒤에서 오는 별빛을 막아서 어둡게 보이는 성운(말머리성운 등)에 대한 설명으로 옳은 것은?</span></div>
+        <div class="opts">
+          <button class="opt">① 반사 성운이다.</button>
+          <button class="opt">② 스스로 빛을 내는 성운이다.</button>
+          <button class="opt">③ 뒤에서 오는 별빛을 막아서 어둡게 보인다.</button>
+          <button class="opt">④ 우리은하 원반을 둘러싼 구형의 공간에 주로 분포한다.</button>
+          <button class="opt">⑤ 우리은하의 중심부에 주로 분포한다.</button>
+        </div>
+        <div class="sol">암흑 성운입니다. 스스로 빛을 내는 성운은 방출(발광) 성운이며, 성운은 우리은하의 <b>나선팔</b>에 분포합니다.
+          우리은하 중심부에 주로 분포하는 것은 구상 성단입니다. → <b>③</b></div>
+      </div>
+
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">12</span><span class="qt">팽창하는 우주에 대한 설명으로 옳은 것은?</span></div>
+        <div class="opts">
+          <button class="opt">① 외부 은하들은 서로 가까워지고 있다.</button>
+          <button class="opt">② 우주는 모든 방향으로 팽창하고 있다.</button>
+          <button class="opt">③ 우주가 팽창하면서 은하의 크기가 작아진다.</button>
+          <button class="opt">④ 팽창하는 우주의 중심에는 우리은하가 있다.</button>
+          <button class="opt">⑤ 과거의 우주는 현재보다 크기가 더 컸을 것이다.</button>
+        </div>
+        <div class="sol">팽창하는 우주에는 <b>중심이 없으며</b>, 시간을 되돌리면 과거 우주는 현재보다 훨씬 작았을 것입니다.
+          과학자들은 우주가 약 <b>138억 년 전</b>에 탄생하였다고 설명합니다. → <b>②</b></div>
+      </div>
+
+    </div>
+
+    <div class="score-bar">
+      <span class="s"></span>
+      <button class="btn" data-show-all>모두 정답 보기</button>
+      <button class="btn" data-reset-quiz>다시 풀기</button>
+    </div>
+  </section>
+
+  <!-- 서술형 -->
+  <section class="block" id="essay">
+    <h2 class="sec"><span class="num">서술형</span> 모범 답안 모음</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>① 밤하늘 별들의 색이 다른 까닭</h3>
+        <button class="btn amber" data-reveal="e1" data-label="모범 답안 보기">모범 답안 보기</button>
+        <div class="reveal" id="e1">별의 색깔은 표면 온도에 따라 달라진다. 별의 색깔이 다른 까닭은 <b>별마다 표면 온도가 다르기 때문</b>이다.</div>
+      </div>
+      <div class="card">
+        <h3>② 은하수가 띠 모양으로 관측되는 까닭</h3>
+        <button class="btn amber" data-reveal="e2" data-label="모범 답안 보기">모범 답안 보기</button>
+        <div class="reveal" id="e2">태양계는 우리은하 중심으로부터 약 8500 pc 떨어진 나선팔에 위치한다. 나선팔은 별이 집중된 원반이므로,
+          지구에서 관측한 은하의 모습은 <b>띠 모양</b>으로 관측된다. 은하수는 우리은하 나선팔을 보고 있는 것이다.</div>
+      </div>
+      <div class="card">
+        <h3>③ 두 종류의 성단을 구성하는 별의 색깔과 나이</h3>
+        <button class="btn amber" data-reveal="e4" data-label="모범 답안 보기">모범 답안 보기</button>
+        <div class="reveal" id="e4">(가)는 <b>산개 성단</b>으로 파란색의 젊은 별들로 이루어져 있고,
+          (나)는 <b>구상 성단</b>으로 붉은색의 늙은 별들로 이루어져 있다.</div>
+      </div>
+      <div class="card">
+        <h3>④ 우주 탐사 기술이 일상생활에 쓰이는 예</h3>
+        <button class="btn amber" data-reveal="e5" data-label="모범 답안 보기">모범 답안 보기</button>
+        <div class="reveal" id="e5">자기 공명 영상(MRI)으로 질병을 진단한다. 폴리카보네이트가 안전모에 이용된다.
+          우주복으로 개발된 신소재가 기능성 옷감으로 쓰인다.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="pager"></div>
+</main>
+
+<footer class="foot">Ⅷ. 별과 우주 · 단원 정리와 평가 | 교사용 교과서 290~291, 306~312쪽</footer>
+
+<script src="assets/common.js"></script>
+<script>
+/* 빈칸 / 열쇠 */
+document.querySelectorAll(".fill").forEach(function (f) {
+  f.textContent = f.dataset.a;
+  f.addEventListener("click", function () { f.classList.toggle("on"); });
+});
+document.querySelectorAll(".clue").forEach(function (c) {
+  c.querySelector(".an").textContent = c.dataset.a;
+  c.addEventListener("click", function () { c.classList.toggle("on"); });
+});
+
+/* =========================================================
+   생각 그물 (개념 지도)
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvMap");
+  var C = SU.Canvas(cv, 1.72), U = SU.U;
+  var nN = document.getElementById("mpN"), nD = document.getElementById("mpD");
+
+  var N = [
+    { id: 0, x: 0.50, y: 0.09, t: "별과 우주", lv: 0, d: "별의 특징과 우주의 구조·팽창·탐사를 다루는 단원입니다." },
+    { id: 1, x: 0.27, y: 0.30, t: "별", lv: 1, p: 0, d: "스스로 빛을 내는 천체. 거리·밝기·색을 통해 별의 성질을 알아냅니다." },
+    { id: 2, x: 0.73, y: 0.30, t: "우주", lv: 1, p: 0, d: "우리은하와 수많은 외부 은하로 이루어진 공간. 지금도 팽창하고 있습니다." },
+
+    { id: 3, x: 0.09, y: 0.56, t: "별까지의 거리", lv: 2, p: 1, d: "6개월 간격으로 관측한 시차의 절반인 연주 시차로 별까지의 거리를 구합니다." },
+    { id: 4, x: 0.27, y: 0.56, t: "등급과 밝기", lv: 2, p: 1, d: "밝기는 거리의 제곱에 반비례합니다. 1등급은 6등급보다 100배 밝습니다." },
+    { id: 5, x: 0.45, y: 0.56, t: "표면 온도와 색", lv: 2, p: 1, d: "표면 온도가 높으면 청색, 낮아질수록 청백색·백색·황백색·황색·주황색·적색." },
+    { id: 6, x: 0.57, y: 0.56, t: "우리은하", lv: 2, p: 2, d: "태양계가 속한 은하. 지름 약 30000 pc, 태양계는 중심에서 약 8500 pc 떨어진 나선팔에 있습니다." },
+    { id: 7, x: 0.75, y: 0.56, t: "팽창하는 우주", lv: 2, p: 2, d: "외부 은하들이 서로 멀어지고 있습니다. 팽창하는 우주에 중심은 없습니다." },
+    { id: 8, x: 0.905, y: 0.56, t: "우주 탐사", lv: 2, p: 2, d: "탐사선·로켓·인공위성·우주 망원경·탐사 로봇으로 우주를 탐사하고, 그 기술이 일상에 쓰입니다." },
+
+    { id: 9, x: 0.045, y: 0.82, t: "연주 시차", lv: 3, p: 3, d: "지구 공전 궤도 양 끝에서 별을 관측할 때 나타나는 시차의 절반. 단위는 ″." },
+    { id: 10, x: 0.145, y: 0.90, t: "1 pc", lv: 3, p: 3, d: "연주 시차가 1″인 별까지의 거리. 1 pc은 약 3.26 광년입니다." },
+    { id: 11, x: 0.225, y: 0.82, t: "겉보기 등급", lv: 3, p: 4, d: "우리 눈에 보이는 별의 밝기를 나타낸 등급." },
+    { id: 12, x: 0.325, y: 0.90, t: "절대 등급", lv: 3, p: 4, d: "모든 별이 10 pc에 있다고 가정했을 때의 밝기 등급. 별의 실제 밝기를 비교합니다." },
+    { id: 13, x: 0.415, y: 0.82, t: "청색 ↔ 적색", lv: 3, p: 5, d: "청색이 가장 뜨겁고 적색이 가장 차갑습니다." },
+    { id: 14, x: 0.525, y: 0.82, t: "성단", lv: 3, p: 6, d: "많은 별이 좁은 공간에 모인 집단. 산개 성단과 구상 성단이 있습니다." },
+    { id: 15, x: 0.625, y: 0.90, t: "성운", lv: 3, p: 6, d: "성간 물질이 구름처럼 모인 천체. 방출·반사·암흑 성운이 있습니다." },
+    { id: 16, x: 0.715, y: 0.82, t: "외부 은하", lv: 3, p: 7, d: "우리은하 밖의 은하. 허블이 그 존재를 알아냈습니다." },
+    { id: 17, x: 0.815, y: 0.90, t: "138억 년", lv: 3, p: 7, d: "우주는 약 138억 년 전에 탄생하여 지금까지 팽창해 왔습니다." },
+    { id: 18, x: 0.865, y: 0.82, t: "탐사 성과", lv: 3, p: 8, d: "스푸트니크 1호, 아폴로 11호, 허블 우주 망원경, ISS, 누리호, 다누리호 등." },
+    { id: 19, x: 0.935, y: 0.90, t: "일상 속 기술", lv: 3, p: 8, d: "인공위성(GPS), 전자레인지, MRI, 폴리카보네이트, 기능성 옷감, 형상 기억 합금." }
+  ];
+
+  var COL = ["#ffd166", "#7ef0c8", "#8fc0ff", "rgba(207,218,255,.92)"];
+  var sel = 0, hover = -1, appear = 0;
+
+  function xy(n, w, h) { return [n.x * w, n.y * h]; }
+
+  function pick(mx, my) {
+    var w = C.w, h = C.h, best = -1, bd = 1e9;
+    N.forEach(function (n, i) {
+      var p = xy(n, w, h), d = Math.hypot(p[0] - mx, p[1] - my);
+      if (d < bd) { bd = d; best = i; }
+    });
+    return bd < 52 ? best : -1;
+  }
+  cv.addEventListener("pointermove", function (e) {
+    var r = cv.getBoundingClientRect();
+    hover = pick(e.clientX - r.left, e.clientY - r.top);
+    cv.style.cursor = hover >= 0 ? "pointer" : "default";
+  });
+  cv.addEventListener("click", function (e) {
+    var r = cv.getBoundingClientRect();
+    var i = pick(e.clientX - r.left, e.clientY - r.top);
+    if (i >= 0) { sel = i; nN.textContent = N[i].t; nD.textContent = N[i].d; }
+  });
+
+  SU.loop(cv, function (dt, t) {
+    appear = Math.min(1, appear + dt * 0.5);
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var bg = ctx.createLinearGradient(0, 0, 0, h);
+    bg.addColorStop(0, "#070d20"); bg.addColorStop(1, "#0a1026");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+
+    // 연결선
+    N.forEach(function (n) {
+      if (n.p === undefined) return;
+      var a = xy(N[n.p], w, h), b = xy(n, w, h);
+      var prog = U.clamp((appear - n.lv * 0.16) / 0.4, 0, 1);
+      if (prog <= 0) return;
+      var on = (sel === n.id || sel === n.p);
+      ctx.strokeStyle = on ? "rgba(255,209,102,.85)" : "rgba(132,162,255,.30)";
+      ctx.lineWidth = on ? 2.1 : 1.2;
+      ctx.beginPath();
+      ctx.moveTo(a[0], a[1]);
+      var mx = (a[0] + b[0]) / 2, my = a[1] + (b[1] - a[1]) * 0.62;
+      var ex = U.lerp(a[0], b[0], prog), ey = U.lerp(a[1], b[1], prog);
+      ctx.quadraticCurveTo(mx, my, ex, ey);
+      ctx.stroke();
+    });
+
+    // 마디
+    N.forEach(function (n, i) {
+      var p = xy(n, w, h);
+      var prog = U.clamp((appear - n.lv * 0.16) / 0.4, 0, 1);
+      if (prog <= 0) return;
+      var on = sel === i, hov = hover === i;
+      var size = [15, 13.5, 12.5, 11][n.lv];
+      var col = on ? "#ffd166" : COL[n.lv];
+      ctx.save();
+      ctx.globalAlpha = prog;
+      var float = Math.sin(t * 0.9 + i) * 1.6;
+      if (on) U.glow(ctx, p[0], p[1] + float, 34, "rgba(255,209,102,1)", 0.45);
+      else if (hov) U.glow(ctx, p[0], p[1] + float, 26, "rgba(126,240,200,1)", 0.28);
+      U.chip(ctx, p[0], p[1] + float, n.t, col, size);
+      ctx.restore();
+    });
+
+    U.label(ctx, 14, 18, "Ⅷ. 별과 우주 — 생각 그물", "rgba(207,218,255,.9)", 13, "left", 800);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03 우주 탐사 | Ⅷ. 별과 우주</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .tl { position:relative; padding-left:0; margin-top:8px; }
+  .tl-line { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; }
+  @media(max-width:860px){ .tl-line{ grid-template-columns:1fr 1fr; } }
+  .tl-item { text-align:center; }
+  .tl-item .yr { font-weight:900; color:var(--accent-2); letter-spacing:.06em; font-size:.92rem; }
+  .tl-item .bar { height:3px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); border-radius:3px; margin:8px 0 10px; position:relative; }
+  .tl-item .bar::after { content:""; position:absolute; left:50%; top:-3.5px; width:10px; height:10px; border-radius:50%;
+    background:var(--accent-2); transform:translateX(-50%); box-shadow:0 0 10px rgba(255,209,102,.8); }
+  .tl-item img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:50%; border:2px solid var(--line-strong); background:#000; }
+  .tl-item .nm { font-weight:800; margin-top:9px; font-size:.95rem; }
+  .tl-item .ds { font-size:.8rem; color:var(--dim); }
+
+  .flip { perspective:1000px; }
+  .flip .inner { position:relative; transition:transform .6s cubic-bezier(.2,.8,.3,1); transform-style:preserve-3d; aspect-ratio:1/1; }
+  .flip:hover .inner, .flip.on .inner { transform:rotateY(180deg); }
+  .flip .face { position:absolute; inset:0; backface-visibility:hidden; border-radius:16px; overflow:hidden;
+    border:1px solid var(--line); background:var(--panel); }
+  .flip .front img { width:100%; height:100%; object-fit:contain; background:#0b1026; padding:10px; }
+  .flip .front .cap { position:absolute; left:0; right:0; bottom:0; padding:8px 10px; font-weight:800; font-size:.9rem;
+    background:linear-gradient(transparent,rgba(5,8,20,.92)); text-align:center; }
+  .flip .back { transform:rotateY(180deg); display:flex; align-items:center; padding:16px; font-size:.88rem; color:var(--dim); line-height:1.6;
+    background:linear-gradient(135deg,rgba(110,168,255,.16),rgba(126,240,200,.08)); }
+</style>
+</head>
+<body>
+<canvas id="bg-stars"></canvas><div id="bg-glow"></div>
+<div id="progress"></div>
+
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><span class="dot"></span><span>Ⅷ. 별과 우주 <small>중2 과학</small></span></a>
+  <nav class="chips"></nav>
+  <div class="tmode"><span class="sw"></span>교사 모드</div>
+</div></header>
+
+<main class="wrap">
+
+  <div class="page-head">
+    <span class="eyebrow">Ⅷ-2. 우주 · 03 · 4~5차시</span>
+    <h1>우주 <em>탐사</em></h1>
+    <p class="lede">인류는 우주에 대한 탐사 활동을 계속하고 있으며, 이를 위한 기술 발전이 우리의 삶도 변화시키고 있습니다.
+      우주 탐사는 어떤 의의가 있으며 인류에게 어떤 영향을 주었을까요?</p>
+    <div style="margin-top:10px">
+      <span class="pill a2">#인공위성</span><span class="pill a2">#화성 탐사</span><span class="pill a2">#로켓</span><span class="pill a2">#로봇</span>
+    </div>
+  </div>
+
+  <div class="goals">
+    <h3>이 단원에서 나는</h3>
+    <ul><li>우주 탐사의 의의와 인류에 미친 영향을 조사하여 과학의 유용성을 인식할 수 있다.</li></ul>
+  </div>
+
+  <!-- 도입 -->
+  <section class="block">
+    <h2 class="sec"><span class="num">도입</span> 우주를 탐사하는 까닭은 무엇일까?</h2>
+    <div class="grid g2">
+      <div class="card">
+        <div class="hook">“우리나라는 세계에서 <strong>7번째로 달을 탐사한 나라</strong>가 되었어!”<br>
+          “달을 향해 쏘아 올릴 탐사선 <strong>다누리</strong>야!”</div>
+        <p style="margin:0; color:var(--dim)">
+          우주를 탐사함으로써 우리는 우주의 기원과 탄생, 외계 행성과 생명체 등 <b style="color:var(--txt)">우주에 대한 호기심을 충족</b>할 수 있으며,
+          미래의 인류가 살아갈 <b style="color:var(--txt)">새로운 터전</b>을 마련할 수도 있습니다.</p>
+      </div>
+      <figure class="fig">
+        <img src="img/danuri.jpg" alt="달 궤도 탐사선 다누리호">
+        <figcaption>다누리호 — 2022년 달 궤도 진입에 성공한 우리나라 최초의 달 궤도 탐사선</figcaption>
+      </figure>
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card" style="border-color:rgba(126,240,200,.3)">
+        <h3 style="color:var(--accent-3)">우주 탐사의 의의</h3>
+        <p style="margin:0; color:var(--dim)">우주의 기원과 구조를 이해하고, 외계 생명체의 존재 가능성을 탐색하며,
+          지구 환경과 인류 생존에 대한 연구를 수행하는 중요한 활동입니다.</p>
+      </div>
+      <div class="card" style="border-color:rgba(255,209,102,.3)">
+        <h3 style="color:var(--accent-2)">인류에게 미친 영향</h3>
+        <p style="margin:0; color:var(--dim)">기후 변화·소행성 충돌 등 위험 요소를 감시하고 우주 자원 활용 가능성을 모색할 수 있습니다.
+          또한 GPS·반도체·의료 기술 등 혁신 기술을 탄생시켜 우리 생활을 편리하게 만듭니다.</p>
+      </div>
+    </div>
+    <div class="teacher-note">
+      <span class="tlabel">도입 안내</span>
+      우리나라는 1992년 우리별 1호를 시작으로 2022년 누리호와 다누리호 발사에 성공했다.
+      세계 주요국이 우주 탐사에 힘쓰는 이유를 학생들이 자유롭게 이야기해 보게 한 뒤 성과를 살펴본다.
+    </div>
+  </section>
+
+  <!-- 태양계 탐사 애니메이션 -->
+  <section class="block" id="probes">
+    <h2 class="sec"><span class="num">개념 1</span> 우주 탐사선은 어디까지 갔을까? <span class="qq">교과서 302~303쪽</span></h2>
+    <p class="sec-sub">태양계 천체를 탐사할 목적으로 쏘아 올린 탐사선들이 어느 천체까지 도달했는지 살펴봅시다.</p>
+
+    <div class="sim">
+      <div class="sim-head">
+        <h4>태양계 탐사 지도 — 탐사선의 여정</h4>
+        <span class="hint">탐사선 이름을 누르면 그 여정만 볼 수 있습니다</span>
+      </div>
+      <canvas id="cvSolar"></canvas>
+      <div class="sim-controls">
+        <button class="btn on" data-probe="-1">모두 보기</button>
+        <button class="btn" data-probe="0">매리너 10호</button>
+        <button class="btn" data-probe="1">바이킹 1호</button>
+        <button class="btn" data-probe="2">보이저 1호</button>
+        <button class="btn" data-probe="3">카시니호</button>
+        <button class="btn" data-probe="4">뉴호라이즌스호</button>
+      </div>
+      <div class="readout">
+        <div class="stat" style="flex:1; min-width:300px"><div class="k">탐사 내용</div>
+          <div class="v" id="prMsg" style="font-size:.95rem; color:var(--txt); font-weight:700; line-height:1.5">
+            탐사선들은 수성에서 명왕성까지 태양계 곳곳을 탐사했습니다.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 성과 갤러리 -->
+  <section class="block" id="gallery">
+    <h2 class="sec"><span class="num">개념 2</span> 우주 탐사의 성과 <span class="qq">교과서 302~303쪽</span></h2>
+
+    <h3 class="mini">우주 탐사선</h3>
+    <div class="grid g4">
+      <div class="photo-card"><img src="img/sputnik.jpg" alt="스푸트니크 1호">
+        <div class="pc-body"><h4>스푸트니크 1호</h4><p>1957년 발사된 인류 최초의 인공위성</p></div></div>
+      <div class="photo-card"><img src="img/apollo11.jpg" alt="아폴로 11호 달 착륙선">
+        <div class="pc-body"><h4>아폴로 11호</h4><p>달 착륙 — 1969년 인류 최초로 달에 착륙</p></div></div>
+      <div class="photo-card"><img src="img/mariner10.jpg" alt="매리너 10호">
+        <div class="pc-body"><h4>매리너 10호</h4><p>수성, 금성 근접 탐사</p></div></div>
+      <div class="photo-card"><img src="img/viking1.jpg" alt="바이킹 1호">
+        <div class="pc-body"><h4>바이킹 1호</h4><p>화성 표면 탐사</p></div></div>
+      <div class="photo-card"><img src="img/voyager1.jpg" alt="보이저 1호">
+        <div class="pc-body"><h4>보이저 1호</h4><p>목성, 토성 탐사</p></div></div>
+      <div class="photo-card"><img src="img/cassini.jpg" alt="카시니호">
+        <div class="pc-body"><h4>카시니호</h4><p>토성 대기권 진입</p></div></div>
+      <div class="photo-card"><img src="img/newhorizons.jpg" alt="뉴호라이즌스호">
+        <div class="pc-body"><h4>뉴호라이즌스호</h4><p>명왕성 탐사</p></div></div>
+      <div class="photo-card"><img src="img/danuri.jpg" alt="다누리호">
+        <div class="pc-body"><h4>다누리호</h4><p>달 탐사 — 우리나라 최초의 달 궤도 탐사선</p></div></div>
+    </div>
+
+    <h3 class="mini">로켓 · 인공위성</h3>
+    <div class="grid g2">
+      <div class="photo-card"><img src="img/nuri_rocket.jpg" alt="발사되는 로켓">
+        <div class="pc-body"><h4>로켓</h4><p>로켓의 발달로 인공위성, 우주 탐사선, 유인 우주선 등을 발사할 수 있게 되었다.</p></div></div>
+      <div class="photo-card"><img src="img/arirang3a.jpg" alt="아리랑 3A호 인공위성">
+        <div class="pc-body"><h4>인공위성 <span class="pill">아리랑 3A호</span></h4>
+          <p>사용 목적에 따라 방송 통신 위성, 지구 관측 위성, 군사 위성 등이 있다.</p></div></div>
+    </div>
+
+    <h3 class="mini">우주 망원경 · 국제 우주 정거장</h3>
+    <div class="grid g3">
+      <div class="photo-card"><img src="img/hubble.jpg" alt="허블 우주 망원경">
+        <div class="pc-body"><h4>허블 우주 망원경</h4><p>대기권 밖에서 별, 성단과 성운, 외부 은하 등을 관측하였다.</p></div></div>
+      <div class="photo-card"><img src="img/jwst.jpg" alt="제임스 웹 우주 망원경">
+        <div class="pc-body"><h4>제임스 웹 우주 망원경</h4><p>더욱 멀리 있는 천체들을 관측할 수 있게 되었다.</p></div></div>
+      <div class="photo-card"><img src="img/iss.jpg" alt="국제 우주 정거장">
+        <div class="pc-body"><h4>국제 우주 정거장[ISS]</h4><p>다국적인 협력과 공동 연구로 우주 탐사, 과학 연구, 기술 개발 등이 이루어진다.</p></div></div>
+    </div>
+
+    <h3 class="mini">우주 탐사 로봇</h3>
+    <div class="grid g2">
+      <div class="photo-card"><img src="img/philae.jpg" alt="혜성 표면의 필레 탐사 로봇">
+        <div class="pc-body"><h4>필레</h4><p>최초의 혜성 탐사 로봇으로, 수십억 년 된 얼음과 먼지 혼합물에 대한 정보를 지구로 전송했다.</p></div></div>
+      <div class="photo-card"><img src="img/perseverance.jpg" alt="화성의 퍼서비어런스 탐사 로봇">
+        <div class="pc-body"><h4>퍼서비어런스</h4><p>화성의 암석과 토양을 조사하고 샘플을 채취하는 임무를 수행한다.</p></div></div>
+    </div>
+
+    <h3 class="mini">우리나라의 우주 탐사</h3>
+    <div class="tl">
+      <div class="tl-line">
+        <div class="tl-item"><div class="yr">1992</div><div class="bar"></div>
+          <img src="img/uribyul1.jpg" alt="우리별 1호"><div class="nm">우리별 1호</div><div class="ds">과학 위성</div></div>
+        <div class="tl-item"><div class="yr">2013</div><div class="bar"></div>
+          <img src="img/naro.jpg" alt="나로호"><div class="nm">나로호</div><div class="ds">우주 발사체</div></div>
+        <div class="tl-item"><div class="yr">2021</div><div class="bar"></div>
+          <img src="img/nuri.jpg" alt="누리호"><div class="nm">누리호</div><div class="ds">한국형 우주 발사체</div></div>
+        <div class="tl-item"><div class="yr">2022</div><div class="bar"></div>
+          <img src="img/danuri_moon.jpg" alt="다누리호"><div class="nm">다누리호</div><div class="ds">달 궤도 진입</div></div>
+        <div class="tl-item"><div class="yr">2032</div><div class="bar"></div>
+          <img src="img/moon_lander.jpg" alt="달 착륙선"><div class="nm">달 착륙선</div><div class="ds">탐사 계획</div></div>
+      </div>
+    </div>
+
+    <div class="teacher-note">
+      <span class="tlabel">지도상의 유의점 · 오개념</span>
+      초기 우주 탐사는 미·소의 ‘우주 경쟁’으로 시작되었지만, 현대에는 국제적인 <b>경쟁이 아닌 협력</b>이 중요시된다는 점을 언급하는 것이 좋다.
+      <br><br><b>“우주 탐사와 천문학은 같은 것이다?”</b> — 우주 탐사는 우주 공간을 직접 탐사하는 것이고,
+      천문학은 우주에 있는 천체를 관찰하는 것이므로 차이가 있다.
+    </div>
+  </section>
+
+  <!-- 일상 속 기술 -->
+  <section class="block" id="tech">
+    <h2 class="sec"><span class="num">개념 3</span> 우주 탐사 기술이 일상생활에 이용된 예 <span class="qq">교과서 301쪽 | 그림 13 |</span></h2>
+    <p class="sec-sub">카드에 마우스를 올리거나 눌러 보세요. 어떤 기술인지 설명이 나타납니다.</p>
+    <div class="grid g3" id="techGrid">
+      <div class="flip"><div class="inner">
+        <div class="face front"><img src="img/tech_satellite.jpg" alt="인공위성 활용"><div class="cap">인공위성</div></div>
+        <div class="face back"><div>위성 항법 시스템[GPS]으로 실시간 위치를 확인하고, 지구를 관측하며 통신에 이용된다.</div></div>
+      </div></div>
+      <div class="flip"><div class="inner">
+        <div class="face front"><img src="img/tech_polycarbonate.jpg" alt="폴리카보네이트 안전모"><div class="cap">폴리카보네이트</div></div>
+        <div class="face back"><div>열에 강하고 단단하여 안전모, 다양한 재료 등에 이용된다.</div></div>
+      </div></div>
+      <div class="flip"><div class="inner">
+        <div class="face front"><img src="img/tech_fabric.jpg" alt="기능성 옷감"><div class="cap">기능성 옷감</div></div>
+        <div class="face back"><div>우주복 용도로 개발된 신소재가 기능성 옷에 이용된다.</div></div>
+      </div></div>
+      <div class="flip"><div class="inner">
+        <div class="face front"><img src="img/tech_microwave.jpg" alt="전자레인지"><div class="cap">전자레인지</div></div>
+        <div class="face back"><div>우주 비행선에서 음식을 조리할 수 있게 개발된 것으로 일상생활에 널리 쓰인다.</div></div>
+      </div></div>
+      <div class="flip"><div class="inner">
+        <div class="face front"><img src="img/tech_mri.jpg" alt="자기 공명 영상 MRI"><div class="cap">자기 공명 영상[MRI]</div></div>
+        <div class="face back"><div>우주선의 영상 처리 기술에서 착안하여 질병 진단에 이용된다.</div></div>
+      </div></div>
+      <div class="flip"><div class="inner">
+        <div class="face front"><img src="img/tech_shapememory.jpg" alt="형상 기억 합금 안경테"><div class="cap">형상 기억 합금</div></div>
+        <div class="face back"><div>우주선 안테나로 개발된 소재로, 안경테·치아 교정 장치 등에 이용된다.</div></div>
+      </div></div>
+    </div>
+
+    <div class="teacher-note">
+      <span class="tlabel">참고 자료 — 추가 사례</span>
+      동결 건조 식품, 벨크로, 테프론(프라이팬 코팅), 바코드 기술도 우주 탐사와 관련되어 발전한 예이다.
+      다만 해당 기술이 <b>순수하게 우주 탐사를 위해 개발된 것인지</b>, 기존 기술이 우주 탐사에 쓰인 것인지는 구분해 지도한다.
+    </div>
+  </section>
+
+  <!-- 핵심 정리 -->
+  <section class="block">
+    <h2 class="sec"><span class="num">정리</span> 핵심 정리</h2>
+    <div class="key">
+      <ul>
+        <li><b>우주 탐사의 의의</b> : 우주에 대한 지식과 이해의 폭 확대, 혁신적인 탐사 기술을 일상생활에 이용,
+          지구의 기후와 환경의 변화·자원 고갈 등의 현상 이해, 다국적 우주 탐사 프로젝트를 통한 국가 간 협력 촉진</li>
+        <li><b>우주 탐사가 우리 삶에 미친 영향</b> : 새로운 과학 기술의 개발과 발전,
+          우주 탐사에 활용된 기술의 실생활 이용(GPS, MRI, CT, 폴리카보네이트, 전자레인지, 기능성 옷감 등)</li>
+        <li><b>우주 탐사의 성과</b> : 우주 탐사선, 로켓·인공위성, 우주 망원경·국제 우주 정거장, 우주 탐사 로봇, 우리나라의 우주 탐사</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 확인 -->
+  <section class="block" id="check">
+    <h2 class="sec"><span class="num">확인</span> 이것만은 &amp; 문제로 확인</h2>
+    <div class="quiz">
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">1</span><span class="qt">우주에 쏘아 올린 <span class="blank"></span>을 이용해 우리는 길을 찾아가거나 화상 통화를 할 수 있다.</span></div>
+        <div class="opts"><button class="opt">우주 망원경</button><button class="opt">인공위성</button><button class="opt">탐사 로봇</button></div>
+        <div class="sol"><b>인공위성</b> — 위성 항법 시스템(GPS)으로 실시간 위치를 확인하고, 지구를 관측하며 통신에 이용됩니다.</div>
+      </div>
+
+      <div class="q" data-a="2">
+        <div class="qh"><span class="qn">2</span><span class="qt">우주 비행선 내에서 간단히 음식을 조리할 수 있게 개발된 <span class="blank"></span>는 일상생활에 널리 쓰이고 있다.</span></div>
+        <div class="opts"><button class="opt">형상 기억 합금</button><button class="opt">폴리카보네이트</button><button class="opt">전자레인지</button><button class="opt">기능성 옷감</button></div>
+        <div class="sol"><b>전자레인지</b>입니다.</div>
+      </div>
+
+      <div class="q" data-a="0">
+        <div class="qh"><span class="qn">3</span><span class="qt">우주 탐사선과 탐사 대상을 옳게 짝지은 것은?</span></div>
+        <div class="opts">
+          <button class="opt">뉴호라이즌스호 — 명왕성</button>
+          <button class="opt">매리너 10호 — 토성</button>
+          <button class="opt">바이킹 1호 — 목성</button>
+          <button class="opt">카시니호 — 수성</button>
+        </div>
+        <div class="sol">매리너 10호는 수성·금성, 바이킹 1호는 화성 표면, 카시니호는 토성 대기권 진입,
+          보이저 1호는 목성·토성을 탐사했습니다. <b>뉴호라이즌스호는 명왕성</b>을 탐사했습니다.</div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card">
+        <h3><span class="pill">과학 유용성</span> 서술형</h3>
+        <p class="note-sm" style="margin:0 0 10px">그림에 제시된 것 외에 우주 탐사 기술이 일상생활에 쓰이는 예를 두 가지 이상 서술하시오.</p>
+        <button class="btn amber" data-reveal="qa1" data-label="모범 답안 보기">모범 답안 보기</button>
+        <div class="reveal" id="qa1">
+          자기 공명 영상(MRI)으로 질병을 진단한다. 폴리카보네이트가 안전모에 이용된다.
+          우주복으로 개발된 신소재가 기능성 옷감으로 쓰인다. (그 밖에 동결 건조 식품, 벨크로, 테프론, 바코드 기술 등)
+        </div>
+      </div>
+      <div class="card">
+        <h3>스스로 정리하기</h3>
+        <p style="margin:0">인류는 끊임없이 우주를 <span class="kw">ㅌ ㅅ</span>하고 있으며, 이로부터 발달한 과학 기술은 우리의 삶에 유용하게 쓰인다.
+          <button class="btn amber" data-reveal="selfA" data-label="확인">확인</button></p>
+        <div class="reveal" id="selfA"><b class="kw2">탐사</b></div>
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <span class="s"></span>
+      <button class="btn" data-show-all>모두 정답 보기</button>
+      <button class="btn" data-reset-quiz>다시 풀기</button>
+    </div>
+  </section>
+
+  <div class="pager"></div>
+</main>
+
+<footer class="foot">Ⅷ-2. 우주 · 03 우주 탐사 | 교사용 교과서 300~305쪽</footer>
+
+<script src="assets/common.js"></script>
+<script>
+/* =========================================================
+   태양계 탐사 지도
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvSolar");
+  var C = SU.Canvas(cv, 1.9), U = SU.U;
+  var msg = document.getElementById("prMsg");
+  var sel = -1;
+
+  var PLANETS = [
+    { n: "수성", r: 0.13, c: "#b9b3a8", s: 3.4, sp: 1.62 },
+    { n: "금성", r: 0.20, c: "#e8c48a", s: 5.0, sp: 1.18 },
+    { n: "지구", r: 0.27, c: "#6ea8ff", s: 5.2, sp: 1.00 },
+    { n: "화성", r: 0.35, c: "#e07a52", s: 4.2, sp: 0.80 },
+    { n: "목성", r: 0.52, c: "#d9b28c", s: 11.5, sp: 0.44 },
+    { n: "토성", r: 0.66, c: "#e6d3a3", s: 10.0, sp: 0.32, ring: true },
+    { n: "천왕성", r: 0.78, c: "#9fdce6", s: 7.0, sp: 0.22 },
+    { n: "해왕성", r: 0.88, c: "#6f95e8", s: 6.8, sp: 0.17 },
+    { n: "명왕성", r: 0.97, c: "#c8b8a8", s: 3.2, sp: 0.13 }
+  ];
+  var PROBES = [
+    { n: "매리너 10호", to: [1, 0], c: "#7ef0c8", d: "매리너 10호 — 수성, 금성 근접 탐사" },
+    { n: "바이킹 1호", to: [3], c: "#ffd166", d: "바이킹 1호 — 화성 표면 탐사" },
+    { n: "보이저 1호", to: [4, 5], c: "#ff8a6b", d: "보이저 1호 — 목성, 토성 탐사" },
+    { n: "카시니호", to: [5], c: "#c3a8ff", d: "카시니호 — 토성 대기권 진입" },
+    { n: "뉴호라이즌스호", to: [8], c: "#8fc0ff", d: "뉴호라이즌스호 — 명왕성 탐사" }
+  ];
+
+  document.querySelectorAll("[data-probe]").forEach(function (b) {
+    b.onclick = function () {
+      sel = parseInt(b.dataset.probe, 10);
+      document.querySelectorAll("[data-probe]").forEach(function (x) { x.classList.toggle("on", x === b); });
+      msg.textContent = sel < 0 ? "탐사선들은 수성에서 명왕성까지 태양계 곳곳을 탐사했습니다." : PROBES[sel].d;
+    };
+  });
+
+  var stars = [];
+  for (var i = 0; i < 130; i++) stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.1 + 0.2, a: Math.random() * 0.5 + 0.15 });
+
+  SU.loop(cv, function (dt, t) {
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var bg = ctx.createRadialGradient(w * 0.10, h * 0.5, 0, w * 0.10, h * 0.5, w);
+    bg.addColorStop(0, "#0d1330"); bg.addColorStop(1, "#03050e");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i];
+      ctx.fillStyle = "rgba(255,255,255," + s.a * 0.5 + ")";
+      ctx.beginPath(); ctx.arc(s.x * w, s.y * h, s.r, 0, 6.2832); ctx.fill();
+    }
+
+    var cx = w * 0.5, cy = h * 0.5;
+    var RX = w * 0.46, RY = h * 0.42;
+
+    // 궤도
+    PLANETS.forEach(function (p) {
+      ctx.strokeStyle = "rgba(132,162,255,.16)"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.ellipse(cx, cy, RX * p.r, RY * p.r, 0, 0, 6.2832); ctx.stroke();
+    });
+
+    // 태양
+    U.glow(ctx, cx, cy, 52, "rgba(255,190,70,1)", 1);
+    ctx.fillStyle = "#ffdc8a"; ctx.beginPath(); ctx.arc(cx, cy, 15, 0, 6.2832); ctx.fill();
+    U.label(ctx, cx, cy + 32, "태양", "#ffd166", 12);
+
+    // 행성
+    var pos = PLANETS.map(function (p, i) {
+      var a = t * p.sp * 0.18 + i * 0.9;
+      var x = cx + Math.cos(a) * RX * p.r, y = cy + Math.sin(a) * RY * p.r;
+      return { x: x, y: y, p: p };
+    });
+    pos.forEach(function (o, i) {
+      var p = o.p;
+      var hot = sel >= 0 && PROBES[sel].to.indexOf(i) >= 0;
+      if (hot) U.glow(ctx, o.x, o.y, p.s * 3.2, "rgba(255,255,255,.9)", 0.6);
+      if (p.ring) {
+        ctx.strokeStyle = "rgba(230,211,163,.8)"; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.ellipse(o.x, o.y, p.s * 1.9, p.s * 0.7, -0.4, 0, 6.2832); ctx.stroke();
+      }
+      var gg = ctx.createRadialGradient(o.x - p.s * 0.3, o.y - p.s * 0.3, p.s * 0.1, o.x, o.y, p.s);
+      gg.addColorStop(0, "#fff"); gg.addColorStop(0.35, p.c); gg.addColorStop(1, "rgba(0,0,0,.65)");
+      ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(o.x, o.y, p.s, 0, 6.2832); ctx.fill();
+      U.label(ctx, o.x, o.y + p.s + 13, p.n, hot ? "#fff" : "rgba(166,176,212,.85)", 11.5);
+    });
+
+    // 탐사선
+    var earth = pos[2];
+    PROBES.forEach(function (pr, pi) {
+      if (sel >= 0 && sel !== pi) return;
+      var period = 9 + pi * 1.4;
+      var u = ((t + pi * 1.9) % period) / period;
+      pr.to.forEach(function (ti, k) {
+        var target = pos[ti];
+        var seg = pr.to.length;
+        var uu = U.clamp(u * seg - k, 0, 1);
+        if (uu <= 0) return;
+        var from = k === 0 ? earth : pos[pr.to[k - 1]];
+        var e = U.easeOut(uu);
+        // 곡선 경로
+        var mx = (from.x + target.x) / 2, my = (from.y + target.y) / 2 - (h * 0.14) * (ti > 3 ? 1 : 0.6);
+        function bez(s) {
+          var a = (1 - s) * (1 - s), b = 2 * (1 - s) * s, c2 = s * s;
+          return [a * from.x + b * mx + c2 * target.x, a * from.y + b * my + c2 * target.y];
+        }
+        // 궤적
+        ctx.globalAlpha = 0.55; ctx.lineWidth = 1.6; ctx.setLineDash([3, 4]);
+        ctx.strokeStyle = pr.c;
+        ctx.beginPath();
+        for (var s = 0; s <= 30; s++) {
+          var q = bez((s / 30) * e);
+          if (s === 0) ctx.moveTo(q[0], q[1]); else ctx.lineTo(q[0], q[1]);
+        }
+        ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+        var q = bez(e);
+        U.glow(ctx, q[0], q[1], 11, "rgba(255,255,255,1)", 0.9);
+        ctx.fillStyle = pr.c;
+        ctx.beginPath(); ctx.arc(q[0], q[1], 3.6, 0, 6.2832); ctx.fill();
+        if (k === pr.to.length - 1 || sel >= 0) U.label(ctx, q[0], q[1] - 16, pr.n, pr.c, 11.5);
+      });
+    });
+
+    U.label(ctx, 14, 18, "태양계 탐사 지도 (거리는 실제 비율이 아닙니다)", "rgba(207,218,255,.9)", 13, "left", 800);
+  });
+})();
+
+/* 카드 탭 지원 (터치 기기) */
+document.querySelectorAll("#techGrid .flip").forEach(function (f) {
+  f.addEventListener("click", function () { f.classList.toggle("on"); });
+});
+</script>
+</body>
+</html>

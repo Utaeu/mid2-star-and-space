@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02 팽창하는 우주 | Ⅷ. 별과 우주</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<canvas id="bg-stars"></canvas><div id="bg-glow"></div>
+<div id="progress"></div>
+
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><span class="dot"></span><span>Ⅷ. 별과 우주 <small>중2 과학</small></span></a>
+  <nav class="chips"></nav>
+  <div class="tmode"><span class="sw"></span>교사 모드</div>
+</div></header>
+
+<main class="wrap">
+
+  <div class="page-head">
+    <span class="eyebrow">Ⅷ-2. 우주 · 02 · 3차시</span>
+    <h1>팽창하는 <em>우주</em></h1>
+    <p class="lede">우주에는 태양계가 속해 있는 우리은하를 포함해 무수히 많은 은하가 있습니다.
+      <b>허블</b>은 우리은하 밖의 <b>외부 은하</b>를 관측하여 이들 사이의 거리가 점점 멀어진다는 것을 알아냈습니다.</p>
+    <div style="margin-top:10px">
+      <span class="pill a2">#외부 은하</span><span class="pill a2">#우주 팽창</span>
+    </div>
+  </div>
+
+  <div class="goals">
+    <h3>이 단원에서 나는</h3>
+    <ul><li>모형을 이용하여 우주가 팽창하고 있음을 설명할 수 있다.</li></ul>
+  </div>
+
+  <!-- 도입 -->
+  <section class="block">
+    <h2 class="sec"><span class="num">도입</span> 은하 사이의 거리가 멀어지는 까닭은?</h2>
+    <div class="hook">
+      <b>은하 A</b> : “이상하다. 은하 B에 벌써 도착할 시간인데 지난번보다 더 멀어졌네!”<br>
+      <b>은하 B</b> : “나도 은하 A가 지난번보다 멀어졌어. 그런데 왜 너와의 거리도 점점 멀어지는 것 같지?”<br>
+      <strong>은하와 은하 사이의 거리가 멀어지는 까닭은 무엇일까요?</strong>
+    </div>
+    <p style="color:var(--dim); max-width:76ch">
+      거리가 멀어지는 이유는 <b style="color:var(--txt)">은하가 스스로 움직이고 있기 때문</b>일 수도 있고,
+      <b style="color:var(--txt)">우주 공간 자체가 팽창하고 있기 때문</b>일 수도 있습니다.
+      하지만 수많은 은하가 <b style="color:var(--accent-2)">대부분 멀어지는 방향으로</b> 움직이고 있다고 설명하는 것은 무리가 있으므로,
+      우주 공간 자체가 팽창하고 있다는 것으로 그 까닭을 설명할 수 있습니다.
+    </p>
+    <div class="teacher-note">
+      <span class="tlabel">지도 안내</span>
+      은하 사이가 멀어지는 까닭이 ‘은하가 스스로 움직여서’인지 ‘우주 공간이 팽창해서’인지 먼저 생각해 보게 한 뒤
+      풍선 모형으로 넘어간다.<br>
+      <b>과학자 · 허블(Hubble, E. P., 1889~1953)</b> 미국의 천문학자, 외부 은하의 존재를 알아냈다.
+    </div>
+  </section>
+
+  <!-- 풍선 모형 -->
+  <section class="block" id="balloon">
+    <h2 class="sec"><span class="num">개념 1</span> 풍선 모형으로 보는 우주 팽창 <span class="qq">교과서 298쪽</span></h2>
+    <p class="sec-sub">풍선 <span class="kw">표면</span>을 우주 공간, 붙임딱지를 은하라고 생각해 봅시다.
+      풍선을 불면 붙임딱지 사이의 거리가 어떻게 변할까요?</p>
+
+    <div class="sim">
+      <div class="sim-head">
+        <h4>풍선 모형 — 직접 불어 보기</h4>
+        <span class="hint">풍선 표면 = 우주 공간 · 붙임딱지 = 은하</span>
+      </div>
+      <canvas id="cvBalloon"></canvas>
+      <div class="sim-controls">
+        <label class="ctl">풍선 불기
+          <input type="range" id="blS" min="0" max="100" value="0">
+          <span class="val" id="blV">작게</span></label>
+        <button class="btn on" id="blAuto">자동으로 불기 ▶</button>
+        <span class="ctl" style="gap:6px">기준 은하
+          <button class="btn amber on" data-ref="0">1번</button>
+          <button class="btn amber" data-ref="1">2번</button>
+          <button class="btn amber" data-ref="2">3번</button>
+        </span>
+      </div>
+      <div class="readout">
+        <div class="stat"><div class="k" id="k12">1 ↔ 2 거리</div><div class="v" id="d12">2.0 cm</div></div>
+        <div class="stat amber"><div class="k" id="k13">1 ↔ 3 거리</div><div class="v" id="d13">4.0 cm</div></div>
+        <div class="stat warm" style="flex:1; min-width:280px"><div class="k">관찰</div>
+          <div class="v" id="blMsg" style="font-size:.93rem; color:var(--txt); font-weight:700; line-height:1.5">
+            풍선을 불면 붙임딱지 사이의 거리가 어떻게 변하는지 살펴보세요.</div></div>
+      </div>
+    </div>
+
+    <div class="key" style="margin-top:18px">
+      <h3>여기까지 정리</h3>
+      <ul>
+        <li>풍선을 불면 1↔2는 2 cm → 3 cm로, 1↔3은 4 cm → 6 cm로 늘어난다.
+          즉 <b>처음에 더 멀리 있던 것이 더 많이 멀어진다.</b></li>
+        <li>어느 붙임딱지를 기준으로 보아도 다른 붙임딱지는 모두 멀어진다. → <b>팽창의 중심이 없다.</b></li>
+        <li>마찬가지로 <b>우주 공간이 팽창함에 따라 은하 사이의 거리가 멀어지고 있다.</b></li>
+      </ul>
+    </div>
+
+    <div class="teacher-note">
+      <span class="tlabel">오개념 바로잡기</span>
+      <b>“풍선 내부가 우주 공간이다?”</b> — 풍선 <b>내부 공간은 고려하지 않는다.</b>
+      3차원 우주 공간을 2차원인 풍선 <b>표면</b>에 투영한 모형이다.
+      학생 수준에서 어려울 수 있는 우주론적 개념은 도입하지 않도록 주의한다.
+    </div>
+  </section>
+
+  <!-- 팽창하는 우주 -->
+  <section class="block" id="expand">
+    <h2 class="sec"><span class="num">개념 2</span> 우주에는 중심이 없다 <span class="qq">교과서 299쪽</span></h2>
+    <p class="sec-sub">
+      풍선 표면이 팽창할수록 붙임딱지 사이의 거리는 멀어집니다. 이와 마찬가지로 관측된 외부 은하들 사이의 거리가 멀어지는 것은
+      <span class="kw">우주 공간이 팽창하고 있기 때문</span>입니다. 또한 팽창하는 풍선 표면에 중심이 없는 것처럼
+      <span class="kw">팽창하는 우주에도 중심이 없습니다.</span>
+    </p>
+
+    <div class="sim">
+      <div class="sim-head">
+        <h4>| 그림 12 | 팽창하는 우주 모형 — 시간을 되돌려 보자</h4>
+        <span class="hint">슬라이더를 왼쪽으로 옮기면 과거로 갑니다</span>
+      </div>
+      <canvas id="cvExp"></canvas>
+      <div class="sim-controls">
+        <label class="ctl">시간
+          <input type="range" id="exS" min="4" max="100" value="100">
+          <span class="val" id="exV">현재</span></label>
+        <button class="btn amber" id="exBack">시간 되돌리기 ⏪</button>
+        <button class="btn" id="exFwd">현재로 ⏩</button>
+      </div>
+      <div class="readout">
+        <div class="stat"><div class="k">우주의 크기 (상대)</div><div class="v" id="exSize">1.00배</div></div>
+        <div class="stat amber"><div class="k">우주의 나이</div><div class="v" id="exAge">약 138억 년</div></div>
+        <div class="stat warm" style="flex:1; min-width:280px"><div class="k">알 수 있는 것</div>
+          <div class="v" id="exMsg" style="font-size:.93rem; color:var(--txt); font-weight:700; line-height:1.5">
+            은하 자체의 크기는 그대로인데, 은하 사이의 거리만 멀어집니다.</div></div>
+      </div>
+    </div>
+
+    <div class="grid g3" style="margin-top:18px">
+      <figure class="fig">
+        <img src="img/expand_b.jpg" alt="과거의 작은 우주를 나타낸 모형">
+        <figcaption>과거의 우주 — 크기가 더 작았다</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="img/expand_a.jpg" alt="현재의 우주를 나타낸 모형">
+        <figcaption>현재의 우주 — 은하 사이가 멀어졌다</figcaption>
+      </figure>
+      <div class="card">
+        <h3>약 138억 년 전</h3>
+        <p style="margin:0; color:var(--dim)">팽창하고 있는 우주의 시간을 과거로 되돌린다면 우주의 크기는 점점 작아질 것입니다.
+          이를 바탕으로 과학자들은 우주가 <b style="color:var(--accent-2)">약 138억 년 전에 탄생</b>하였고,
+          점점 팽창하여 현재의 모습이 되었다고 설명합니다.</p>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:18px">
+      <div class="card">
+        <h3>건포도빵으로 비유하면</h3>
+        <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap">
+          <img src="img/raisin_bread.jpg" alt="건포도빵 단면" style="width:140px; border-radius:12px; border:1px solid var(--line)">
+          <p style="flex:1; min-width:200px; margin:0; color:var(--dim)">
+            오븐에서 부풀어 오르는 건포도빵에서 <b style="color:var(--accent-2)">건포도는 은하</b>,
+            <b style="color:var(--accent-2)">빵 반죽은 우주 공간</b>입니다. 반죽이 부풀면 건포도 사이의 거리가 서로 멀어집니다.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>기억할 세 가지</h3>
+        <ul style="margin:0; padding-left:20px; color:var(--dim)">
+          <li>외부 은하들은 <b style="color:var(--txt)">서로 멀어지고</b> 있다.</li>
+          <li>팽창하는 우주에는 <b style="color:var(--accent-2)">특별한 중심이 없다.</b></li>
+          <li>멀리 있는 은하일수록 <b style="color:var(--txt)">더 빠르게</b> 멀어진다.</li>
+        </ul>
+        <div class="teacher-note">
+          <span class="tlabel">참고 자료 — 허블</span>
+          허블은 1923년 안드로메다성운까지의 거리를 계산해 그것이 우리은하 밖의 <b>외부 은하</b>임을 밝혔고,
+          1929년에는 멀리 있는 은하일수록 적색 편이가 크다는 것을 알아내 우주가 팽창하고 있음을 밝혔다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 핵심 정리 -->
+  <section class="block">
+    <h2 class="sec"><span class="num">정리</span> 핵심 정리</h2>
+    <div class="key">
+      <ul>
+        <li><b>외부 은하</b> : 우리은하 밖의 은하</li>
+        <li><b>풍선 모형</b> : 풍선 표면을 우주 공간, 붙임딱지를 은하라고 했을 때, 풍선 표면이 커짐에 따라 붙임딱지 사이의 거리가 멀어짐을 알 수 있다.</li>
+        <li><b>팽창하는 우주</b> : 외부 은하들의 거리가 서로 멀어지고 있다. 팽창하는 우주에는 <b>중심이 없다.</b></li>
+        <li>우주는 <b>약 138억 년 전</b>에 탄생하였고, 점점 팽창하여 현재의 모습이 되었다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 확인 -->
+  <section class="block" id="check">
+    <h2 class="sec"><span class="num">확인</span> 이것만은 &amp; 문제로 확인</h2>
+    <div class="quiz">
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">1</span><span class="qt">우리은하 밖의 은하들을 무엇이라고 하는가?</span></div>
+        <div class="opts"><button class="opt">성운</button><button class="opt">외부 은하</button><button class="opt">성단</button></div>
+        <div class="sol"><b>외부 은하</b>입니다. 허블은 외부 은하를 관측하여 이들 사이의 거리가 점점 멀어진다는 것을 알아냈습니다.</div>
+      </div>
+
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">2</span><span class="qt">우주가 팽창함에 따라 은하들 사이의 거리는?</span></div>
+        <div class="opts"><button class="opt">가까워지고 있다</button><button class="opt">멀어지고 있다</button></div>
+        <div class="sol">우주 공간이 팽창하므로 은하들 사이의 거리는 <b>멀어지고</b> 있습니다.</div>
+      </div>
+
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">3</span><span class="qt">팽창하는 우주에 대한 설명으로 옳은 것은?</span></div>
+        <div class="opts">
+          <button class="opt">① 외부 은하들은 서로 가까워지고 있다.</button>
+          <button class="opt">② 우주는 모든 방향으로 팽창하고 있다.</button>
+          <button class="opt">③ 우주가 팽창하면서 은하의 크기가 작아진다.</button>
+          <button class="opt">④ 팽창하는 우주의 중심에는 우리은하가 있다.</button>
+          <button class="opt">⑤ 과거의 우주는 현재보다 크기가 더 컸을 것이다.</button>
+        </div>
+        <div class="sol">팽창하는 우주에서 외부 은하들은 서로 <b>멀어지고</b> 있으며, 팽창하는 우주에는 <b>중심이 없습니다</b>.
+          시간을 거꾸로 되돌리면 과거 우주는 현재보다 훨씬 <b>작았을</b> 것입니다. → <b>② 우주는 모든 방향으로 팽창하고 있다.</b></div>
+      </div>
+
+      <div class="q" data-a="0">
+        <div class="qh"><span class="qn">4</span><span class="qt">풍선 모형에 대해 옳게 말한 사람을 모두 고른 것은?<br>
+          <span class="note-sm">학생 A : 은하와 은하 사이의 거리는 점점 멀어져.<br>
+          학생 B : 풍선 위에 붙인 붙임딱지는 은하를 비유한 것이야.<br>
+          학생 C : 팽창하는 우주의 중심은 우리은하야.</span></span></div>
+        <div class="opts">
+          <button class="opt">학생 A, 학생 B</button>
+          <button class="opt">학생 A, 학생 C</button>
+          <button class="opt">학생 B, 학생 C</button>
+          <button class="opt">학생 A, 학생 B, 학생 C</button>
+        </div>
+        <div class="sol">이 모형에서 은하들은 풍선의 <b>표면</b>에 위치하므로 특별한 중심이 존재하지 않습니다.
+          따라서 학생 C의 말은 옳지 않습니다. → <b>학생 A, 학생 B</b></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>스스로 정리하기</h3>
+      <p style="margin:0">과학자들은 우리은하 밖의 은하들이 서로 멀어지고 있음을 관측하여 우주가 <span class="kw">ㅍ ㅊ</span>하고 있음을 알아냈다.
+        <button class="btn amber" data-reveal="selfA" data-label="확인">확인</button></p>
+      <div class="reveal" id="selfA"><b class="kw2">팽창</b></div>
+    </div>
+
+    <div class="score-bar">
+      <span class="s"></span>
+      <button class="btn" data-show-all>모두 정답 보기</button>
+      <button class="btn" data-reset-quiz>다시 풀기</button>
+    </div>
+  </section>
+
+  <div class="pager"></div>
+</main>
+
+<footer class="foot">Ⅷ-2. 우주 · 02 팽창하는 우주 | 교사용 교과서 298~299쪽</footer>
+
+<script src="assets/common.js"></script>
+<script>
+/* =========================================================
+   1) 풍선 모형 (구면 위의 붙임딱지)
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvBalloon");
+  var C = SU.Canvas(cv, 1.75), U = SU.U;
+  var sl = document.getElementById("blS"), vS = document.getElementById("blV");
+  var d12 = document.getElementById("d12"), d13 = document.getElementById("d13");
+  var k12 = document.getElementById("k12"), k13 = document.getElementById("k13");
+  var msg = document.getElementById("blMsg"), bAuto = document.getElementById("blAuto");
+  var auto = false, dir = 1, grow = 0, ref = 0;
+
+  bAuto.onclick = function () {
+    auto = !auto; bAuto.classList.toggle("on", auto);
+    bAuto.textContent = auto ? "자동으로 불기 ⏸" : "자동으로 불기 ▶";
+  };
+  sl.addEventListener("input", function () { auto = false; bAuto.classList.remove("on"); bAuto.textContent = "자동으로 불기 ▶"; });
+  document.querySelectorAll("[data-ref]").forEach(function (b) {
+    b.onclick = function () {
+      ref = parseInt(b.dataset.ref, 10);
+      document.querySelectorAll("[data-ref]").forEach(function (x) { x.classList.toggle("on", x === b); });
+    };
+  });
+
+  /* 붙임딱지: 구면 좌표 (theta=극각, phi=방위각) */
+  var FR = Math.PI / 2;                 // 정면(관측자 쪽)을 향하는 방위각
+  var DOTS = [
+    { th: 1.25, ph: FR, n: "1" },
+    { th: 1.25, ph: FR + 0.4744, n: "2" },   // 1에서 0.45 rad 떨어짐
+    { th: 2.15, ph: FR, n: "3" },            // 1에서 0.90 rad 떨어짐 (2배)
+    { th: 0.72, ph: 0.95, n: "" }, { th: 1.90, ph: 0.30, n: "" },
+    { th: 0.95, ph: -1.25, n: "" }, { th: 2.05, ph: -0.85, n: "" },
+    { th: 1.55, ph: 2.10, n: "" }, { th: 0.55, ph: -2.4, n: "" },
+    { th: 2.35, ph: 1.50, n: "" }, { th: 1.10, ph: 2.85, n: "" },
+    { th: 1.95, ph: -2.2, n: "" }
+  ];
+  function toXYZ(d) {
+    return [Math.sin(d.th) * Math.cos(d.ph), Math.cos(d.th), Math.sin(d.th) * Math.sin(d.ph)];
+  }
+  function angBetween(a, b) {
+    var A = toXYZ(a), B = toXYZ(b);
+    var dot = A[0] * B[0] + A[1] * B[1] + A[2] * B[2];
+    return Math.acos(U.clamp(dot, -1, 1));
+  }
+  var K = 2.0 / angBetween(DOTS[0], DOTS[1]);   // 처음 1↔2 가 2.0 cm가 되도록
+
+  SU.loop(cv, function (dt, t) {
+    if (auto) {
+      grow += dir * dt * 0.34;
+      if (grow > 1) { grow = 1; dir = -1; }
+      if (grow < 0) { grow = 0; dir = 1; }
+      sl.value = grow * 100;
+    } else grow = U.approach(grow, parseFloat(sl.value) / 100, dt, 9);
+
+    var scale = 1 + grow * 0.5;      // 1.0 → 1.5배
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var bg = ctx.createLinearGradient(0, 0, 0, h);
+    bg.addColorStop(0, "#070c1e"); bg.addColorStop(1, "#0a1026");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+
+    var cx = w * 0.40, cy = h * 0.50;
+    var R = Math.min(w * 0.17, h * 0.30) * scale;
+    var spin = 0.42 * Math.sin(t * 0.22);   // 번호 붙임딱지가 계속 보이도록 좌우로만 흔든다
+
+    // 풍선 몸체
+    var gg = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.38, R * 0.1, cx, cy, R);
+    gg.addColorStop(0, "rgba(255,150,170,.95)");
+    gg.addColorStop(0.55, "rgba(215,80,120,.85)");
+    gg.addColorStop(1, "rgba(120,30,75,.9)");
+    ctx.fillStyle = gg;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.fill();
+    // 매듭
+    ctx.fillStyle = "rgba(150,40,85,.95)";
+    ctx.beginPath();
+    ctx.moveTo(cx - R * 0.10, cy + R * 0.97); ctx.lineTo(cx + R * 0.10, cy + R * 0.97);
+    ctx.lineTo(cx, cy + R * 1.18); ctx.closePath(); ctx.fill();
+    // 광택
+    var hl = ctx.createRadialGradient(cx - R * 0.38, cy - R * 0.42, 0, cx - R * 0.38, cy - R * 0.42, R * 0.5);
+    hl.addColorStop(0, "rgba(255,255,255,.5)"); hl.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = hl; ctx.beginPath(); ctx.arc(cx - R * 0.38, cy - R * 0.42, R * 0.5, 0, 6.2832); ctx.fill();
+
+    function pr(d) {
+      var p = toXYZ(d);
+      var x = p[0] * Math.cos(spin) + p[2] * Math.sin(spin);
+      var z = -p[0] * Math.sin(spin) + p[2] * Math.cos(spin);
+      return { x: cx + x * R, y: cy - p[1] * R, z: z };
+    }
+
+    // 붙임딱지
+    var pts = DOTS.map(pr);
+    DOTS.forEach(function (d, i) {
+      var p = pts[i], front = p.z > -0.02;
+      var main = d.n !== "";
+      ctx.globalAlpha = front ? 1 : 0.22;
+      var col = i === ref ? "#7ef0c8" : (main ? "#ffd166" : "rgba(255,255,255,.85)");
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.arc(p.x, p.y, main ? 8 : 4.5, 0, 6.2832); ctx.fill();
+      if (main) {
+        ctx.fillStyle = "#0a1026"; ctx.font = "800 11px " + getComputedStyle(document.body).fontFamily;
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText(d.n, p.x, p.y + 0.5);
+      }
+      ctx.globalAlpha = 1;
+    });
+
+    // 기준 은하에서의 호(거리) 표시
+    function arc(i, j, col) {
+      var A = toXYZ(DOTS[i]), B = toXYZ(DOTS[j]);
+      ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath();
+      for (var s = 0; s <= 24; s++) {
+        var u = s / 24;
+        var x = A[0] + (B[0] - A[0]) * u, y = A[1] + (B[1] - A[1]) * u, z = A[2] + (B[2] - A[2]) * u;
+        var L = Math.sqrt(x * x + y * y + z * z); x /= L; y /= L; z /= L;
+        var xr = x * Math.cos(spin) + z * Math.sin(spin);
+        var px = cx + xr * R, py = cy - y * R;
+        if (s === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+    var others = [0, 1, 2].filter(function (i) { return i !== ref; });
+    arc(ref, others[0], "rgba(126,240,200,.9)");
+    arc(ref, others[1], "rgba(255,209,102,.9)");
+
+    // 오른쪽 그래프 (거리 변화)
+    var gx = w * 0.66, gy = h * 0.18, gw = w * 0.30, gh = h * 0.62;
+    ctx.fillStyle = "rgba(255,255,255,.04)";
+    ctx.fillRect(gx, gy, gw, gh);
+    ctx.strokeStyle = "rgba(132,162,255,.25)"; ctx.lineWidth = 1; ctx.strokeRect(gx, gy, gw, gh);
+    var dA = K * angBetween(DOTS[ref], DOTS[others[0]]) * scale;
+    var dB = K * angBetween(DOTS[ref], DOTS[others[1]]) * scale;
+    var maxd = 7;
+    [[dA, "rgba(126,240,200,.9)", DOTS[ref].n + " ↔ " + DOTS[others[0]].n],
+     [dB, "rgba(255,209,102,.9)", DOTS[ref].n + " ↔ " + DOTS[others[1]].n]].forEach(function (B, i) {
+      var bw = gw * 0.26, bx = gx + gw * (0.22 + i * 0.4);
+      var bh = (gh - 40) * U.clamp(B[0] / maxd, 0, 1);
+      ctx.fillStyle = B[1];
+      ctx.fillRect(bx, gy + gh - 22 - bh, bw, bh);
+      U.label(ctx, bx + bw / 2, gy + gh - 32 - bh, B[0].toFixed(1) + " cm", B[1], 13);
+      U.label(ctx, bx + bw / 2, gy + gh - 10, B[2], "rgba(166,176,212,.9)", 12);
+    });
+    U.label(ctx, gx + gw / 2, gy - 12, "붙임딱지 사이의 거리", "rgba(207,218,255,.9)", 13);
+
+    U.label(ctx, 14, 18, "풍선 표면 = 우주 공간 · 붙임딱지 = 은하", "rgba(207,218,255,.9)", 13, "left", 800);
+
+    vS.textContent = grow < 0.15 ? "작게" : (grow < 0.6 ? "조금 더" : "크게");
+    k12.textContent = DOTS[ref].n + " ↔ " + DOTS[others[0]].n + " 거리";
+    k13.textContent = DOTS[ref].n + " ↔ " + DOTS[others[1]].n + " 거리";
+    d12.textContent = dA.toFixed(1) + " cm";
+    d13.textContent = dB.toFixed(1) + " cm";
+    msg.textContent = grow < 0.1
+      ? "풍선을 불어 보세요. 붙임딱지 사이의 거리가 어떻게 변할까요?"
+      : "어느 붙임딱지를 기준으로 보아도 다른 붙임딱지는 모두 멀어집니다. 처음에 더 멀리 있던 것이 더 많이 멀어집니다.";
+  });
+})();
+
+/* =========================================================
+   2) 팽창하는 우주 (시간 되돌리기)
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvExp");
+  var C = SU.Canvas(cv, 2.35), U = SU.U;
+  var sl = document.getElementById("exS"), vS = document.getElementById("exV");
+  var oSize = document.getElementById("exSize"), oAge = document.getElementById("exAge"), oMsg = document.getElementById("exMsg");
+  var target = 1, a = 1;
+  document.getElementById("exBack").onclick = function () { target = 0.05; sl.value = 5; };
+  document.getElementById("exFwd").onclick = function () { target = 1; sl.value = 100; };
+  sl.addEventListener("input", function () { target = parseFloat(sl.value) / 100; });
+
+  // 공변 좌표(변하지 않는 위치)
+  var GX = [];
+  for (var i = 0; i < 26; i++) {
+    var ang = Math.random() * 6.2832, rr = Math.sqrt(Math.random()) * 0.92;
+    GX.push({ x: Math.cos(ang) * rr, y: Math.sin(ang) * rr * 0.8, sp: Math.random() * 6.3, r: 10 + Math.random() * 9, tilt: Math.random() * 3.14 });
+  }
+  GX[0].x = -0.55; GX[0].y = 0.05;
+  GX[1].x = 0.48; GX[1].y = -0.12;
+
+  function spiral(ctx, x, y, r, rot, alpha) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.globalAlpha = alpha;
+    ctx.globalCompositeOperation = "lighter";
+    var g = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+    g.addColorStop(0, "rgba(255,244,215,.95)"); g.addColorStop(0.35, "rgba(255,205,140,.35)");
+    g.addColorStop(1, "rgba(150,180,255,0)");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, 0, r, r * 0.45, 0, 0, 6.2832); ctx.fill();
+    ctx.strokeStyle = "rgba(180,210,255,.55)"; ctx.lineWidth = 1.4;
+    for (var k = 0; k < 2; k++) {
+      ctx.beginPath();
+      for (var s = 0; s <= 22; s++) {
+        var u = s / 22, th = k * Math.PI + u * 2.6, rad = r * (0.16 + u * 0.92);
+        var px = Math.cos(th) * rad, py = Math.sin(th) * rad * 0.45;
+        if (s === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  SU.loop(cv, function (dt, t) {
+    a = U.approach(a, target, dt, 3.0);
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = "#04060f"; ctx.fillRect(0, 0, w, h);
+
+    var cx = w * 0.5, cy = h * 0.46;
+    var R = Math.min(w * 0.30, h * 0.40) * (0.12 + 0.88 * a);
+
+    // 우주 공간
+    var g = ctx.createRadialGradient(cx, cy, R * 0.2, cx, cy, R);
+    g.addColorStop(0, "rgba(60,90,190,.30)"); g.addColorStop(0.7, "rgba(35,55,130,.18)");
+    g.addColorStop(1, "rgba(20,30,80,.05)");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.fill();
+    ctx.strokeStyle = "rgba(132,162,255,.35)"; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.stroke();
+
+    // 은하 (크기는 그대로, 거리만 커짐)
+    GX.forEach(function (gx, i) {
+      var x = cx + gx.x * R * 0.92, y = cy + gx.y * R * 0.92;
+      spiral(ctx, x, y, gx.r * (0.55 + 0.45 * Math.min(1, a * 1.6)), gx.tilt + t * 0.05, 0.95);
+    });
+
+    // 두 은하 사이 거리
+    var x1 = cx + GX[0].x * R * 0.92, y1 = cy + GX[0].y * R * 0.92;
+    var x2 = cx + GX[1].x * R * 0.92, y2 = cy + GX[1].y * R * 0.92;
+    ctx.strokeStyle = "rgba(126,240,200,.8)"; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.setLineDash([]);
+    var dist = Math.hypot(x2 - x1, y2 - y1);
+    U.chip(ctx, (x1 + x2) / 2, (y1 + y2) / 2 - 16, "은하 사이 거리", "#7ef0c8", 12);
+
+    // 시간 화살표
+    U.arrow(ctx, w * 0.06, h - 22, w * 0.94, h - 22, "rgba(255,255,255,.4)", 1.5, 8);
+    U.label(ctx, w * 0.06, h - 38, "과거 (우주의 크기가 작았다)", "rgba(166,176,212,.85)", 12, "left");
+    U.label(ctx, w * 0.94, h - 38, "현재", "rgba(166,176,212,.85)", 12, "right");
+    var mx = w * (0.06 + 0.88 * a);
+    ctx.fillStyle = "#ffd166"; ctx.beginPath(); ctx.arc(mx, h - 22, 6, 0, 6.2832); ctx.fill();
+
+    U.label(ctx, 14, 18, "시간의 흐름에 따른 우주", "rgba(207,218,255,.9)", 13, "left", 800);
+
+    var age = 138 * a;
+    vS.textContent = a > 0.96 ? "현재" : (age < 1 ? "탄생 직후" : "약 " + age.toFixed(0) + "억 년");
+    oSize.textContent = (0.12 + 0.88 * a).toFixed(2) + "배";
+    oAge.textContent = a > 0.96 ? "약 138억 년" : (age < 1 ? "탄생 직후" : "약 " + age.toFixed(0) + "억 년");
+    oMsg.textContent = a < 0.3
+      ? "시간을 되돌리면 우주의 크기는 점점 작아집니다. 과학자들은 우주가 약 138억 년 전에 탄생했다고 설명합니다."
+      : "은하 자체의 크기는 그대로인데, 은하 사이의 거리만 멀어집니다. 팽창의 중심은 없습니다.";
+  });
+})();
+</script>
+</body>
+</html>

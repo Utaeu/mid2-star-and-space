@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03 별의 표면 온도와 색 | Ⅷ. 별과 우주</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .hotspot { position: relative; }
+  .hotspot .mk {
+    position: absolute; transform: translate(-50%, -50%);
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 2px solid var(--accent-2); box-shadow: 0 0 0 4px rgba(255,209,102,.16);
+    animation: ping 2.4s ease-out infinite;
+  }
+  .hotspot .mk.blue { border-color: #8fc0ff; box-shadow: 0 0 0 4px rgba(143,192,255,.16); animation-delay: 1.2s; }
+  .hotspot .tag {
+    position: absolute; transform: translate(-50%, 0); white-space: nowrap;
+    font-size: .76rem; font-weight: 800; padding: 3px 9px; border-radius: 8px;
+    background: rgba(6,10,24,.82); border: 1px solid var(--accent-2); color: var(--accent-2);
+  }
+  .hotspot .tag.blue { border-color: #8fc0ff; color: #b9d7ff; }
+  @keyframes ping { 0% { transform: translate(-50%,-50%) scale(.75); opacity: 1 } 70%,100% { transform: translate(-50%,-50%) scale(1.5); opacity: 0 } }
+</style>
+</head>
+<body>
+<canvas id="bg-stars"></canvas><div id="bg-glow"></div>
+<div id="progress"></div>
+
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><span class="dot"></span><span>Ⅷ. 별과 우주 <small>중2 과학</small></span></a>
+  <nav class="chips"></nav>
+  <div class="tmode"><span class="sw"></span>교사 모드</div>
+</div></header>
+
+<main class="wrap">
+
+  <div class="page-head">
+    <span class="eyebrow">Ⅷ-1. 별 · 03 · 5차시</span>
+    <h1>별의 표면 <em>온도</em>와 색</h1>
+    <p class="lede">뜨거운 용암은 흘러가면서 온도가 내려가고, 그때 색이 노란색 → 빨간색 → 검은색으로 달라집니다.
+      밤하늘의 별들도 다양한 색으로 관측됩니다.</p>
+    <div style="margin-top:10px">
+      <span class="pill a2">#별의 표면 온도</span><span class="pill a2">#별의 색</span>
+    </div>
+  </div>
+
+  <div class="goals">
+    <h3>이 단원에서 나는</h3>
+    <ul><li>별의 표면 온도와 색의 관계를 설명할 수 있다.</li></ul>
+  </div>
+
+  <!-- 도입 -->
+  <section class="block">
+    <h2 class="sec"><span class="num">도입</span> 용암의 색이 흐르면서 달라지는 까닭은?</h2>
+    <div class="hook">
+      “화산에서 엄청난 양의 용암이 계속 흘러나오고 있대.” → “그런데 용암의 색이 흐르면서 달라지네!”<br>
+      <strong>용암이 흘러내려 가면서 색이 달라지는 까닭은 무엇일까요?</strong>
+    </div>
+    <p style="color:var(--dim); max-width:74ch">용암이 흘러내려 가면서 <b style="color:var(--txt)">용암의 온도가 달라지기 때문</b>입니다.
+      물체의 색을 보면 온도를 비교할 수 있습니다. 별도 마찬가지입니다.</p>
+    <div class="teacher-note">
+      <span class="tlabel">지도 안내</span>
+      이전 차시의 등급 개념을 확인한 다음, 용암 분출 장면에서 색이 다른 것이 어떤 의미인지 생각해 보도록 지도한다.
+      별의 표면 온도는 <b>별의 색을 이용하여 비교하는 수준으로만</b> 다룬다.
+    </div>
+  </section>
+
+  <!-- 오리온자리 -->
+  <section class="block" id="orion">
+    <h2 class="sec"><span class="num">개념 1</span> 오리온자리의 두 별 <span class="qq">교과서 288쪽 | 그림 7 |</span></h2>
+    <p class="sec-sub">겨울철에 잘 관측되는 오리온자리의 <span class="kw">베텔게우스</span>와 <span class="kw">리겔</span>은 색이 다릅니다.
+      적색을 띠는 베텔게우스의 표면 온도는 청백색을 띠는 리겔보다 <span class="kw">낮습니다</span>.</p>
+
+    <div class="grid g2">
+      <figure class="fig hotspot">
+        <img src="img/orion.jpg" alt="오리온자리 사진. 왼쪽 위의 붉은 별이 베텔게우스, 오른쪽 아래의 푸른 별이 리겔">
+        <div class="mk" style="left:30%; top:18%"></div>
+        <div class="tag" style="left:30%; top:calc(18% + 22px)">베텔게우스 · 적색 · 온도 낮다</div>
+        <div class="mk blue" style="left:70%; top:75%"></div>
+        <div class="tag blue" style="left:70%; top:calc(75% + 22px)">리겔 · 청백색 · 온도 높다</div>
+        <figcaption><b>| 그림 7 |</b> 오리온자리 — 같은 별자리 안에서도 별의 색은 뚜렷하게 다르다.</figcaption>
+      </figure>
+      <div class="card">
+        <h3>별의 색을 관측하면?</h3>
+        <p style="color:var(--dim)">별의 표면 온도에 따라 별의 색이 다릅니다.
+          따라서 <b style="color:var(--accent-2)">별의 색을 관측하여 표면 온도를 비교</b>할 수 있습니다.</p>
+        <p style="color:var(--dim); margin-bottom:0">
+          별까지의 거리를 몰라도, 망원경으로 색만 확인하면 그 별의 표면이 얼마나 뜨거운지 짐작할 수 있다는 뜻입니다.
+          오른쪽 아래 시뮬레이션에서 온도를 직접 바꿔 보세요.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 온도-색 시뮬레이션 -->
+  <section class="block" id="sim">
+    <h2 class="sec"><span class="num">개념 2</span> 표면 온도에 따라 색은 어떻게 달라질까? <span class="qq">교과서 289쪽 | 그림 8 |</span></h2>
+    <p class="sec-sub">표면 온도가 매우 높은 별은 <span class="kw">청색</span>을 띠고, 표면 온도가 낮아지면서 점차
+      청백색 → 백색 → 황백색 → 황색 → 주황색 → <span class="kw">적색</span>을 띠게 됩니다.</p>
+
+    <div class="sim">
+      <div class="sim-head">
+        <h4>별의 표면 온도 바꿔 보기</h4>
+        <span class="hint">아래 버튼을 누르면 실제 별의 온도로 이동합니다</span>
+      </div>
+      <canvas id="cvTemp"></canvas>
+      <div class="sim-controls">
+        <label class="ctl">표면 온도
+          <input type="range" id="tpSl" min="0" max="1000" value="470">
+          <span class="val" id="tpV">6000 K</span></label>
+        <button class="btn" data-k="3300">베텔게우스</button>
+        <button class="btn" data-k="4300">아르크투루스</button>
+        <button class="btn on" data-k="6000">태양</button>
+        <button class="btn" data-k="9900">시리우스</button>
+        <button class="btn" data-k="12000">리겔</button>
+        <button class="btn" data-k="40000">나오스</button>
+      </div>
+      <div class="readout">
+        <div class="stat"><div class="k">표면 온도</div><div class="v" id="roT">6000 K</div></div>
+        <div class="stat amber"><div class="k">별의 색</div><div class="v" id="roC">황색</div></div>
+        <div class="stat" style="flex:1; min-width:250px"><div class="k">이런 별이 있어요</div>
+          <div class="v" id="roE" style="font-size:.95rem; color:var(--txt); font-weight:700">태양, 카펠라</div></div>
+      </div>
+    </div>
+
+    <h3 class="mini">| 그림 8 | 별의 색과 표면 온도</h3>
+    <div class="table-scroll">
+    <table class="data">
+      <thead><tr><th style="width:22%">색</th><th style="width:30%">대략적인 표면 온도</th><th>별의 예</th></tr></thead>
+      <tbody>
+        <tr><td class="name" style="color:#9fc0ff">청색</td><td class="tnum">30000 K 이상</td><td>나오스</td></tr>
+        <tr><td class="name" style="color:#c3d6ff">청백색</td><td class="tnum">10000 ~ 30000 K</td><td>리겔, 스피카</td></tr>
+        <tr><td class="name" style="color:#eef0ff">백색</td><td class="tnum">7500 ~ 10000 K</td><td>시리우스, 베가</td></tr>
+        <tr><td class="name" style="color:#fff3d8">황백색</td><td class="tnum">6000 ~ 7500 K</td><td>카노푸스, 프로키온</td></tr>
+        <tr><td class="name" style="color:#ffe08a">황색</td><td class="tnum">5000 ~ 6000 K</td><td>태양, 카펠라</td></tr>
+        <tr><td class="name" style="color:#ffb066">주황색</td><td class="tnum">3500 ~ 5000 K</td><td>아르크투루스, 알데바란</td></tr>
+        <tr><td class="name" style="color:#ff8a6b">적색</td><td class="tnum">3500 K 미만</td><td>베텔게우스, 안타레스</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note-sm" style="margin-top:8px">예를 들어 황색 별인 태양은 표면 온도가 약 6000 K입니다.</p>
+
+    <div class="grid g2" style="margin-top:18px">
+      <figure class="fig hotspot">
+        <img src="img/albireo.jpg" alt="백조자리 알비레오. 주황색 별과 청백색 별이 나란히 보인다">
+        <div class="mk" style="left:46%; top:51%"></div>
+        <div class="tag" style="left:32%; top:calc(51% + 24px)">알비레오 A · 약 4000 K</div>
+        <div class="mk blue" style="left:57%; top:49%"></div>
+        <div class="tag blue" style="left:74%; top:calc(49% - 44px)">알비레오 B · 약 14000 K</div>
+        <figcaption>백조자리의 알비레오 — 나란히 보이는 두 별의 색이 다르다.</figcaption>
+      </figure>
+      <div class="card">
+        <h3>색만 보고도 알 수 있는 것</h3>
+        <p style="color:var(--dim)">알비레오 A는 <b style="color:#ffb066">주황색</b>, 알비레오 B는 <b style="color:#c3d6ff">청백색</b>입니다.
+          따라서 <b style="color:var(--txt)">알비레오 B가 알비레오 A보다 표면 온도가 높습니다.</b></p>
+        <p style="color:var(--dim); margin-bottom:0">황색인 태양(약 6000 K)과 비교하면 표면 온도는
+          <b style="color:var(--accent-2)">알비레오 A → 태양 → 알비레오 B</b> 순으로 높아집니다.</p>
+        <div class="teacher-note">
+          <span class="tlabel">지도상의 유의점</span>
+          중학교 교육과정에서는 분광형(O·B·A·F·G·K·M)을 다루지 않고, <b>색으로 표면 온도를 비교하는 수준</b>으로만 지도한다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 핵심 정리 -->
+  <section class="block">
+    <h2 class="sec"><span class="num">정리</span> 핵심 정리</h2>
+    <div class="key">
+      <ul>
+        <li><b>별의 색</b> : 별의 표면 온도에 따라 별의 색이 달라진다.</li>
+        <li><b>표면 온도에 따른 별의 색</b> : 표면 온도가 매우 높은 별은 <b>청색</b>이며, 표면 온도가 낮아질수록
+          청백색 → 백색 → 황백색 → 황색 → 주황색 → <b>적색</b>이다.</li>
+        <li>따라서 <b>별의 색을 관측하면 표면 온도를 비교</b>할 수 있다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 확인 -->
+  <section class="block" id="check">
+    <h2 class="sec"><span class="num">확인</span> 이것만은 &amp; 문제로 확인</h2>
+    <div class="quiz">
+      <div class="q" data-a="0">
+        <div class="qh"><span class="qn">1</span><span class="qt">청색 별은 적색 별보다 표면 온도가?</span></div>
+        <div class="opts"><button class="opt">높다</button><button class="opt">낮다</button></div>
+        <div class="sol"><b>높다.</b> 별의 색이 청색 → 청백색 → 백색 → 황백색 → 황색 → 주황색 → 적색 순으로 표면 온도가 낮아집니다.</div>
+      </div>
+
+      <div class="q" data-a="2">
+        <div class="qh"><span class="qn">2</span><span class="qt">표면 온도가 약 6000 K인 태양은 <span class="blank"></span>색 별이다.</span></div>
+        <div class="opts"><button class="opt">청</button><button class="opt">백</button><button class="opt">황</button><button class="opt">적</button></div>
+        <div class="sol"><b>황색</b> — 5000~6000 K인 별은 황색으로 보입니다. 태양과 카펠라가 여기에 해당합니다.</div>
+      </div>
+
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">3</span><span class="qt">표면 온도가 높은 것부터 낮은 순으로 별의 색을 옳게 나열한 것은?</span></div>
+        <div class="opts">
+          <button class="opt">적색 – 주황색 – 황색 – 백색 – 청색</button>
+          <button class="opt">청색 – 청백색 – 백색 – 황백색 – 황색 – 주황색 – 적색</button>
+          <button class="opt">백색 – 청색 – 황색 – 적색 – 주황색</button>
+          <button class="opt">황색 – 백색 – 청색 – 주황색 – 적색</button>
+        </div>
+        <div class="sol">표면 온도가 높은 것에서 낮은 순으로 <b>청색 – 청백색 – 백색 – 황백색 – 황색 – 주황색 – 적색</b>입니다.</div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card">
+        <h3><span class="pill">사고력</span> 태양의 색은 앞으로 어떻게 변할까?</h3>
+        <p class="note-sm" style="margin:0 0 10px">태양은 약 50억 년이 지나면 온도가 훨씬 낮아질 것이라고 한다.
+          그렇다면 태양의 색은 점차 어떻게 변하게 될지 설명해 보자.</p>
+        <button class="btn amber" data-reveal="q4a" data-label="모범 답안 보기">모범 답안 보기</button>
+        <div class="reveal" id="q4a">
+          태양은 현재 황색이며 황색보다 표면 온도가 낮은 별은 주황색, 적색 별이다.
+          표면 온도가 점점 낮아지면 별의 색이 <b>주황색에서 적색까지</b> 변하게 될 것이다.
+        </div>
+      </div>
+      <div class="card">
+        <h3>스스로 정리하기</h3>
+        <p style="margin:0">별의 표면 <span class="kw">ㅇ ㄷ</span>에 따라 별의 색이 달라진다.
+          <button class="btn amber" data-reveal="selfA" data-label="확인">확인</button></p>
+        <div class="reveal" id="selfA"><b class="kw2">온도</b></div>
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <span class="s"></span>
+      <button class="btn" data-show-all>모두 정답 보기</button>
+      <button class="btn" data-reset-quiz>다시 풀기</button>
+    </div>
+  </section>
+
+  <div class="pager"></div>
+</main>
+
+<footer class="foot">Ⅷ-1. 별 · 03 별의 표면 온도와 색 | 교사용 교과서 288~289쪽</footer>
+
+<script src="assets/common.js"></script>
+<script>
+(function () {
+  var cv = document.getElementById("cvTemp");
+  var C = SU.Canvas(cv, 2.1), U = SU.U;
+  var sl = document.getElementById("tpSl"), vEl = document.getElementById("tpV");
+  var roT = document.getElementById("roT"), roC = document.getElementById("roC"), roE = document.getElementById("roE");
+  var KMIN = 2800, KMAX = 40000;
+
+  var BANDS = [
+    { name: "적색", lo: 0, hi: 3500, ex: "베텔게우스, 안타레스" },
+    { name: "주황색", lo: 3500, hi: 5000, ex: "아르크투루스, 알데바란" },
+    { name: "황색", lo: 5000, hi: 6000, ex: "태양, 카펠라" },
+    { name: "황백색", lo: 6000, hi: 7500, ex: "카노푸스, 프로키온" },
+    { name: "백색", lo: 7500, hi: 10000, ex: "시리우스, 베가" },
+    { name: "청백색", lo: 10000, hi: 30000, ex: "리겔, 스피카" },
+    { name: "청색", lo: 30000, hi: 1e9, ex: "나오스" }
+  ];
+  function bandOf(k) { for (var i = 0; i < BANDS.length; i++) if (k <= BANDS[i].hi) return BANDS[i]; return BANDS[6]; }
+
+  /* 교과서 | 그림 8 |의 7가지 색 구분에 맞춘 색 띠 */
+  var RAMP = [
+    [2800, [255, 118, 80]], [3500, [255, 138, 107]], [5000, [255, 176, 102]],
+    [6000, [255, 224, 138]], [7500, [255, 243, 216]], [10000, [238, 240, 255]],
+    [30000, [195, 214, 255]], [40000, [159, 192, 255]]
+  ];
+  function ramp(k) {
+    k = Math.max(2800, Math.min(40000, k));
+    for (var i = 1; i < RAMP.length; i++) {
+      if (k <= RAMP[i][0]) {
+        var a = RAMP[i - 1], b = RAMP[i];
+        var u = (Math.log(k) - Math.log(a[0])) / (Math.log(b[0]) - Math.log(a[0]));
+        return [0, 1, 2].map(function (j) { return Math.round(a[1][j] + (b[1][j] - a[1][j]) * u); });
+      }
+    }
+    return RAMP[RAMP.length - 1][1];
+  }
+  function slToK(v) { return KMIN * Math.pow(KMAX / KMIN, v / 1000); }
+  function kToSl(k) { return 1000 * Math.log(k / KMIN) / Math.log(KMAX / KMIN); }
+
+  var target = 6000, cur = 6000;
+  sl.addEventListener("input", function () {
+    target = slToK(parseFloat(sl.value));
+    document.querySelectorAll("[data-k]").forEach(function (b) { b.classList.remove("on"); });
+  });
+  document.querySelectorAll("[data-k]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      target = parseFloat(b.dataset.k);
+      sl.value = kToSl(target);
+      document.querySelectorAll("[data-k]").forEach(function (x) { x.classList.toggle("on", x === b); });
+    });
+  });
+
+  // 표면 얼룩 (부드러운 변화를 위해 고정 패턴)
+  var blobs = [];
+  for (var i = 0; i < 26; i++) {
+    var a = Math.random() * 6.2832, r = Math.sqrt(Math.random()) * 0.82;
+    blobs.push({ x: Math.cos(a) * r, y: Math.sin(a) * r, s: Math.random() * 0.26 + 0.1, p: Math.random() * 6.3, sp: Math.random() * 0.5 + 0.25 });
+  }
+
+  SU.loop(cv, function (dt, t) {
+    cur = U.approach(cur, target, dt, 3.6);
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var bg = ctx.createLinearGradient(0, 0, 0, h);
+    bg.addColorStop(0, "#050914"); bg.addColorStop(1, "#080d20");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+
+    var col = ramp(cur);
+    var cs = "rgba(" + col[0] + "," + col[1] + "," + col[2] + ",1)";
+    var cx = w * 0.30, cy = h * 0.48, R = Math.min(w * 0.15, h * 0.32);
+
+    // 별 후광
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    var pulse = 1 + 0.02 * Math.sin(t * 1.6);
+    var gg = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, R * 3.4 * pulse);
+    gg.addColorStop(0, "rgba(" + col[0] + "," + col[1] + "," + col[2] + ",.42)");
+    gg.addColorStop(0.45, "rgba(" + col[0] + "," + col[1] + "," + col[2] + ",.10)");
+    gg.addColorStop(1, "rgba(" + col[0] + "," + col[1] + "," + col[2] + ",0)");
+    ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(cx, cy, R * 3.4 * pulse, 0, 6.2832); ctx.fill();
+    ctx.restore();
+
+    // 본체
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.clip();
+    var bodyG = ctx.createRadialGradient(cx - R * 0.28, cy - R * 0.3, R * 0.1, cx, cy, R);
+    bodyG.addColorStop(0, "rgba(255,255,255,.98)");
+    bodyG.addColorStop(0.42, cs);
+    bodyG.addColorStop(1, "rgba(" + Math.round(col[0] * 0.62) + "," + Math.round(col[1] * 0.62) + "," + Math.round(col[2] * 0.68) + ",1)");
+    ctx.fillStyle = bodyG; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.fill();
+    ctx.globalCompositeOperation = "overlay";
+    for (var i = 0; i < blobs.length; i++) {
+      var b = blobs[i];
+      var bx = cx + b.x * R, by = cy + b.y * R, br = b.s * R * (1 + 0.14 * Math.sin(t * b.sp + b.p));
+      var bg2 = ctx.createRadialGradient(bx, by, 0, bx, by, br);
+      var aa = 0.1 + 0.07 * Math.sin(t * b.sp * 1.3 + b.p);
+      bg2.addColorStop(0, "rgba(255,255,255," + aa + ")");
+      bg2.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = bg2; ctx.beginPath(); ctx.arc(bx, by, br, 0, 6.2832); ctx.fill();
+    }
+    ctx.restore();
+
+    U.spike(ctx, cx, cy, R * 3.1, "rgba(" + col[0] + "," + col[1] + "," + col[2] + ",.30)", 2);
+
+    // 색 띠 (오른쪽)
+    var bx0 = w * 0.55, bx1 = w * 0.95, by0 = h * 0.30, bh = h * 0.16;
+    var grad = ctx.createLinearGradient(bx0, 0, bx1, 0);
+    for (var i = 0; i <= 12; i++) {
+      var kk = KMAX * Math.pow(KMIN / KMAX, i / 12);
+      var c2 = ramp(kk);
+      grad.addColorStop(i / 12, "rgb(" + c2[0] + "," + c2[1] + "," + c2[2] + ")");
+    }
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    var rr = 9;
+    ctx.moveTo(bx0 + rr, by0); ctx.arcTo(bx1, by0, bx1, by0 + bh, rr);
+    ctx.arcTo(bx1, by0 + bh, bx0, by0 + bh, rr); ctx.arcTo(bx0, by0 + bh, bx0, by0, rr);
+    ctx.arcTo(bx0, by0, bx1, by0, rr); ctx.closePath(); ctx.fill();
+    U.label(ctx, bx0, by0 - 14, "높다", "rgba(166,176,212,.9)", 12, "left");
+    U.label(ctx, bx1, by0 - 14, "낮다", "rgba(166,176,212,.9)", 12, "right");
+    U.label(ctx, (bx0 + bx1) / 2, by0 - 14, "표면 온도", "rgba(207,218,255,.9)", 12);
+
+    // 현재 위치 표시
+    var frac = Math.log(KMAX / cur) / Math.log(KMAX / KMIN);
+    var mx = bx0 + (bx1 - bx0) * U.clamp(frac, 0, 1);
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(mx, by0 - 6); ctx.lineTo(mx, by0 + bh + 6); ctx.stroke();
+    var band = bandOf(cur);
+    U.chip(ctx, U.clamp(mx, bx0 + 40, bx1 - 40), by0 + bh + 24, band.name, "#fff", 13);
+
+    // 별의 예
+    U.label(ctx, bx0, by0 + bh + 58, "이 온도의 별: " + band.ex, "rgba(207,218,255,.9)", 13, "left");
+    U.label(ctx, bx0, by0 + bh + 82, Math.round(cur / 100) * 100 + " K", "rgba(255,209,102,.95)", 20, "left", 900);
+
+    vEl.textContent = Math.round(cur / 100) * 100 + " K";
+    roT.textContent = Math.round(cur / 100) * 100 + " K";
+    roC.textContent = band.name;
+    roE.textContent = band.ex;
+  });
+})();
+</script>
+</body>
+</html>

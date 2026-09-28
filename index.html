@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ⅷ. 별과 우주 | 중학교 2학년 과학 수업 자료</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<canvas id="bg-stars"></canvas><div id="bg-glow"></div>
+<div id="progress"></div>
+
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><span class="dot"></span><span>Ⅷ. 별과 우주 <small>중2 과학</small></span></a>
+  <nav class="chips"></nav>
+  <div class="tmode"><span class="sw"></span>교사 모드</div>
+</div></header>
+
+<main class="wrap">
+
+  <div class="page-head">
+    <span class="eyebrow">중학교 2학년 과학 · 대단원 Ⅷ</span>
+    <h1>별과 <em>우주</em></h1>
+    <p class="lede">
+      별까지의 거리를 알아내는 방법을 이해하고, 별의 밝기·색이 무엇을 말해 주는지 살펴봅니다.
+      이어서 우리은하를 이루는 천체와 우주 팽창을 설명하고, 우주 탐사가 인류에게 준 영향을 알아봅니다.
+    </p>
+  </div>
+
+  <!-- 인트로 애니메이션 -->
+  <section class="block">
+    <div class="sim">
+      <div class="sim-head">
+        <h4>우주에는 어떤 천체들이 있을까?</h4>
+        <span class="hint">천체를 눌러 보세요</span>
+      </div>
+      <canvas id="cvIntro"></canvas>
+      <div class="readout" id="introInfo">
+        <div class="stat"><div class="k">지금 보는 천체</div><div class="v" id="introName">별</div></div>
+        <div class="stat" style="flex:1; min-width:240px"><div class="k">설명</div>
+          <div class="v" id="introDesc" style="font-size:.93rem; color:var(--txt); font-weight:600; line-height:1.5">스스로 빛을 내는 천체</div></div>
+      </div>
+    </div>
+    <div class="teacher-note">
+      <span class="tlabel">단원 개관</span>
+      우주에는 여러 은하가 있다. 은하에는 태양계가 포함되어 있는 우리은하와 그 외의 외부 은하들이 있다.
+      은하에는 별과, 별의 무리인 성단, 그리고 별과 별 사이에 있는 성간 물질들이 모여 있는 성운이 있다.
+      태양계를 구성하는 별·행성·위성·왜소 행성·소행성·혜성들도 우주에 있는 천체이다.
+      <br><br>이 단원에서는 별까지의 거리, 별의 밝기와 등급, 색과 온도 등 별의 특징과 우리은하의 모양·구성 천체 및
+      우주 팽창에 대해 학습한다. 이를 바탕으로 우주에 대한 흥미와 호기심을 갖도록 하고, 우주 탐사의 의의와
+      인류에게 미치는 영향을 조사하여 과학의 유용성을 느낄 수 있도록 한다.
+    </div>
+  </section>
+
+  <!-- 소단원 카드 -->
+  <section class="block">
+    <h2 class="sec"><span class="num">1</span> 별</h2>
+    <p class="sec-sub">#연주 시차 #광년 #파섹 #겉보기 등급 #절대 등급 #표면 온도 #별의 색</p>
+    <div class="unit-grid">
+      <a class="unit-card" href="s1-01-distance.html">
+        <div class="cno">01 · 1~2차시</div>
+        <h3>별까지의 거리</h3>
+        <p>시차란 무엇인지 알아보고, 지구 공전을 이용한 연주 시차로 별까지의 거리를 비교합니다.</p>
+        <div class="meta">교과서 278~283쪽 · 시차 / 연주 시차 / 1 pc</div>
+      </a>
+      <a class="unit-card" href="s1-02-magnitude.html">
+        <div class="cno">02 · 3~4차시</div>
+        <h3>별의 등급과 밝기</h3>
+        <p>거리가 멀어질 때 밝기가 어떻게 달라지는지 확인하고, 겉보기 등급과 절대 등급을 비교합니다.</p>
+        <div class="meta">교과서 284~287쪽 · 거리의 제곱에 반비례</div>
+      </a>
+      <a class="unit-card" href="s1-03-temperature.html">
+        <div class="cno">03 · 5차시</div>
+        <h3>별의 표면 온도와 색</h3>
+        <p>별의 색을 관측하여 표면 온도를 비교합니다. 청색부터 적색까지 색과 온도의 관계를 익힙니다.</p>
+        <div class="meta">교과서 288~289쪽 · 오리온자리 / 알비레오</div>
+      </a>
+    </div>
+
+    <h2 class="sec" style="margin-top:40px"><span class="num">2</span> 우주</h2>
+    <p class="sec-sub">#우리은하 #성단 #성운 #외부 은하 #우주 팽창 #인공위성 #화성 탐사 #로켓 #로봇</p>
+    <div class="unit-grid">
+      <a class="unit-card" href="s2-01-galaxy.html">
+        <div class="cno">01 · 1~2차시</div>
+        <h3>우리은하</h3>
+        <p>우리은하의 모양과 크기를 3차원으로 살펴보고, 우리은하를 이루는 성단과 성운을 비교합니다.</p>
+        <div class="meta">교과서 292~297쪽 · 30000 pc / 8500 pc</div>
+      </a>
+      <a class="unit-card" href="s2-02-expansion.html">
+        <div class="cno">02 · 3차시</div>
+        <h3>팽창하는 우주</h3>
+        <p>풍선 모형으로 우주 팽창을 설명하고, 시간을 되돌려 초기 우주의 모습을 추론합니다.</p>
+        <div class="meta">교과서 298~299쪽 · 약 138억 년 전 탄생</div>
+      </a>
+      <a class="unit-card" href="s2-03-exploration.html">
+        <div class="cno">03 · 4~5차시</div>
+        <h3>우주 탐사</h3>
+        <p>우주 탐사의 성과를 연표로 살펴보고, 탐사 기술이 일상생활에 쓰이는 예를 찾아봅니다.</p>
+        <div class="meta">교과서 300~304쪽 · 탐사선 / 로켓 / 탐사 로봇</div>
+      </a>
+    </div>
+
+    <div class="unit-grid" style="margin-top:16px; grid-template-columns:1fr">
+      <a class="unit-card" href="review.html" style="background:linear-gradient(135deg, rgba(255,209,102,.12), rgba(110,168,255,.08)); border-color:rgba(255,209,102,.3)">
+        <div class="cno" style="color:var(--accent-2)">중단원 점검 · 대단원 마무리</div>
+        <h3>단원 정리 · 확인 문제</h3>
+        <p>개념 정리 쏙쏙 · 생각 그물 · 문제로 확인 콕콕 · 실력 향상 문항을 한곳에 모았습니다. 채점과 해설이 함께 나옵니다.</p>
+        <div class="meta">교과서 290~291, 306~311쪽</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 수업 설계 -->
+  <section class="block">
+    <h2 class="sec"><span class="num">수업</span> 차시 계획</h2>
+    <p class="sec-sub">교사용 교과서의 중단원 수업 지도 설계(총 12차시)를 그대로 옮겼습니다.</p>
+
+    <div class="card">
+      <h3>Ⅷ-1. 별 <span class="pill a3">1~6차시</span></h3>
+      <div class="table-scroll">
+      <table class="data">
+        <thead><tr><th style="width:30%">소단원</th><th>차시</th><th>교과서</th><th style="width:40%">핵심 내용</th></tr></thead>
+        <tbody>
+          <tr><td class="name">01 별까지의 거리</td><td class="tnum">1~2</td><td class="tnum">278~283</td>
+            <td style="text-align:left">시차 · 연주 시차 · 1 pc(파섹)</td></tr>
+          <tr><td class="name">02 별의 등급과 밝기</td><td class="tnum">3~4</td><td class="tnum">284~287</td>
+            <td style="text-align:left">밝기와 거리의 관계 · 겉보기 등급 · 절대 등급</td></tr>
+          <tr><td class="name">03 별의 표면 온도와 색</td><td class="tnum">5</td><td class="tnum">288~289</td>
+            <td style="text-align:left">표면 온도에 따른 별의 색</td></tr>
+          <tr><td class="name">중단원 점검</td><td class="tnum">6</td><td class="tnum">290~291</td>
+            <td style="text-align:left">개념 정리 · 확인 문제</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="teacher-note">
+        <span class="tlabel">성취기준 · 지도상의 유의점</span>
+        <b>[9과15-01]</b> 지구 자전에 의한 천체의 겉보기 운동과 지구 공전에 의한 별자리 변화를 이해하고, 밤하늘 천체에 호기심을 가진다.
+        연주 시차를 이용하여 별까지의 거리를 구할 수 있고, 별의 등급과 밝기의 관계 및 표면 온도와 색의 관계를 설명할 수 있다.
+        <ul>
+          <li>별까지의 거리를 구하는 방법은 <b>수식을 도입하지 않는다.</b></li>
+          <li>연주 시차와 겉보기 등급·절대 등급의 <b>개념을 중심으로</b> 다룬다.</li>
+          <li>별의 표면 온도는 <b>별의 색을 이용하여 비교하는 수준</b>으로만 다룬다.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Ⅷ-2. 우주 <span class="pill a3">1~6차시</span></h3>
+      <div class="table-scroll">
+      <table class="data">
+        <thead><tr><th style="width:30%">소단원</th><th>차시</th><th>교과서</th><th style="width:40%">핵심 내용</th></tr></thead>
+        <tbody>
+          <tr><td class="name">01 우리은하</td><td class="tnum">1~2</td><td class="tnum">292~297</td>
+            <td style="text-align:left">우리은하의 모양과 크기 · 은하수 · 성단 · 성운</td></tr>
+          <tr><td class="name">02 팽창하는 우주</td><td class="tnum">3</td><td class="tnum">298~299</td>
+            <td style="text-align:left">외부 은하 · 우주 팽창 · 약 138억 년</td></tr>
+          <tr><td class="name">03 우주 탐사</td><td class="tnum">4~5</td><td class="tnum">300~304</td>
+            <td style="text-align:left">탐사 성과 · 일상생활에 쓰이는 우주 기술</td></tr>
+          <tr><td class="name">중단원 점검</td><td class="tnum">6</td><td class="tnum">306~307</td>
+            <td style="text-align:left">개념 정리 · 확인 문제</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="teacher-note">
+        <span class="tlabel">성취기준 · 지도상의 유의점</span>
+        <b>[9과15-02]</b> 우리은하의 구조와 크기를 이해하고, 성운과 성단의 특징을 비교할 수 있다.<br>
+        <b>[9과15-03]</b> 모형을 이용하여 우주가 팽창하고 있음을 설명할 수 있다.<br>
+        <b>[9과15-04]</b> 우주 탐사의 의의와 인류에게 미치는 영향을 조사하여 과학의 유용성을 인식할 수 있다.
+        <ul>
+          <li>우리은하의 크기는 수치 암기보다 <b>규모에 대한 인식</b>에 초점을 맞춘다.</li>
+          <li>풍선 모형으로 우주 팽창을 설명하되, 어려운 우주론적 개념은 도입하지 않는다.</li>
+          <li>우주 탐사는 현대에 <b>경쟁이 아닌 국제 협력</b>이 중요시된다는 점을 함께 다룬다.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card">
+        <h3>선수 학습 연계</h3>
+        <ul style="margin:0; padding-left:20px; color:var(--dim)">
+          <li><b style="color:var(--txt)">[초4] 밤하늘 관찰</b> — 별의 정의를 알고 북극성 주변의 별자리를 관찰할 수 있다.</li>
+          <li><b style="color:var(--txt)">[중1] 태양계</b> — 태양의 표면과 대기에서 일어나는 현상을 알고, 태양 활동이 지구에 미치는 영향을 추론할 수 있다.</li>
+          <li><b style="color:var(--txt)">[중1] 태양계 구성원</b> — 태양계를 구성하는 천체의 특징을 알고 행성을 구분할 수 있다.</li>
+          <li><b style="color:var(--txt)">[중1] 과학과 인류의 지속가능한 삶</b> — 과학의 발전이 인류 문명에 미친 영향을 설명할 수 있다.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>이 자료 사용법</h3>
+        <ul style="margin:0; padding-left:20px; color:var(--dim)">
+          <li>각 페이지는 <b style="color:var(--txt)">도입 → 개념·애니메이션 → 핵심 정리 → 확인</b> 순서입니다.
+            준비물이 필요한 탐구·해 보기 활동은 넣지 않았습니다.</li>
+          <li>오른쪽 위 <b style="color:var(--accent-2)">교사 모드</b>를 켜면 지도상의 유의점과 참고 자료가 함께 표시됩니다. 학생에게 보여 줄 때는 꺼 두세요.</li>
+          <li>시뮬레이션은 슬라이더와 버튼으로 직접 조작합니다. 판서 대신 화면을 띄워 발문에 활용하세요.</li>
+          <li>인터넷 연결 없이 동작합니다. 폴더째 USB에 담아 교실 PC에서 바로 열 수 있습니다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="pager"></div>
+</main>
+
+<footer class="foot">
+  중학교 2학년 과학 Ⅷ. 별과 우주 · 교사용 교과서(278~312쪽)의 내용·자료·전개 순서를 기준으로 제작한 수업용 자료입니다.<br>
+  사진 자료 출처: 교사용 교과서 PDF · 수업 활용 목적
+</footer>
+
+<script src="assets/common.js"></script>
+<script>
+(function () {
+  var wrap = document.getElementById("cvIntro");
+  var C = SU.Canvas(wrap, 3.0), U = SU.U;
+  var nameEl = document.getElementById("introName"), descEl = document.getElementById("introDesc");
+
+  var OBJ = [
+    { n: "별", d: "스스로 빛을 내는 천체. 밝기와 색은 별마다 다르다." },
+    { n: "성단", d: "많은 별이 좁은 공간에 모여 집단을 이룬 것. 산개 성단과 구상 성단이 있다." },
+    { n: "성운", d: "성간 물질이 모여 있어 구름처럼 보이는 천체. 방출·반사·암흑 성운이 있다." },
+    { n: "은하", d: "수천억 개의 별로 이루어진 천체 집단. 태양계가 속한 은하를 우리은하라고 한다." }
+  ];
+  var sel = 0, hl = [1, 0, 0, 0], auto = 0;
+
+  // 성단/성운/은하 입자 미리 생성
+  var cluster = [], neb = [], gal = [];
+  for (var i = 0; i < 46; i++) {
+    var a = Math.random() * 6.2832, r = Math.pow(Math.random(), 0.6);
+    cluster.push({ x: Math.cos(a) * r, y: Math.sin(a) * r * 0.92, s: Math.random() * 1.4 + 0.5, p: Math.random() * 6.3 });
+  }
+  for (var i = 0; i < 9; i++) {
+    neb.push({ x: (Math.random() - 0.5) * 1.3, y: (Math.random() - 0.5) * 1.1, r: Math.random() * 0.55 + 0.35,
+      c: Math.random() < 0.5 ? [255, 96, 120] : [110, 150, 255], p: Math.random() * 6.3 });
+  }
+  for (var i = 0; i < 340; i++) {
+    var t = Math.pow(Math.random(), 1.15), arm = Math.floor(Math.random() * 2);
+    var th = t * 3.6 + arm * Math.PI + (Math.random() - 0.5) * 0.5;
+    var rr = 0.10 + t * 0.92;
+    gal.push({ r: rr, th: th, s: Math.random() * 1.1 + 0.4, c: t > 0.35 ? [170, 205, 255] : [255, 226, 170] });
+  }
+
+  function pos(i) { return { x: C.w * (0.135 + i * 0.243), y: C.h * 0.47 }; }
+
+  wrap.addEventListener("click", function (e) {
+    var r = wrap.getBoundingClientRect(), mx = e.clientX - r.left;
+    var best = 0, bd = 1e9;
+    for (var i = 0; i < 4; i++) { var d = Math.abs(pos(i).x - mx); if (d < bd) { bd = d; best = i; } }
+    sel = best; auto = 0; nameEl.textContent = OBJ[sel].n; descEl.textContent = OBJ[sel].d;
+  });
+  wrap.style.cursor = "pointer";
+
+  SU.loop(wrap, function (dt, t) {
+    auto += dt;
+    if (auto > 4.5) { auto = 0; sel = (sel + 1) % 4; nameEl.textContent = OBJ[sel].n; descEl.textContent = OBJ[sel].d; }
+    for (var i = 0; i < 4; i++) hl[i] = U.approach(hl[i], i === sel ? 1 : 0, dt, 5.5);
+
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    // 옅은 배경 별
+    ctx.save();
+    for (var i = 0; i < 70; i++) {
+      var x = ((i * 97.13) % 1) * w, y = ((i * 41.77) % 1) * h;
+      x = (i * 137.5) % w; y = (i * 89.3) % h;
+      var a = 0.12 + 0.1 * Math.sin(t * 1.1 + i);
+      ctx.fillStyle = "rgba(255,255,255," + a + ")";
+      ctx.beginPath(); ctx.arc(x, y, 0.9, 0, 6.2832); ctx.fill();
+    }
+    ctx.restore();
+
+    var base = Math.min(h * 0.24, w * 0.068);
+
+    for (var i = 0; i < 4; i++) {
+      var p = pos(i), k = 0.86 + hl[i] * 0.34, R = base * k;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.globalAlpha = 0.5 + hl[i] * 0.5;
+
+      if (i === 0) {
+        U.glow(ctx, 0, 0, R * 1.05, "rgba(190,215,255,1)", 1);
+        U.spike(ctx, 0, 0, R * 1.5, "rgba(200,222,255,.7)", 1.5);
+      } else if (i === 1) {
+        for (var j = 0; j < cluster.length; j++) {
+          var c = cluster[j], tw = 0.55 + 0.45 * Math.sin(t * 2.1 + c.p);
+          U.glow(ctx, c.x * R, c.y * R, c.s * 5 * tw, "rgba(150,195,255,1)", 0.95 * tw);
+        }
+      } else if (i === 2) {
+        ctx.globalCompositeOperation = "lighter";
+        for (var j = 0; j < neb.length; j++) {
+          var b = neb[j], pu = 1 + 0.07 * Math.sin(t * 0.8 + b.p);
+          var g = ctx.createRadialGradient(b.x * R, b.y * R, 0, b.x * R, b.y * R, b.r * R * 1.5 * pu);
+          g.addColorStop(0, "rgba(" + b.c[0] + "," + b.c[1] + "," + b.c[2] + ",.36)");
+          g.addColorStop(1, "rgba(" + b.c[0] + "," + b.c[1] + "," + b.c[2] + ",0)");
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(b.x * R, b.y * R, b.r * R * 1.5 * pu, 0, 6.2832); ctx.fill();
+        }
+        for (var j = 0; j < 14; j++) {
+          var ax = Math.cos(j * 2.4) * R * 0.75, ay = Math.sin(j * 1.7) * R * 0.6;
+          U.glow(ctx, ax, ay, 4.5, "rgba(255,255,255,1)", 0.9);
+        }
+        ctx.globalCompositeOperation = "source-over";
+      } else {
+        ctx.rotate(t * 0.16);
+        ctx.globalCompositeOperation = "lighter";
+        var cg = ctx.createRadialGradient(0, 0, 0, 0, 0, R * 0.5);
+        cg.addColorStop(0, "rgba(255,240,205,.75)"); cg.addColorStop(1, "rgba(255,200,120,0)");
+        ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(0, 0, R * 0.5, 0, 6.2832); ctx.fill();
+        for (var j = 0; j < gal.length; j++) {
+          var s = gal[j], x = Math.cos(s.th) * s.r * R, y = Math.sin(s.th) * s.r * R * 0.42;
+          ctx.fillStyle = "rgba(" + s.c[0] + "," + s.c[1] + "," + s.c[2] + ",.75)";
+          ctx.beginPath(); ctx.arc(x, y, s.s, 0, 6.2832); ctx.fill();
+        }
+        ctx.globalCompositeOperation = "source-over";
+      }
+      ctx.restore();
+
+      ctx.globalAlpha = 1;
+      var col = hl[i] > 0.5 ? "#7ef0c8" : "rgba(166,176,212,.85)";
+      U.chip(ctx, p.x, p.y + base * 1.45, OBJ[i].n, col, 13);
+    }
+  });
+})();
+</script>
+</body>
+</html>

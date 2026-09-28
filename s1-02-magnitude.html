@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02 별의 등급과 밝기 | Ⅷ. 별과 우주</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<canvas id="bg-stars"></canvas><div id="bg-glow"></div>
+<div id="progress"></div>
+
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><span class="dot"></span><span>Ⅷ. 별과 우주 <small>중2 과학</small></span></a>
+  <nav class="chips"></nav>
+  <div class="tmode"><span class="sw"></span>교사 모드</div>
+</div></header>
+
+<main class="wrap">
+
+  <div class="page-head">
+    <span class="eyebrow">Ⅷ-1. 별 · 02 · 3~4차시</span>
+    <h1>별의 <em>등급</em>과 밝기</h1>
+    <p class="lede">밤하늘의 별은 밝은 것도 있고 어두운 것도 있습니다.
+      별의 밝기가 다양한 까닭은 <b>실제 밝기가 다르거나</b>, <b>지구로부터의 거리가 다르기</b> 때문입니다.</p>
+    <div style="margin-top:10px">
+      <span class="pill a2">#별의 밝기</span><span class="pill a2">#겉보기 등급</span><span class="pill a2">#절대 등급</span>
+    </div>
+  </div>
+
+  <div class="goals">
+    <h3>이 단원에서 나는</h3>
+    <ul>
+      <li>별의 밝기와 거리의 관계를 설명할 수 있다.</li>
+      <li>별의 등급과 밝기의 관계를 설명할 수 있다.</li>
+    </ul>
+  </div>
+
+  <!-- ================= 도입 ================= -->
+  <section class="block">
+    <h2 class="sec"><span class="num">도입</span> 같은 전등인데 밝기가 달라진 까닭은?</h2>
+    <div class="hook">
+      “앗! 글씨가 잘 안 보이네!” → 전등을 가까이 가져오자 “휴, 더 밝아져서 잘 보인다!”<br>
+      <strong>같은 전등인데 내가 느끼는 밝기가 달라진 까닭은 무엇일까요?</strong>
+    </div>
+    <p style="color:var(--dim); max-width:74ch">
+      전등으로부터 거리가 멀어지면 전등에서 나온 빛이 넓게 퍼집니다. 빛이 비치는 <b style="color:var(--txt)">면적이 넓어지므로</b>
+      같은 면적에 들어오는 빛의 양은 줄어듭니다. 밤길의 가로등도 마찬가지입니다.
+      가로등의 밝기는 모두 같지만 가까운 가로등이 더 밝아 보입니다.
+    </p>
+    <div class="teacher-note">
+      <span class="tlabel">지도 안내</span>
+      같은 밝기의 광원이 거리에 따라 다르게 보였던 경험(가로등, 자동차 전조등 등)을 학생들이 먼저 이야기해 보게 한 뒤
+      아래 시뮬레이션으로 그 까닭을 확인한다.
+    </div>
+  </section>
+
+  <!-- ================= 3D 빛 퍼짐 ================= -->
+  <section class="block" id="inverse">
+    <h2 class="sec"><span class="num">개념 1</span> 거리에 따른 빛의 세기 변화 <span class="qq">교과서 285쪽 | 그림 3 |</span></h2>
+    <p class="sec-sub">광원으로부터의 거리가 2배, 3배, … 늘어나면 같은 양의 빛이 더 넓은 면적에 퍼집니다.
+      그래서 <span class="kw">단위 면적에 들어오는 빛의 양은 거리의 제곱에 반비례</span>합니다.</p>
+
+    <div class="sim">
+      <div class="sim-head">
+        <h4>3차원으로 보는 빛의 퍼짐</h4>
+        <span class="hint">천천히 회전합니다 · 슬라이더로 거리를 바꿔 보세요</span>
+      </div>
+      <canvas id="cvInv"></canvas>
+      <div class="sim-controls">
+        <label class="ctl">광원으로부터의 거리
+          <input type="range" id="ivD" min="100" max="300" value="100">
+          <span class="val" id="ivDV">1배</span></label>
+        <button class="btn on" id="ivSpin">회전 ⏸</button>
+        <button class="btn amber" id="ivGrid">1 · 4 · 9 칸 보기</button>
+      </div>
+      <div class="readout">
+        <div class="stat"><div class="k">거리</div><div class="v" id="ivR1">1배</div></div>
+        <div class="stat amber"><div class="k">빛이 퍼진 넓이</div><div class="v" id="ivR2">1배</div></div>
+        <div class="stat warm"><div class="k">단위 면적당 밝기</div><div class="v" id="ivR3">1배</div></div>
+        <div class="stat" style="flex:1; min-width:220px"><div class="k">한 문장으로</div>
+          <div class="v" id="ivR4" style="font-size:.93rem; font-weight:700; color:var(--txt); line-height:1.5">거리가 1배일 때의 밝기입니다.</div></div>
+      </div>
+    </div>
+
+    <div class="key" style="margin-top:18px">
+      <h3>여기까지 정리</h3>
+      <ul>
+        <li>광원으로부터의 거리가 멀어질수록 별의 밝기는 <b>어두워진다.</b></li>
+        <li>거리가 2배, 3배, … 늘어나면 단위 면적에 들어오는 빛의 세기는 <b>¼배, ⅑배, …</b>가 된다.</li>
+        <li>단위 면적에 들어오는 빛의 양은 <b>거리의 제곱에 반비례</b>한다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= 등급 ================= -->
+  <section class="block" id="grade">
+    <h2 class="sec"><span class="num">개념 2</span> 별의 밝기를 등급으로 어떻게 나타낼까? <span class="qq">교과서 286쪽</span></h2>
+    <p class="sec-sub">
+      <span class="kw">히파르코스</span>는 맨눈으로 가장 밝게 보이는 별들을 1등급, 가장 어둡게 보이는 별들을 6등급으로 정했습니다.
+      이후 과학자들은 <span class="kw">1등급인 별이 6등급인 별보다 100배 밝고, 1등급 차이마다 밝기 차이는 약 2.5배</span>라는 것을 알아냈습니다.
+    </p>
+
+    <div class="sim">
+      <div class="sim-head">
+        <h4>| 그림 4 | 등급에 따른 밝기 차이</h4>
+        <span class="hint">등급이 클수록 어두운 별</span>
+      </div>
+      <canvas id="cvMag"></canvas>
+    </div>
+    <p class="note-sm" style="margin-top:8px">
+      우리 눈에 보이는 별의 밝기를 기준으로 정한 밝기 등급을 <b class="kw2">겉보기 등급</b>이라고 합니다.
+    </p>
+
+    <div class="teacher-note">
+      <span class="tlabel">참고 자료</span>
+      <b>히파르코스(B.C.190?~B.C.120?)</b> 고대 그리스의 천문학자·지리학자·수학자. 현재도 사용되는 별자리 46개를 결정하였고,
+      세차 운동에 의한 춘분점의 이동을 발견하였다. 삼각법을 이용하여 처음으로 일식을 예측하는 방법을 개발하였다.
+      <br><br><b>겉보기 등급의 음수는 무슨 의미인가?</b> 처음에는 1~6등급만 있었지만 망원경 관측을 통해
+      +6.0보다 약 2.5배 어두운 별은 +7.0으로, +1.0보다 약 2.5배 밝은 별은 0.0, 그보다 약 2.5배 더 밝은 별은 −1.0으로 하여
+      겉보기 등급이 음수인 별도 정해지게 되었다. 태양의 겉보기 등급은 −26.7이다.
+    </div>
+  </section>
+
+  <!-- ================= 겉보기 / 절대 ================= -->
+  <section class="block" id="abs">
+    <h2 class="sec"><span class="num">개념 3</span> 겉보기 등급과 절대 등급 <span class="qq">교과서 286~287쪽</span></h2>
+
+    <div class="grid g2">
+      <figure class="fig">
+        <img src="img/sun_mag.jpg" alt="태양의 겉보기 등급 -26.7과 절대 등급 4.8을 비교하는 삽화">
+        <figcaption><b>| 그림 5 |</b> 태양의 겉보기 등급과 절대 등급 — 지구에서 가장 밝게 보이지만, 실제로 가장 밝은 별은 아니다.</figcaption>
+      </figure>
+      <div class="card">
+        <h3>왜 ‘같은 거리’에서 비교해야 할까?</h3>
+        <p style="color:var(--dim)">
+          겉보기 등급이 가장 작은 별은 <b style="color:var(--txt)">−26.7등급인 태양</b>으로 가장 밝게 보입니다.
+          하지만 태양이 가장 밝게 보이는 까닭은 <b style="color:var(--txt)">지구로부터 가장 가까이 있기 때문</b>입니다.</p>
+        <p style="color:var(--dim); margin-bottom:0">
+          따라서 별의 실제 밝기는 모든 별을 <b style="color:var(--accent-2)">같은 거리</b>에서 비교해야 합니다.
+          모든 별이 <b style="color:var(--accent-2)">10 pc</b>의 거리에 있다고 가정했을 때의 밝기로 정한 등급을
+          <b class="kw2">절대 등급</b>이라고 합니다. 태양의 절대 등급은 <b style="color:var(--txt)">4.8등급</b>입니다.</p>
+      </div>
+    </div>
+
+    <div class="sim" style="margin-top:18px">
+      <div class="sim-head">
+        <h4>모든 별을 10 pc에 세워 보자</h4>
+        <span class="hint">버튼을 누르면 별들이 10 pc 위치로 이동하며 밝기가 달라집니다</span>
+      </div>
+      <canvas id="cv10pc"></canvas>
+      <div class="sim-controls">
+        <button class="btn on" id="tpNow">지금 보이는 밝기 (겉보기 등급)</button>
+        <button class="btn amber" id="tpAbs">10 pc에 세웠을 때 (절대 등급)</button>
+      </div>
+      <div class="readout">
+        <div class="stat"><div class="k">지금 가장 밝게 보이는 별</div><div class="v" id="tpA">시리우스</div></div>
+        <div class="stat amber"><div class="k">실제로 가장 밝은 별</div><div class="v" id="tpB">리겔</div></div>
+        <div class="stat warm" style="flex:1; min-width:260px"><div class="k">읽는 법</div>
+          <div class="v" id="tpC" style="font-size:.93rem; font-weight:700; color:var(--txt); line-height:1.5">
+            (겉보기 등급 − 절대 등급)의 값이 클수록 멀리 있는 별입니다.</div></div>
+      </div>
+    </div>
+
+    <div class="grid g3" style="margin-top:18px">
+      <div class="card" style="border-color:rgba(126,240,200,.35)">
+        <h3 style="color:var(--accent-3)">10 pc보다 가까운 별</h3>
+        <p style="margin:0; color:var(--dim)">겉보기 등급 <b style="color:var(--txt)">&lt;</b> 절대 등급<br>
+          <span class="note-sm">예) 시리우스 — 겉보기 −1.5, 절대 1.4</span></p>
+      </div>
+      <div class="card" style="border-color:rgba(255,209,102,.35)">
+        <h3 style="color:var(--accent-2)">정확히 10 pc인 별</h3>
+        <p style="margin:0; color:var(--dim)">겉보기 등급 <b style="color:var(--txt)">=</b> 절대 등급<br>
+          <span class="note-sm">두 등급의 차가 0</span></p>
+      </div>
+      <div class="card" style="border-color:rgba(255,138,107,.35)">
+        <h3 style="color:var(--warm)">10 pc보다 먼 별</h3>
+        <p style="margin:0; color:var(--dim)">겉보기 등급 <b style="color:var(--txt)">&gt;</b> 절대 등급<br>
+          <span class="note-sm">예) 베텔게우스 — 겉보기 0.6, 절대 −5.9</span></p>
+      </div>
+    </div>
+    <p class="note-sm" style="margin-top:10px">| 그림 6 | 같은 별의 겉보기 등급과 절대 등급 비교 · 출처: Foundations of Astronomy 14th ed, 2017</p>
+
+    <div class="teacher-note">
+      <span class="tlabel">지도상의 유의점</span>
+      거리를 구할 때 <b>수식을 활용하지 않고 개념을 중심으로</b> 다룬다.
+      별까지의 거리가 (겉보기 등급 − 절대 등급)의 값과 관련이 있다는 사실을 유추할 수 있도록 지도한다.
+    </div>
+  </section>
+
+  <!-- ================= 핵심 정리 ================= -->
+  <section class="block">
+    <h2 class="sec"><span class="num">정리</span> 핵심 정리</h2>
+    <div class="key">
+      <ul>
+        <li><b>거리와 밝기의 관계</b> : 광원으로부터의 거리가 멀어질수록 별의 밝기는 어두워진다. 거리가 2배, 3배 늘어나면 밝기는 ¼배, ⅑배가 된다. 즉 <b>밝기는 거리의 제곱에 반비례</b>한다.</li>
+        <li><b>겉보기 등급</b> : 맨눈으로 볼 때 별의 밝기를 나타낸 등급. <b>1등급이 6등급보다 100배 밝다.</b> 1등급 차이는 약 2.5배.</li>
+        <li><b>절대 등급</b> : 모든 별이 <b>10 pc</b> 거리에 있다고 가정했을 때의 밝기에 해당하는 등급</li>
+        <li><b>밝기로 별의 거리 구하기</b> : (겉보기 등급 − 절대 등급)의 값이 <b>클수록 별까지의 거리가 멀다.</b></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= 확인 ================= -->
+  <section class="block" id="check">
+    <h2 class="sec"><span class="num">확인</span> 이것만은 &amp; 문제로 확인</h2>
+    <div class="quiz">
+      <div class="q" data-a="0">
+        <div class="qh"><span class="qn">1</span><span class="qt">별의 등급이 작을수록 밝기가?</span></div>
+        <div class="opts"><button class="opt">밝다</button><button class="opt">어둡다</button></div>
+        <div class="sol"><b>밝다.</b> 1등급이 6등급보다 100배 밝습니다. 등급이 클수록 어두운 별입니다.</div>
+      </div>
+
+      <div class="q" data-a="2">
+        <div class="qh"><span class="qn">2</span><span class="qt">겉보기 등급과 절대 등급이 같은 별은 지구로부터 <span class="blank"></span> pc 떨어져 있다.</span></div>
+        <div class="opts"><button class="opt">1</button><button class="opt">5</button><button class="opt">10</button><button class="opt">100</button></div>
+        <div class="sol"><b>10 pc</b> — 절대 등급은 별을 10 pc에 두었을 때의 밝기이므로, 두 등급이 같다면 그 별은 이미 10 pc에 있는 것입니다.</div>
+      </div>
+
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">3</span><span class="qt"><span class="pill">사고력</span> 100 pc에 있는 별 S의 겉보기 등급이 6등급이다. 이 별의 절대 등급은?</span></div>
+        <div class="opts"><button class="opt">6등급</button><button class="opt">1등급</button><button class="opt">11등급</button><button class="opt">−4등급</button></div>
+        <div class="sol"><b>1등급</b> — 100 pc에 있는 별을 10 pc로 옮기면 거리가 ⅒이 되어 밝기는 100배 밝아집니다.
+          100배는 5등급 차이이므로 6 − 5 = <b>1등급</b>이 됩니다.</div>
+      </div>
+
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">4</span><span class="qt">관측자의 위치가 A에서 B로 이동하여 별까지의 거리가 2배가 되었을 때, 별의 밝기 변화로 옳은 것은?</span></div>
+        <div class="opts">
+          <button class="opt">½배가 된다</button><button class="opt">¼배가 된다</button>
+          <button class="opt">2배가 된다</button><button class="opt">4배가 된다</button><button class="opt">변함없다</button>
+        </div>
+        <div class="sol">밝기는 광원으로부터의 거리의 제곱에 반비례합니다. 거리가 2배 늘어나면 밝기는 <b>¼배</b>가 됩니다.</div>
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>스스로 정리하기</h3>
+      <p style="margin:0">별의 실제 밝기는 <span class="kw">ㅈ ㄷ</span> 등급으로 비교한다.
+        <button class="btn amber" data-reveal="selfA" data-label="확인">확인</button></p>
+      <div class="reveal" id="selfA"><b class="kw2">절대</b> 등급</div>
+    </div>
+
+    <div class="score-bar">
+      <span class="s"></span>
+      <button class="btn" data-show-all>모두 정답 보기</button>
+      <button class="btn" data-reset-quiz>다시 풀기</button>
+    </div>
+  </section>
+
+  <div class="pager"></div>
+</main>
+
+<footer class="foot">Ⅷ-1. 별 · 02 별의 등급과 밝기 | 교사용 교과서 284~287쪽</footer>
+
+<script src="assets/common.js"></script>
+<script>
+/* =========================================================
+   1) 3D 빛의 퍼짐 (거리의 제곱에 반비례)
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvInv");
+  var C = SU.Canvas(cv, 1.85), U = SU.U;
+  var sD = document.getElementById("ivD"), vD = document.getElementById("ivDV");
+  var bSpin = document.getElementById("ivSpin"), bGrid = document.getElementById("ivGrid");
+  var r1 = document.getElementById("ivR1"), r2 = document.getElementById("ivR2"),
+      r3 = document.getElementById("ivR3"), r4 = document.getElementById("ivR4");
+  var spin = true, showGrid = true, A = -0.55, dNow = 1;
+
+  bSpin.onclick = function () { spin = !spin; bSpin.classList.toggle("on", spin); bSpin.textContent = spin ? "회전 ⏸" : "회전 ▶"; };
+  bGrid.onclick = function () { showGrid = !showGrid; bGrid.classList.toggle("on", showGrid); };
+  bGrid.classList.add("on");
+
+  var HS = 0.26;   // 빔의 반각 (거리 1에서 반지름)
+  var B = 0.26;    // 시선 기울기
+
+  SU.loop(cv, function (dt, t) {
+    if (spin) A = -1.02 + 0.22 * Math.sin(t * 0.22);
+    var dT = parseFloat(sD.value) / 100;
+    dNow = U.approach(dNow, dT, dt, 8);
+
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var g = ctx.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, "#060b1e"); g.addColorStop(1, "#0b1128");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+
+    var cx = w * 0.5, cy = h * 0.46, FOV = Math.min(w, h * 1.8) * 0.70, CAM = 4.0;
+    function pr(x, y, z) {
+      var X = x - 1.55;
+      var ca = Math.cos(A), sa = Math.sin(A);
+      var x1 = X * ca + z * sa, z1 = -X * sa + z * ca;
+      var cb = Math.cos(B), sb = Math.sin(B);
+      var y1 = y * cb - z1 * sb, z2 = y * sb + z1 * cb;
+      var zz = z2 + CAM;
+      return [cx + x1 * FOV / zz, cy - y1 * FOV / zz, zz];
+    }
+
+    // 빔 모서리
+    ctx.strokeStyle = "rgba(255,225,150,.30)"; ctx.lineWidth = 1.2;
+    [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(function (c) {
+      var p0 = pr(0, 0, 0), p1 = pr(3.25, c[0] * HS * 3.25, c[1] * HS * 3.25);
+      ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
+    });
+
+    // 기준 패널 (1, 2, 3배)
+    function panel(d, n, alpha, hi) {
+      var s = HS * d;
+      var pts = [pr(d, s, s), pr(d, s, -s), pr(d, -s, -s), pr(d, -s, s)];
+      var bright = 1 / (d * d);
+      // 격자 칸
+      if (showGrid) {
+        for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) {
+          var y0 = s - (2 * s) * i / n, y1 = s - (2 * s) * (i + 1) / n;
+          var z0 = -s + (2 * s) * j / n, z1 = -s + (2 * s) * (j + 1) / n;
+          var q = [pr(d, y0, z0), pr(d, y0, z1), pr(d, y1, z1), pr(d, y1, z0)];
+          ctx.beginPath(); ctx.moveTo(q[0][0], q[0][1]);
+          for (var k = 1; k < 4; k++) ctx.lineTo(q[k][0], q[k][1]);
+          ctx.closePath();
+          ctx.fillStyle = "rgba(255,226,150," + (bright * 0.78 * alpha) + ")";
+          ctx.fill();
+          ctx.strokeStyle = "rgba(255,226,150," + 0.35 * alpha + ")"; ctx.lineWidth = 1; ctx.stroke();
+        }
+      } else {
+        ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+        for (var k = 1; k < 4; k++) ctx.lineTo(pts[k][0], pts[k][1]);
+        ctx.closePath();
+        ctx.fillStyle = "rgba(255,226,150," + (bright * 0.78 * alpha) + ")"; ctx.fill();
+        ctx.strokeStyle = "rgba(255,226,150," + 0.4 * alpha + ")"; ctx.lineWidth = 1; ctx.stroke();
+      }
+      // 테두리
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+      for (var k = 1; k < 4; k++) ctx.lineTo(pts[k][0], pts[k][1]);
+      ctx.closePath();
+      ctx.strokeStyle = hi ? "rgba(126,240,200,.95)" : "rgba(255,255,255," + 0.22 * alpha + ")";
+      ctx.lineWidth = hi ? 2.4 : 1; ctx.stroke();
+      return pts;
+    }
+
+    // 뒤쪽부터
+    panel(3, 3, 0.55, false);
+    panel(2, 2, 0.7, false);
+    panel(1, 1, 0.9, false);
+
+    // 움직이는 패널
+    var mv = panel(dNow, Math.max(1, Math.round(dNow)), 1, true);
+
+    // 광원
+    var p0 = pr(0, 0, 0);
+    U.glow(ctx, p0[0], p0[1], 44, "rgba(255,210,110,1)", 1);
+    ctx.fillStyle = "#fff6d8"; ctx.beginPath(); ctx.arc(p0[0], p0[1], 7, 0, 6.2832); ctx.fill();
+    U.label(ctx, p0[0], p0[1] + 34, "광원", "#ffd166", 13);
+
+    // 거리 라벨
+    [1, 2, 3].forEach(function (d) {
+      var q = pr(d, -HS * d - 0.17, 0);
+      U.label(ctx, q[0], q[1], d + "배", "rgba(166,176,212,.85)", 12);
+      var b = pr(d, HS * d + 0.10 + d * 0.24, 0);
+      U.chip(ctx, b[0], b[1], d === 1 ? "밝기 1배" : (d === 2 ? "밝기 ¼배" : "밝기 ⅑배"), "rgba(255,226,150,.9)", 11);
+    });
+
+    var dd = dNow;
+    vD.textContent = dd.toFixed(1) + "배";
+    r1.textContent = dd.toFixed(1) + "배";
+    r2.textContent = (dd * dd).toFixed(1) + "배";
+    var br = 1 / (dd * dd);
+    r3.textContent = br >= 0.995 ? "1배" : ("1/" + (1 / br).toFixed(1) + "배");
+    r4.textContent = dd < 1.1 ? "거리가 1배일 때의 밝기입니다."
+      : "거리가 " + dd.toFixed(1) + "배 → 넓이 " + (dd * dd).toFixed(1) + "배 → 밝기는 " + (100 * br).toFixed(0) + "%로 줄어듭니다.";
+  });
+})();
+
+/* =========================================================
+   2) 등급 사다리
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvMag");
+  var C = SU.Canvas(cv, 3.1), U = SU.U;
+
+  SU.loop(cv, function (dt, t) {
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var g = ctx.createLinearGradient(0, 0, w, 0);
+    g.addColorStop(0, "#0a1230"); g.addColorStop(1, "#070b1c");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+
+    var n = 6, y = h * 0.47;
+    var x0 = w * 0.115, dx = (w * 0.77) / (n - 1);
+
+    // 1 ↔ 6 등급 100배 표시
+    var by = h * 0.87;
+    ctx.strokeStyle = "rgba(126,240,200,.6)"; ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(x0, by - 8); ctx.lineTo(x0, by); ctx.lineTo(x0 + dx * 5, by); ctx.lineTo(x0 + dx * 5, by - 8);
+    ctx.stroke();
+    U.chip(ctx, x0 + dx * 2.5, by, "1등급은 6등급보다 100배 밝다", "#7ef0c8", 13);
+
+    for (var i = 0; i < n; i++) {
+      var m = i + 1, x = x0 + dx * i;
+      var b = Math.pow(100, (6 - m) / 5);           // 6등급을 1로 본 상대 밝기
+      var tw = 0.92 + 0.08 * Math.sin(t * 2.2 + i * 1.3);
+      var r = (10 + 30 * Math.pow(b / 100, 0.42)) * tw;
+      U.glow(ctx, x, y, r * 2.1, "rgba(200,222,255,1)", 0.95);
+      U.spike(ctx, x, y, r * 2.4, "rgba(210,230,255,.45)", 1.2);
+      ctx.fillStyle = "#fff";
+      ctx.beginPath(); ctx.arc(x, y, Math.max(2, r * 0.22), 0, 6.2832); ctx.fill();
+      U.label(ctx, x, h * 0.14, m + " 등급", i === 0 ? "#ffd166" : "rgba(233,237,255,.92)", 14);
+
+      if (i < n - 1) {
+        var mx = x + dx / 2;
+        U.arrow(ctx, x + r + 12, h * 0.68, x + dx - r - 12, h * 0.68, "rgba(255,209,102,.75)", 1.6, 7);
+        U.label(ctx, mx, h * 0.62, "약 2.5배", "rgba(255,209,102,.9)", 12);
+      }
+    }
+    U.label(ctx, x0 - 6, h * 0.30, "밝다", "#ffd166", 13, "right");
+    U.label(ctx, x0 + dx * 5 + 6, h * 0.30, "어둡다", "rgba(166,176,212,.9)", 13, "left");
+  });
+})();
+
+/* =========================================================
+   3) 10 pc 정렬 시뮬레이터
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cv10pc");
+  var C = SU.Canvas(cv, 2.05), U = SU.U;
+  var bNow = document.getElementById("tpNow"), bAbs = document.getElementById("tpAbs");
+  var oC = document.getElementById("tpC");
+  var mode = 0, k = 0;   // k: 0 = 현재 위치, 1 = 10 pc
+
+  var STARS = [
+    { n: "시리우스", m: -1.5, M: 1.4, c: [200, 220, 255], y: 0.22 },
+    { n: "알타이르", m: 0.77, M: 2.2, c: [235, 240, 255], y: 0.42 },
+    { n: "베가", m: 0.0, M: 0.5, c: [210, 228, 255], y: 0.62 },
+    { n: "아르크투루스", m: -0.04, M: -0.3, c: [255, 190, 130], y: 0.82 },
+    { n: "베텔게우스", m: 0.6, M: -5.9, c: [255, 150, 120], y: 0.32 },
+    { n: "리겔", m: 0.12, M: -6.8, c: [175, 205, 255], y: 0.72 }
+  ];
+
+  bNow.onclick = function () { mode = 0; bNow.classList.add("on"); bAbs.classList.remove("on");
+    oC.textContent = "지금 지구에서 보이는 밝기입니다. 밝게 보인다고 실제로 밝은 별은 아닙니다."; };
+  bAbs.onclick = function () { mode = 1; bAbs.classList.add("on"); bNow.classList.remove("on");
+    oC.textContent = "모두 10 pc에 두었습니다. 이제 보이는 밝기가 곧 별의 실제 밝기입니다."; };
+
+  function radius(mag) {
+    var b = Math.pow(2.512, (2.6 - mag));
+    return 4 + 15 * Math.pow(b, 0.23);
+  }
+
+  SU.loop(cv, function (dt, t) {
+    k = U.approach(k, mode, dt, 3.4);
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var g = ctx.createLinearGradient(0, 0, w, 0);
+    g.addColorStop(0, "#081026"); g.addColorStop(1, "#050914");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+
+    var L = w * 0.13, R = w * 0.95;
+    function xOf(dm) { return L + (R - L) * U.clamp((dm + 3.6) / 11.2, 0, 1); }
+    var x10 = xOf(0);
+
+    // 거리 축
+    var ay = h * 0.93;
+    ctx.strokeStyle = "rgba(132,162,255,.35)"; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(L, ay); ctx.lineTo(R, ay); ctx.stroke();
+    U.label(ctx, L, ay + 15, "가깝다", "rgba(166,176,212,.8)", 12, "left");
+    U.label(ctx, R, ay + 15, "멀다", "rgba(166,176,212,.8)", 12, "right");
+
+    // 10 pc 기준선
+    ctx.strokeStyle = "rgba(255,209,102," + (0.35 + 0.45 * k) + ")";
+    ctx.setLineDash([5, 5]); ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.moveTo(x10, h * 0.08); ctx.lineTo(x10, ay); ctx.stroke(); ctx.setLineDash([]);
+    U.chip(ctx, x10, h * 0.05, "10 pc", "#ffd166", 12);
+
+    // 지구
+    U.glow(ctx, L * 0.42, h * 0.5, 26, "rgba(110,168,255,1)", 0.9);
+    ctx.fillStyle = "#6ea8ff"; ctx.beginPath(); ctx.arc(L * 0.42, h * 0.5, 9, 0, 6.2832); ctx.fill();
+    U.label(ctx, L * 0.42, h * 0.5 + 24, "지구", "#cfdaff", 12);
+
+    STARS.forEach(function (s, i) {
+      var dm = s.m - s.M;
+      var x = U.lerp(xOf(dm), x10, k);
+      var y = h * (0.12 + s.y * 0.68);
+      var mag = U.lerp(s.m, s.M, k);
+      var r = radius(mag), tw = 0.94 + 0.06 * Math.sin(t * 2 + i);
+      var col = "rgba(" + s.c[0] + "," + s.c[1] + "," + s.c[2] + ",1)";
+      // 이동 흔적
+      if (k > 0.02 && k < 0.99) {
+        ctx.strokeStyle = "rgba(255,209,102,.25)"; ctx.lineWidth = 1; ctx.setLineDash([2, 4]);
+        ctx.beginPath(); ctx.moveTo(xOf(dm), y); ctx.lineTo(x, y); ctx.stroke(); ctx.setLineDash([]);
+      }
+      U.glow(ctx, x, y, r * 2.3 * tw, col, 0.95);
+      U.spike(ctx, x, y, r * 2.5, "rgba(255,255,255,.35)", 1);
+      ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x, y, Math.max(1.6, r * 0.2), 0, 6.2832); ctx.fill();
+      U.label(ctx, x, y - r - 14, s.n, "rgba(233,237,255,.95)", 12.5);
+      U.label(ctx, x, y + r + 14, (k > 0.5 ? "절대 " : "겉보기 ") + mag.toFixed(1) + "등급",
+        k > 0.5 ? "rgba(255,209,102,.9)" : "rgba(166,176,212,.9)", 11.5);
+    });
+
+    U.label(ctx, 14, 18, k > 0.5 ? "모두 10 pc에 세운 모습 — 절대 등급" : "실제 거리에 있는 모습 — 겉보기 등급",
+      "rgba(207,218,255,.95)", 13.5, "left", 800);
+  });
+})();
+</script>
+</body>
+</html>

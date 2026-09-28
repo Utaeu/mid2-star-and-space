@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 별까지의 거리 | Ⅷ. 별과 우주</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<canvas id="bg-stars"></canvas><div id="bg-glow"></div>
+<div id="progress"></div>
+
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><span class="dot"></span><span>Ⅷ. 별과 우주 <small>중2 과학</small></span></a>
+  <nav class="chips"></nav>
+  <div class="tmode"><span class="sw"></span>교사 모드</div>
+</div></header>
+
+<main class="wrap">
+
+  <div class="page-head">
+    <span class="eyebrow">Ⅷ-1. 별 · 01 · 1~2차시</span>
+    <h1>별까지의 <em>거리</em></h1>
+    <p class="lede">달이나 금성까지는 전파를 쏘아 되돌아오는 시간으로 거리를 잽니다.
+      그런데 멀리 떨어져 있는 별까지도 이 방법으로 거리를 잴 수 있을까요?</p>
+    <div style="margin-top:10px">
+      <span class="pill a2">#연주 시차</span><span class="pill a2">#광년</span><span class="pill a2">#파섹</span>
+    </div>
+  </div>
+
+  <div class="goals">
+    <h3>이 단원에서 나는</h3>
+    <ul>
+      <li>시차의 뜻을 설명하고, 물체까지의 거리와 시차의 관계를 말할 수 있다.</li>
+      <li>연주 시차를 이용하여 별까지의 거리를 구하는 방법을 설명할 수 있다.</li>
+    </ul>
+  </div>
+
+  <!-- ================= 도입 ================= -->
+  <section class="block" id="hook">
+    <h2 class="sec"><span class="num">도입</span> 두 사람에게 화면이 다르게 보이는 까닭은?</h2>
+    <div class="grid g2">
+      <figure class="fig">
+        <img src="img/cinema.jpg" alt="같은 높이에 앉은 두 사람이 앞사람 때문에 화면의 서로 다른 부분이 가려지는 모습">
+        <figcaption>교사용 교과서 280쪽 · 도입 삽화</figcaption>
+      </figure>
+      <div class="card">
+        <div class="hook">
+          왼쪽에 앉은 사람은 앞사람 때문에 <strong>아기 새</strong>가 가려지고,
+          오른쪽에 앉은 사람은 앞사람 때문에 <strong>뱀</strong>이 가려집니다.
+          같은 화면을 보는데 왜 서로 다르게 보일까요?
+        </div>
+        <p style="margin:0; color:var(--dim)">
+          두 사람의 <b style="color:var(--txt)">시선 방향이 서로 다르기 때문</b>에, 앞사람에게 가려지는 화면의 부분도 달라집니다.
+          보는 위치가 달라지면 같은 물체라도 <b style="color:var(--txt)">배경에 대한 위치가 달라져 보인다</b>는 것이 이 단원의 출발점입니다.
+        </p>
+      </div>
+    </div>
+    <div class="teacher-note">
+      <span class="tlabel">지도 안내</span>
+      실제 극장이 아니라 학교 강당처럼 관객이 같은 높이에 앉아 있는 상황이다.
+      비슷한 경험을 학생들이 먼저 이야기해 보게 한 뒤 시차 개념으로 넘어간다.
+    </div>
+  </section>
+
+  <!-- ================= 시차 ================= -->
+  <section class="block" id="parallax">
+    <h2 class="sec"><span class="num">개념 1</span> 시차란 무엇일까? <span class="qq">교과서 280쪽</span></h2>
+    <p class="sec-sub">
+      떨어져 있는 두 지점 A, B에서 물체를 바라보면 A, B에서 보이는 나무의 배경이 달라집니다.
+      이때 <span class="kw">두 관측 지점과 물체가 이루는 각</span>을 <span class="kw">시차</span>라고 합니다.
+    </p>
+
+    <figure class="fig" style="max-width:560px; margin-bottom:18px">
+      <img src="img/parallax_fig1.jpg" alt="A와 B에서 나무를 바라볼 때 나무 뒤의 집이 달라져 보이는 그림">
+      <figcaption><b>| 그림 1 |</b> 시차 — A에서 보면 나무 뒤에 파란 지붕 집이, B에서 보면 빨간 지붕 집이 보인다.</figcaption>
+    </figure>
+
+    <!-- 시뮬레이션 1 -->
+    <div class="sim">
+      <div class="sim-head">
+        <h4>시차 시뮬레이션 — 물체까지의 거리를 바꿔 보자</h4>
+        <span class="hint">위: 위에서 본 모습 · 아래: 각 지점에서 본 모습</span>
+      </div>
+      <canvas id="cvParallax"></canvas>
+      <div class="sim-controls">
+        <label class="ctl">물체까지의 거리
+          <input type="range" id="pxDist" min="18" max="100" value="38">
+          <span class="val" id="pxDistV">가깝다</span></label>
+        <label class="ctl">두 관측 지점 사이
+          <input type="range" id="pxBase" min="20" max="90" value="60">
+          <span class="val" id="pxBaseV">보통</span></label>
+        <button class="btn on" id="pxPlay">관측 지점 자동 이동 ⏸</button>
+        <button class="btn amber" id="pxA">A에서 보기</button>
+        <button class="btn amber" id="pxB">B에서 보기</button>
+      </div>
+      <div class="readout">
+        <div class="stat"><div class="k">시차 (∠A–물체–B)</div><div class="v" id="pxAng">—</div></div>
+        <div class="stat amber"><div class="k">배경에서 움직인 정도</div><div class="v" id="pxShift">—</div></div>
+        <div class="stat warm" style="flex:1; min-width:240px"><div class="k">관찰</div>
+          <div class="v" id="pxMsg" style="font-size:.93rem; font-weight:700; line-height:1.5">—</div></div>
+      </div>
+    </div>
+
+    <div class="key" style="margin-top:18px">
+      <h3>여기까지 정리</h3>
+      <ul>
+        <li><b>시차</b> : 두 관측 지점과 물체가 이루는 각</li>
+        <li>시차는 관측 지점과 물체 사이의 거리가 <b>가까울수록 크고, 멀수록 작다.</b></li>
+        <li>따라서 물체의 시차를 이용하여 <b>물체까지의 거리를 비교</b>할 수 있다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= 연주 시차 ================= -->
+  <section class="block" id="annual">
+    <h2 class="sec"><span class="num">개념 2</span> 시차를 이용하여 별까지의 거리를 어떻게 구할까? <span class="qq">교과서 282쪽</span></h2>
+    <p class="sec-sub">
+      태양 주위를 공전하는 <span class="kw">지구 궤도의 양 끝</span>에서 각각 별을 관측하면 보이는 방향이 달라져 별의 시차를 측정할 수 있습니다.
+      이때 <span class="kw">시차의 ½</span>을 그 별의 <span class="kw">연주 시차</span>라고 합니다.
+    </p>
+
+    <div class="sim">
+      <div class="sim-head">
+        <h4>연주 시차 시뮬레이션 — 지구가 공전하면 별은 어떻게 움직여 보일까?</h4>
+        <span class="hint">위: 배경 하늘에서 보이는 위치 · 아래: 위에서 본 태양계</span>
+      </div>
+      <canvas id="cvAnnual"></canvas>
+      <div class="sim-controls">
+        <button class="btn on" id="anPlay">공전 재생 ⏸</button>
+        <button class="btn" id="anJump">6개월 이동 ⏭</button>
+        <label class="ctl">별 S까지의 거리
+          <input type="range" id="anDist" min="13" max="80" value="26">
+          <span class="val" id="anDistV">2.6 pc</span></label>
+        <label class="ctl"><input type="checkbox" id="anT" checked style="accent-color:var(--accent-2)"> 더 멀리 있는 별 T 함께 보기</label>
+      </div>
+      <div class="readout">
+        <div class="stat"><div class="k">별 S의 시차 (∠ASB)</div><div class="v" id="anPar">—</div></div>
+        <div class="stat amber"><div class="k">별 S의 연주 시차</div><div class="v" id="anAnn">—</div></div>
+        <div class="stat"><div class="k">별 S까지의 거리</div><div class="v" id="anD">—</div></div>
+        <div class="stat warm"><div class="k">별 T의 연주 시차</div><div class="v" id="anTann">—</div></div>
+      </div>
+    </div>
+    <p class="note-sm" style="margin-top:8px">
+      ※ 화면의 각도는 눈에 잘 보이도록 <b>크게 과장</b>한 모형입니다. 실제 별의 연주 시차는 1″보다도 작습니다.
+      1°(도) = 60′(분), 1′(분) = 60″(초)
+    </p>
+
+    <div class="grid g2" style="margin-top:18px">
+      <div class="card">
+        <h3>꼭 기억할 것</h3>
+        <ul style="margin:0; padding-left:20px; color:var(--dim)">
+          <li>별 S의 시차는 <b style="color:var(--txt)">∠ASB</b>이고, <b style="color:var(--accent-2)">시차의 ½이 연주 시차</b>이다.</li>
+          <li>이름은 ‘연주(1년)’이지만, 사진은 <b style="color:var(--txt)">6개월 간격</b>으로 찍는다.</li>
+          <li>더 멀리 있는 별 T의 연주 시차는 별 S보다 <b style="color:var(--txt)">작다</b>.</li>
+          <li>연주 시차의 단위는 <b style="color:var(--txt)">″(초)</b>를 사용한다.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>거리의 단위</h3>
+        <ul style="margin:0; padding-left:20px; color:var(--dim)">
+          <li><b style="color:var(--accent-3)">1 pc(파섹)</b> — 연주 시차가 <b style="color:var(--txt)">1″</b>인 별까지의 거리</li>
+          <li><b style="color:var(--accent-3)">1 광년(LY)</b> — 빛이 1년 동안 이동하는 거리</li>
+          <li><b>1 pc은 약 3.26 광년</b>이다.</li>
+          <li>멀리 있는 별의 연주 시차는 매우 작아 측정하기 어렵다. 그래서 연주 시차는 <b style="color:var(--txt)">지구로부터 가까운 별</b>의 거리를 구할 때 이용한다.</li>
+        </ul>
+        <div class="teacher-note">
+          <span class="tlabel">참고 자료</span>
+          AU: 지구의 평균 궤도 장반경으로 1 AU = 1.496×10<sup>8</sup> km. 해왕성은 약 30 AU.<br>
+          광년: 1 광년 = 9.46×10<sup>12</sup> km = 6.324×10<sup>4</sup> AU.<br>
+          파섹: 1 pc = 3.086×10<sup>13</sup> km = 206265 AU = 3.26 LY.
+        </div>
+      </div>
+    </div>
+
+    <h3 class="mini">| 표 1 | 별의 연주 시차와 거리</h3>
+    <div class="table-scroll">
+    <table class="data">
+      <thead><tr><th style="width:34%">별</th><th>연주 시차 (″)</th><th>거리 (pc)</th><th style="width:34%">한눈에 보기</th></tr></thead>
+      <tbody>
+        <tr><td class="name">프록시마 센타우리</td><td class="tnum">0.77</td><td class="tnum">1.3</td>
+          <td><div style="height:10px;border-radius:6px;background:linear-gradient(90deg,var(--accent-3),var(--accent-3)) no-repeat;width:12%"></div></td></tr>
+        <tr><td class="name">시리우스</td><td class="tnum">0.38</td><td class="tnum">2.6</td>
+          <td><div style="height:10px;border-radius:6px;background:var(--accent);width:23%"></div></td></tr>
+        <tr><td class="name">베가</td><td class="tnum">0.13</td><td class="tnum">7.7</td>
+          <td><div style="height:10px;border-radius:6px;background:var(--accent-2);width:69%"></div></td></tr>
+        <tr><td class="name">아르크투루스</td><td class="tnum">0.09</td><td class="tnum">11.2</td>
+          <td><div style="height:10px;border-radius:6px;background:var(--warm);width:100%"></div></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note-sm" style="margin-top:8px">출처: Strasbourg Astronomical Data Center, 2024 · 막대가 길수록 먼 별입니다.
+      <b>연주 시차가 큰 별일수록 지구로부터 가깝습니다.</b></p>
+    <div class="teacher-note">
+      <span class="tlabel">지도상의 유의점</span>
+      연주 시차는 명칭은 1년 주기이지만 측정 사진은 <b>6개월 간격</b>임을 이해하게 하고, 연주 시차가 시차의 절반임을 명확히 구분하도록 지도한다.
+      별까지의 거리를 구하는 <b>수식은 도입하지 않는다.</b>
+    </div>
+  </section>
+
+  <!-- ================= 핵심 정리 ================= -->
+  <section class="block">
+    <h2 class="sec"><span class="num">정리</span> 핵심 정리</h2>
+    <div class="key">
+      <ul>
+        <li><b>시차</b> : 고정된 먼 배경이 있을 때, 한 물체를 서로 다른 위치의 두 관측자가 관측하면 생기는 겉보기 위치 차이에 해당하는 각</li>
+        <li><b>거리에 따른 시차</b> : 관측 지점과 물체 사이의 거리가 가까울수록 시차가 크고, 멀수록 작다.</li>
+        <li><b>연주 시차</b> : 태양 주위를 공전하는 지구의 공전 궤도 양 끝에서 별을 관측할 때 나타나는 <b>시차의 절반</b></li>
+        <li><b>파섹(parsec, pc)</b> : 연주 시차가 1″인 별까지의 거리. <b>1 pc ≒ 3.26 광년</b></li>
+        <li>지구에서 멀리 있는 별일수록 연주 시차는 <b>작아진다</b>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= 스스로 확인하기 ================= -->
+  <section class="block" id="check">
+    <h2 class="sec"><span class="num">확인</span> 이것만은 &amp; 스스로 정리하기</h2>
+    <div class="quiz">
+      <div class="q" data-a="0">
+        <div class="qh"><span class="qn">1</span><span class="qt">별이 지구로부터 멀리 떨어져 있을수록 연주 시차는?</span></div>
+        <div class="opts">
+          <button class="opt">작아진다</button>
+          <button class="opt">커진다</button>
+        </div>
+        <div class="sol"><b>작아진다.</b> 거리가 멀수록 지구 공전에 따른 겉보기 위치 변화가 작아지므로 연주 시차도 작아집니다.</div>
+      </div>
+
+      <div class="q" data-a="2">
+        <div class="qh"><span class="qn">2</span><span class="qt">연주 시차가 1″인 별은 지구로부터 1 <span class="blank"></span> 떨어져 있는 별이다.</span></div>
+        <div class="opts">
+          <button class="opt">AU</button>
+          <button class="opt">광년</button>
+          <button class="opt">pc(파섹)</button>
+          <button class="opt">km</button>
+        </div>
+        <div class="sol"><b>pc(파섹)</b> — 연주 시차가 1″인 별까지의 거리를 1 pc이라고 하며, 1 pc은 약 3.26 광년입니다.</div>
+      </div>
+
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">3</span><span class="qt">별의 연주 시차를 구하려면 별을 몇 개월 간격으로 관측해야 하는가?</span></div>
+        <div class="opts">
+          <button class="opt">1개월 간격</button>
+          <button class="opt">6개월 간격</button>
+          <button class="opt">1년 간격</button>
+        </div>
+        <div class="sol"><b>6개월 간격</b> — 지구 공전 궤도의 양 끝에서 관측해야 하므로 6개월 간격입니다. 이때 측정한 시차의 절반이 연주 시차입니다.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>스스로 정리하기</h3>
+      <p style="margin:0">별의 <span class="kw">ㅇ ㅈ ㅅ ㅊ</span>를 측정하면 별까지의 거리를 구할 수 있다.
+        <button class="btn amber" data-reveal="selfAns" data-label="확인">확인</button></p>
+      <div class="reveal" id="selfAns"><b class="kw2">연주 시차</b></div>
+    </div>
+
+    <div class="score-bar">
+      <span class="s"></span>
+      <button class="btn" data-show-all>모두 정답 보기</button>
+      <button class="btn" data-reset-quiz>다시 풀기</button>
+    </div>
+  </section>
+
+  <div class="pager"></div>
+</main>
+
+<footer class="foot">Ⅷ-1. 별 · 01 별까지의 거리 | 교사용 교과서 278~283쪽</footer>
+
+<script src="assets/common.js"></script>
+<script>
+/* =========================================================
+   1) 시차 시뮬레이션
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvParallax");
+  var C = SU.Canvas(cv, 1.62), U = SU.U;
+  var sDist = document.getElementById("pxDist"), sBase = document.getElementById("pxBase");
+  var vAng = document.getElementById("pxAng"), vShift = document.getElementById("pxShift"), vMsg = document.getElementById("pxMsg");
+  var vDist = document.getElementById("pxDistV"), vBase = document.getElementById("pxBaseV");
+  var bPlay = document.getElementById("pxPlay");
+  var playing = true, eye = 0, eyeT = 0;  // 0 = A, 1 = B
+
+  document.getElementById("pxA").onclick = function () { playing = false; eyeT = 0; sync(); };
+  document.getElementById("pxB").onclick = function () { playing = false; eyeT = 1; sync(); };
+  bPlay.onclick = function () { playing = !playing; sync(); };
+  function sync() {
+    bPlay.classList.toggle("on", playing);
+    bPlay.textContent = playing ? "관측 지점 자동 이동 ⏸" : "관측 지점 자동 이동 ▶";
+    document.getElementById("pxA").classList.toggle("on", !playing && eyeT === 0);
+    document.getElementById("pxB").classList.toggle("on", !playing && eyeT === 1);
+  }
+  sync();
+
+  var HOUSE = [
+    [255, 110, 110], [255, 180, 90], [120, 220, 150], [110, 170, 255], [190, 140, 255],
+    [255, 110, 110], [255, 180, 90], [120, 220, 150], [110, 170, 255], [190, 140, 255]
+  ];
+
+  function drawHouse(ctx, x, y, w, col, dim) {
+    var h = w * 0.62;
+    ctx.globalAlpha = dim ? 0.42 : 1;
+    ctx.fillStyle = "#2a3157";
+    ctx.fillRect(x - w / 2, y - h, w, h);
+    ctx.strokeStyle = "rgba(255,255,255,.14)"; ctx.lineWidth = 1;
+    ctx.strokeRect(x - w / 2, y - h, w, h);
+    ctx.fillStyle = "rgba(" + col[0] + "," + col[1] + "," + col[2] + ",1)";
+    ctx.beginPath();
+    ctx.moveTo(x - w * 0.62, y - h); ctx.lineTo(x, y - h - w * 0.42); ctx.lineTo(x + w * 0.62, y - h);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "rgba(255,230,160,.55)";
+    ctx.fillRect(x - w * 0.18, y - h * 0.72, w * 0.36, h * 0.34);
+    ctx.globalAlpha = 1;
+  }
+  function drawTree(ctx, x, y, s) {
+    ctx.fillStyle = "#6b4a2a";
+    ctx.fillRect(x - s * 0.09, y - s * 0.55, s * 0.18, s * 0.55);
+    var g = ctx.createRadialGradient(x - s * 0.15, y - s * 0.95, s * 0.05, x, y - s * 0.85, s * 0.62);
+    g.addColorStop(0, "#7fd68a"); g.addColorStop(1, "#2f8b52");
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y - s * 0.85, s * 0.52, 0, 6.2832); ctx.fill();
+    ctx.beginPath(); ctx.arc(x - s * 0.34, y - s * 0.62, s * 0.34, 0, 6.2832); ctx.fill();
+    ctx.beginPath(); ctx.arc(x + s * 0.34, y - s * 0.62, s * 0.34, 0, 6.2832); ctx.fill();
+  }
+
+  SU.loop(cv, function (dt, t) {
+    if (playing) eyeT = 0.5 + 0.5 * Math.sin(t * 1.15);
+    eye = U.approach(eye, eyeT, dt, 9);
+
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+
+    var topH = h * 0.6;            // 위에서 본 모습 영역
+    var d = parseFloat(sDist.value) / 100;   // 0.18~1.0
+    var bs = parseFloat(sBase.value) / 100;  // 0.20~0.90
+
+    vDist.textContent = d < 0.36 ? "가깝다" : (d < 0.68 ? "보통" : "멀다");
+    vBase.textContent = bs < 0.4 ? "좁다" : (bs < 0.7 ? "보통" : "넓다");
+
+    /* ---- 위에서 본 모습 ---- */
+    var bgY = topH * 0.11;                       // 배경(집들이 늘어선 줄)
+    var obsY = topH * 0.91;                      // 관측 지점
+    var cx = w * 0.5;
+    var half = (w * 0.095) * bs;
+    var ax = cx - half, bx = cx + half;
+    var objY = obsY - (obsY - bgY) * (0.28 + d * 0.64);  // 물체(나무) 위치
+
+    ctx.fillStyle = "rgba(255,255,255,.028)";
+    ctx.fillRect(0, 0, w, topH);
+    ctx.strokeStyle = "rgba(132,162,255,.2)"; ctx.setLineDash([4, 5]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, bgY); ctx.lineTo(w, bgY); ctx.stroke(); ctx.setLineDash([]);
+    U.label(ctx, w - 12, bgY - 13, "배경 (멀리 있는 집들)", "rgba(166,176,212,.85)", 12, "right");
+
+    // 배경 집들
+    var hs = w * 0.062, n = 9;
+    for (var i = 0; i < n; i++) {
+      var hx = cx + (i - (n - 1) / 2) * hs * 1.32;
+      drawHouse(ctx, hx, bgY, hs * 0.8, HOUSE[i], true);
+    }
+
+    // 시선 교점 계산
+    function hit(ox) { var k = (obsY - bgY) / (obsY - objY); return ox + (cx - ox) * k; }
+    var hitA = hit(ax), hitB = hit(bx);
+
+    // 시선
+    [[ax, hitA, "rgba(126,240,200,", 0], [bx, hitB, "rgba(255,209,102,", 1]].forEach(function (L) {
+      var strong = Math.abs(eye - L[3]) < 0.5;
+      ctx.strokeStyle = L[2] + (strong ? 0.95 : 0.3) + ")";
+      ctx.lineWidth = strong ? 2.2 : 1.2;
+      ctx.beginPath(); ctx.moveTo(L[0], obsY); ctx.lineTo(L[1], bgY); ctx.stroke();
+    });
+
+    // 시차 각 표시
+    var a1 = Math.atan2(obsY - objY, ax - cx), a2 = Math.atan2(obsY - objY, bx - cx);
+    ctx.strokeStyle = "rgba(255,138,107,.95)"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(cx, objY, 34, -a2, -a1, false); ctx.stroke();
+    var ang = Math.abs(Math.atan2(ax - cx, obsY - objY) - Math.atan2(bx - cx, obsY - objY)) * 180 / Math.PI;
+    U.chip(ctx, cx, objY - 50, "시차 " + ang.toFixed(1) + "°", "#ff8a6b", 13);
+
+    // 나무
+    drawTree(ctx, cx, objY + 4, w * 0.055);
+
+    // 관측 지점
+    [[ax, "A", "#7ef0c8", 0, "rgba(126,240,200,1)"], [bx, "B", "#ffd166", 1, "rgba(255,209,102,1)"]].forEach(function (P) {
+      var on = Math.abs(eye - P[3]) < 0.5;
+      U.glow(ctx, P[0], obsY, on ? 26 : 16, P[4], on ? 0.95 : 0.5);
+      ctx.fillStyle = P[2];
+      ctx.beginPath(); ctx.arc(P[0], obsY, on ? 8 : 6, 0, 6.2832); ctx.fill();
+      U.label(ctx, P[0], obsY + 22, P[1] + " 지점", P[2], 13);
+    });
+    // 관측자 표시(이동)
+    var ex = U.lerp(ax, bx, eye);
+    ctx.strokeStyle = "rgba(255,255,255,.75)"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(ex, obsY, 13, 0, 6.2832); ctx.stroke();
+
+    U.label(ctx, 14, 18, "위에서 본 모습", "rgba(207,218,255,.9)", 13, "left");
+
+    /* ---- 아래: 관측자가 본 모습 ---- */
+    var vy = topH + 1, vh = h - topH;
+    ctx.fillStyle = "rgba(0,0,0,.30)";
+    ctx.fillRect(0, vy, w, vh);
+    ctx.strokeStyle = "rgba(132,162,255,.25)";
+    ctx.beginPath(); ctx.moveTo(0, vy); ctx.lineTo(w, vy); ctx.stroke();
+
+    var panes = [[w * 0.25, 0, "A에서 바라본 모습", "#7ef0c8", hitA], [w * 0.75, 1, "B에서 바라본 모습", "#ffd166", hitB]];
+    panes.forEach(function (P) {
+      var on = Math.abs(eye - P[1]) < 0.5;
+      var pw = w * 0.44, ph = vh * 0.74, px = P[0] - pw / 2, py = vy + vh * 0.12;
+      ctx.save();
+      ctx.beginPath(); ctx.rect(px, py, pw, ph); ctx.clip();
+      var g = ctx.createLinearGradient(0, py, 0, py + ph);
+      g.addColorStop(0, "#0a1230"); g.addColorStop(1, "#131c40");
+      ctx.fillStyle = g; ctx.fillRect(px, py, pw, ph);
+      // 배경 집: 시선이 닿는 지점이 화면 중앙에 오도록
+      var scale = pw / (w * 0.9);
+      var off = (P[4] - cx);
+      var base = py + ph * 0.78;
+      for (var i = 0; i < n; i++) {
+        var hx0 = (i - (n - 1) / 2) * hs * 1.32;
+        drawHouse(ctx, P[0] + (hx0 - off) * scale * 1.8, base, hs * 0.8 * scale * 1.8, HOUSE[i], false);
+      }
+      drawTree(ctx, P[0], base + 3, w * 0.055 * scale * 1.85);
+      ctx.restore();
+      ctx.strokeStyle = on ? P[3] : "rgba(132,162,255,.25)";
+      ctx.lineWidth = on ? 2.4 : 1;
+      ctx.strokeRect(px, py, pw, ph);
+      U.label(ctx, P[0], py - 11, P[2], on ? P[3] : "rgba(166,176,212,.7)", 13);
+    });
+
+    /* ---- 수치 ---- */
+    vAng.textContent = ang.toFixed(1) + "°";
+    var shift = Math.abs(hitA - hitB) / (hs * 1.32);
+    vShift.textContent = "집 " + shift.toFixed(1) + " 채";
+    vMsg.textContent = d < 0.4
+      ? "물체가 가까워 시차가 큽니다. 배경이 크게 달라 보여요."
+      : (d < 0.72 ? "물체가 멀어질수록 시차가 작아집니다." : "물체가 아주 멀면 시차가 매우 작아 두 모습이 거의 같아 보입니다.");
+  });
+})();
+
+/* =========================================================
+   2) 연주 시차 시뮬레이션
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvAnnual");
+  var C = SU.Canvas(cv, 1.55), U = SU.U;
+  var bPlay = document.getElementById("anPlay"), bJump = document.getElementById("anJump");
+  var sD = document.getElementById("anDist"), vD = document.getElementById("anDistV"), cT = document.getElementById("anT");
+  var oPar = document.getElementById("anPar"), oAnn = document.getElementById("anAnn"),
+      oDd = document.getElementById("anD"), oT = document.getElementById("anTann");
+  var playing = true, phase = 0, jumpTo = null;
+
+  bPlay.onclick = function () {
+    playing = !playing;
+    bPlay.classList.toggle("on", playing);
+    bPlay.textContent = playing ? "공전 재생 ⏸" : "공전 재생 ▶";
+  };
+  bJump.onclick = function () { playing = false; bPlay.classList.remove("on"); bPlay.textContent = "공전 재생 ▶"; jumpTo = phase + Math.PI; };
+
+  // 고정된 먼 배경별
+  var bg = [];
+  for (var i = 0; i < 90; i++) bg.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.2 + 0.3, a: Math.random() * 0.5 + 0.25 });
+
+  SU.loop(cv, function (dt, t) {
+    if (jumpTo !== null) {
+      phase = U.approach(phase, jumpTo, dt, 4.5);
+      if (Math.abs(jumpTo - phase) < 0.01) { phase = jumpTo % 6.2832; jumpTo = null; }
+    } else if (playing) phase += dt * 0.55;
+
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+    bgGrad.addColorStop(0, "#050a1c"); bgGrad.addColorStop(1, "#0a1026");
+    ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, w, h);
+
+    var dpc = parseFloat(sD.value) / 10;        // 1.3 ~ 8.0 pc
+    var par = 1 / dpc;                           // 별 S의 연주 시차(″)
+    var dT = dpc * 2.6;                          // 별 T는 2.6배 더 멀리
+    vD.textContent = dpc.toFixed(1) + " pc";
+
+    /* ---- 기준 좌표 ---- */
+    var sunY = h * 0.86, sunX = w * 0.5;
+    var orbX = w * 0.16, orbY = h * 0.045;
+    var Ax = sunX - orbX, Bx = sunX + orbX;
+    var yBG = h * 0.17;                          // 아주 멀리 있는 배경 하늘
+    var SPAN = sunY - yBG;
+
+    /* 겉보기 이동 폭은 연주 시차에 비례하도록 정한다 */
+    var SMAX = w * 0.26;
+    function place(p) {                          // 연주 시차 p(″) → 화면상의 위치
+      var s = SMAX * (p / 0.77);
+      var k = 1 + s / (2 * orbX);
+      return { y: sunY - SPAN / k, s: s, k: k };
+    }
+
+    /* ---- 배경 하늘 ---- */
+    for (var i = 0; i < bg.length; i++) {
+      var st = bg[i];
+      ctx.fillStyle = "rgba(255,255,255," + st.a * 0.5 + ")";
+      ctx.beginPath(); ctx.arc(st.x * w, st.y * yBG * 1.55, st.r, 0, 6.2832); ctx.fill();
+    }
+    ctx.strokeStyle = "rgba(132,162,255,.28)"; ctx.setLineDash([4, 6]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, yBG); ctx.lineTo(w, yBG); ctx.stroke(); ctx.setLineDash([]);
+    U.label(ctx, 14, yBG + 16, "← 아주 멀리 있어 움직이지 않는 배경 별들", "rgba(166,176,212,.75)", 12, "left");
+
+    /* ---- 별 그리기 ---- */
+    function drawStar(sx, p, name, col, rgb, showArc) {
+      var P = place(p), sy = P.y;
+      var appA = Ax + (sx - Ax) * P.k, appB = Bx + (sx - Bx) * P.k;
+      // 시선 A, B
+      ctx.strokeStyle = "rgba(126,240,200,.30)"; ctx.lineWidth = 1.1;
+      ctx.beginPath(); ctx.moveTo(Ax, sunY); ctx.lineTo(appA, yBG); ctx.stroke();
+      ctx.strokeStyle = "rgba(255,209,102,.30)";
+      ctx.beginPath(); ctx.moveTo(Bx, sunY); ctx.lineTo(appB, yBG); ctx.stroke();
+      // 겉보기 위치
+      ctx.strokeStyle = "rgba(255,255,255,.35)"; ctx.setLineDash([2, 4]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(appA, yBG); ctx.lineTo(appB, yBG); ctx.stroke(); ctx.setLineDash([]);
+      U.glow(ctx, appA, yBG, 10, "rgba(126,240,200,1)", 0.85);
+      U.glow(ctx, appB, yBG, 10, "rgba(255,209,102,1)", 0.85);
+      U.label(ctx, appA, yBG - 34, name + " (A에서 볼 때)", "#7ef0c8", 11.5);
+      U.label(ctx, appB, yBG - 17, name + " (B에서 볼 때)", "#ffd166", 11.5);
+      // 시차 각
+      if (showArc) {
+        var aA = -Math.atan2(sunY - sy, Ax - sx), aB = -Math.atan2(sunY - sy, Bx - sx);
+        ctx.strokeStyle = "rgba(255,138,107,.95)"; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(sx, sy, 34, Math.min(aA, aB), Math.max(aA, aB), false); ctx.stroke();
+        U.chip(ctx, sx, sy + 52, "시차 = ∠A" + name.replace("별 ", "") + "B", "#ff8a6b", 12);
+      }
+      // 본체
+      U.glow(ctx, sx, sy, 17, rgb, 1);
+      U.label(ctx, sx + 22, sy - 2, name, col, 13, "left");
+      return { sy: sy, k: P.k };
+    }
+
+    if (cT.checked) {
+      drawStar(w * 0.76, 1 / dT, "별 T", "#ff8a6b", "rgba(255,180,150,1)", false);
+      oT.textContent = (1 / dT).toFixed(2) + "″";
+    } else { oT.textContent = "—"; }
+
+    var sx = w * 0.42;
+    var S = drawStar(sx, par, "별 S", "#cfdaff", "rgba(190,215,255,1)", true);
+
+    /* ---- 궤도 · 태양 · 지구 ---- */
+    ctx.strokeStyle = "rgba(132,162,255,.35)"; ctx.lineWidth = 1.4; ctx.setLineDash([5, 5]);
+    ctx.beginPath(); ctx.ellipse(sunX, sunY, orbX, orbY, 0, 0, 6.2832); ctx.stroke(); ctx.setLineDash([]);
+
+    U.glow(ctx, sunX, sunY, 28, "rgba(255,190,80,1)", 1);
+    ctx.fillStyle = "#ffd166"; ctx.beginPath(); ctx.arc(sunX, sunY, 9, 0, 6.2832); ctx.fill();
+    U.label(ctx, sunX, sunY + 26, "태양", "#ffd166", 12);
+
+    [[Ax, "A", "#7ef0c8"], [Bx, "B", "#ffd166"]].forEach(function (P) {
+      ctx.strokeStyle = P[2]; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(P[0], sunY, 7, 0, 6.2832); ctx.stroke();
+      U.label(ctx, P[0], sunY + 24, P[1], P[2], 12);
+    });
+
+    var ex = sunX + Math.cos(phase) * orbX, ey = sunY - Math.sin(phase) * orbY;
+    // 지금 보이는 위치
+    var kNow = (sunY - yBG) / (sunY - S.sy);
+    var appNow = ex + (sx - ex) * kNow;
+    ctx.strokeStyle = "rgba(255,255,255,.55)"; ctx.lineWidth = 1.5; ctx.setLineDash([3, 4]);
+    ctx.beginPath(); ctx.moveTo(ex, ey); ctx.lineTo(appNow, yBG); ctx.stroke(); ctx.setLineDash([]);
+    U.glow(ctx, appNow, yBG, 14, "rgba(255,255,255,1)", 1);
+    U.spike(ctx, appNow, yBG, 24, "rgba(255,255,255,.5)", 1.2);
+
+    ctx.fillStyle = "#6ea8ff";
+    ctx.beginPath(); ctx.arc(ex, ey, 7, 0, 6.2832); ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,.8)"; ctx.lineWidth = 1.4; ctx.stroke();
+    U.label(ctx, ex, ey + 22, "지구", "#cfdaff", 12);
+
+    U.label(ctx, 14, 18, "지구가 공전하면 별은 배경 하늘에서 좌우로 움직여 보인다", "rgba(207,218,255,.9)", 13, "left", 800);
+    U.label(ctx, 14, h - 14, "위에서 본 태양계 (각도와 거리는 과장한 모형)", "rgba(166,176,212,.7)", 12, "left");
+
+    oPar.textContent = (par * 2).toFixed(2) + "″";
+    oAnn.textContent = par.toFixed(2) + "″";
+    oDd.textContent = dpc.toFixed(1) + " pc";
+  });
+})();
+
+</script>
+</body>
+</html>

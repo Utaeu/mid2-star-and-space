@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 우리은하 | Ⅷ. 별과 우주</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<canvas id="bg-stars"></canvas><div id="bg-glow"></div>
+<div id="progress"></div>
+
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><span class="dot"></span><span>Ⅷ. 별과 우주 <small>중2 과학</small></span></a>
+  <nav class="chips"></nav>
+  <div class="tmode"><span class="sw"></span>교사 모드</div>
+</div></header>
+
+<main class="wrap">
+
+  <div class="page-head">
+    <span class="eyebrow">Ⅷ-2. 우주 · 01 · 1~2차시</span>
+    <h1>우리<em>은하</em></h1>
+    <p class="lede">갈릴레이는 천체 망원경으로 은하수가 수많은 별의 집단이라는 것을 관측했고,
+      그 후 과학자들은 은하수가 <b>우리은하의 일부</b>임을 알아냈습니다.</p>
+    <div style="margin-top:10px">
+      <span class="pill a2">#우리은하</span><span class="pill a2">#성단</span><span class="pill a2">#성운</span>
+    </div>
+  </div>
+
+  <div class="goals">
+    <h3>이 단원에서 나는</h3>
+    <ul>
+      <li>우리은하의 구조와 크기를 설명할 수 있다.</li>
+      <li>우리은하를 구성하는 성단과 성운의 특징을 비교할 수 있다.</li>
+    </ul>
+  </div>
+
+  <!-- 도입 -->
+  <section class="block">
+    <h2 class="sec"><span class="num">도입</span> 은하수를 이루고 있는 천체들은 무엇일까?</h2>
+    <div class="grid g2">
+      <figure class="fig">
+        <img src="img/goguryeo.jpg" alt="고구려 덕흥리 고분 벽화와 천상열차분야지도에 그려진 은하수">
+        <figcaption>고구려 덕흥리 고분 벽화 · 천상열차분야지도 — 은하수를 사이에 두고 견우와 직녀가 그려져 있다.</figcaption>
+      </figure>
+      <div class="card">
+        <div class="hook">“옛날에도 직녀성과 견우성 사이에 있는 은하수를 볼 수 있었구나!”<br>
+          <strong>은하수를 이루고 있는 천체들은 무엇일까요?</strong></div>
+        <p style="margin:0; color:var(--dim)">은하수를 이루고 있는 천체들은 각각 <b style="color:var(--txt)">성운, 성단, 별</b> 등입니다.
+          우리은하의 대부분의 별들은 <b style="color:var(--txt)">납작한 면에 밀집</b>해 있으며 태양계도 그 면에 위치합니다.
+          그래서 태양계에서 우리은하를 바라보면 거의 같은 평면에 있는 별들을 보게 되므로 <b style="color:var(--accent-2)">띠 모양</b>으로 보입니다.</p>
+      </div>
+    </div>
+    <div class="teacher-note">
+      <span class="tlabel">도입 안내</span>
+      왼쪽은 덕흥리 고분 벽화로, 견우와 직녀 사이를 가로지르는 선이 은하수이다.
+      오른쪽 천상열차분야지도에도 중심을 휘감는 커다란 띠로 은하수가 표현되어 있으며, 띠의 두께가 일정하지 않다는 점을 짚어 주면 좋다.
+    </div>
+  </section>
+
+  <!-- 3D 우리은하 -->
+  <section class="block" id="galaxy3d">
+    <h2 class="sec"><span class="num">개념 1</span> 우리은하의 모양과 크기는 어떠할까? <span class="qq">교과서 295쪽 | 그림 10 |</span></h2>
+    <p class="sec-sub">
+      우주에는 수천억 개의 별들로 이루어진 천체 집단인 <span class="kw">은하</span>들이 있습니다.
+      그중 <span class="kw">태양계가 속해 있는 은하</span>를 우리은하라고 합니다.
+      아래 3차원 모형을 돌려 보며 <b>위에서 본 모습</b>과 <b>옆에서 본 모습</b>을 비교해 보세요.
+    </p>
+
+    <div class="sim">
+      <div class="sim-head">
+        <h4>3D 우리은하 — 직접 돌려 보기</h4>
+        <span class="hint">화면을 드래그하면 자유롭게 회전합니다</span>
+      </div>
+      <canvas id="cvGal"></canvas>
+      <div class="sim-controls">
+        <button class="btn on" id="gTop">위에서 본 모습</button>
+        <button class="btn" id="gSide">옆에서 본 모습</button>
+        <button class="btn" id="gTilt">비스듬히 보기</button>
+        <button class="btn amber on" id="gSpin">자동 회전 ⏸</button>
+        <button class="btn amber on" id="gLabel">이름표 보기</button>
+      </div>
+      <div class="readout">
+        <div class="stat"><div class="k">우리은하의 지름</div><div class="v">약 30000 pc</div></div>
+        <div class="stat amber"><div class="k">은하 중심 ~ 태양계</div><div class="v">약 8500 pc</div></div>
+        <div class="stat warm" style="flex:1; min-width:250px"><div class="k">지금 보고 있는 방향</div>
+          <div class="v" id="gView" style="font-size:.95rem; color:var(--txt); font-weight:700">위에서 본 모습</div></div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:18px">
+      <figure class="fig">
+        <img src="img/milkyway_model.jpg" alt="위에서 본 우리은하와 옆에서 본 우리은하 모식도">
+        <figcaption><b>| 그림 10 |</b> 우리은하(모식도) — 위에서 본 모습(위)과 옆에서 본 모습(아래)</figcaption>
+      </figure>
+      <div class="card">
+        <h3>우리은하 한눈에</h3>
+        <ul style="margin:0 0 0; padding-left:20px; color:var(--dim)">
+          <li><b style="color:var(--txt)">위에서 보면</b> 중심부에 <b style="color:var(--accent-2)">막대 구조</b>가 있고,
+            막대 끝에 소용돌이 모양의 <b style="color:var(--accent-2)">나선팔</b>이 있다.</li>
+          <li><b style="color:var(--txt)">옆에서 보면</b> 중심부가 볼록한 <b style="color:var(--accent-2)">원반 모양</b>이다.</li>
+          <li>지름은 약 <b style="color:var(--txt)">30000 pc</b>이다.</li>
+          <li>태양계는 은하 중심에서 약 <b style="color:var(--txt)">8500 pc</b> 떨어진 <b style="color:var(--txt)">나선팔의 원반 면</b>에 있다.</li>
+          <li>별들이 대부분 원반 면에 분포하므로, 옆에서 보았을 때 <b style="color:var(--accent-3)">띠 모양의 은하수</b>로 관측된다.</li>
+        </ul>
+        <div class="teacher-note">
+          <span class="tlabel">지도상의 유의점</span>
+          우리은하의 크기는 <b>은하가 얼마나 큰지에 대한 인식을 가지는 데 초점</b>을 맞추고, 지나치게 수치를 암기하지 않도록 지도한다.
+          우리은하의 구조는 위에서 본 모습과 옆에서 본 모습을 각각 이해하도록 지도한다.
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-note">
+      <span class="tlabel">참고 자료 — 은하의 종류</span>
+      <ul>
+        <li><b>타원 은하</b> 모양이 타원인 은하로, 구형에 가까운 것부터 찌그러진 정도에 따라 E0에서 E7까지로 나뉜다.</li>
+        <li><b>나선 은하</b> 정상 나선 은하와 막대 나선 은하로 나뉜다. 두 형태 모두 나선 모양의 팔을 가진다.</li>
+        <li><b>불규칙 은하</b> 타원형 또는 나선형으로 분류하기 어려운, 일정한 형태를 갖추지 않은 은하.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 은하수 -->
+  <section class="block" id="milkyway">
+    <h2 class="sec"><span class="num">개념 2</span> 은하수는 왜 계절마다 다르게 보일까? <span class="qq">교과서 294~295쪽</span></h2>
+    <p class="sec-sub">우리은하의 별들은 대부분 납작한 원반 면에 모여 있고 태양계도 그 면 위에 있습니다.
+      그래서 하늘을 둘러보면 은하수가 <span class="kw">띠 모양</span>으로 보이고,
+      바라보는 방향에 따라 <span class="kw">밝기와 두께</span>가 달라집니다.</p>
+
+    <div class="sim">
+      <div class="sim-head">
+        <h4>태양계에서 바라본 밤하늘 — 은하수</h4>
+        <span class="hint">계절 버튼을 누르면 바라보는 방향이 부드럽게 바뀝니다</span>
+      </div>
+      <canvas id="cvBand"></canvas>
+      <div class="sim-controls">
+        <button class="btn on" id="mwS">여름철 (A · 우리은하 중심 방향)</button>
+        <button class="btn" id="mwW">겨울철 (B · 중심의 반대 방향)</button>
+        <label class="ctl">바라보는 방향
+          <input type="range" id="mwDir" min="0" max="360" value="0">
+          <span class="val" id="mwDirV">0°</span></label>
+      </div>
+      <div class="readout">
+        <div class="stat"><div class="k">은하수의 밝기</div><div class="v" id="mwB">밝다</div></div>
+        <div class="stat amber"><div class="k">은하수의 폭</div><div class="v" id="mwW2">두껍다</div></div>
+        <div class="stat warm" style="flex:1; min-width:260px"><div class="k">왜 그럴까?</div>
+          <div class="v" id="mwMsg" style="font-size:.93rem; color:var(--txt); font-weight:700; line-height:1.5">
+            은하 중심 방향에는 별이 훨씬 많아 은하수가 밝고 두껍게 보입니다.</div></div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:18px">
+      <figure class="fig">
+        <img src="img/galaxy_edge.jpg" alt="옆에서 본 은하의 모습. 납작한 원반과 볼록한 중심부가 보인다">
+        <figcaption><b>| 그림 9 |</b> 우리은하를 옆에서 본 모습 — 태양계는 원반 면 위에 있다.</figcaption>
+      </figure>
+      <div class="card">
+        <h3>정리하면</h3>
+        <ul style="margin:0; padding-left:20px; color:var(--dim)">
+          <li>태양계에서 보면 별들이 거의 같은 평면에 있으므로 은하수가 <b style="color:var(--txt)">띠 모양</b>으로 보인다.</li>
+          <li><b style="color:var(--accent-2)">여름철</b>에는 우리은하의 <b style="color:var(--txt)">중심 방향(A)</b>을 바라보므로 별이 많아 은하수가 <b style="color:var(--txt)">밝고 두껍게</b> 보인다.</li>
+          <li><b style="color:var(--accent-2)">겨울철</b>에는 중심의 <b style="color:var(--txt)">반대 방향(B)</b>을 바라보므로 은하수가 <b style="color:var(--txt)">어둡고 얇게</b> 보인다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 성단과 성운 -->
+  <section class="block" id="objects">
+    <h2 class="sec"><span class="num">개념 3</span> 우리은하는 어떤 천체들로 이루어져 있을까? <span class="qq">교과서 296~297쪽</span></h2>
+    <p class="sec-sub">
+      우리은하에는 많은 수의 별이 좁은 공간에 모여 집단을 이루는 <span class="kw">성단</span>이 있습니다.
+      별과 별 사이의 공간에는 기체와 먼지들이 희박하게 퍼져 있는데 이를 <span class="kw">성간 물질</span>이라 하고,
+      성간 물질이 모여 있어 구름처럼 보이는 천체를 <span class="kw">성운</span>이라고 합니다.
+    </p>
+
+    <h3 class="mini">성단 — 별들의 무리</h3>
+    <div class="grid g2">
+      <div class="photo-card">
+        <img src="img/open_cluster.jpg" alt="좀생이성단 — 파란색 별들이 듬성듬성 모여 있는 산개 성단">
+        <div class="pc-body">
+          <h4 style="color:#9fc0ff">산개 성단 <span class="pill">좀생이성단</span></h4>
+          <p>수십 ~ 수만 개의 별들이 <b style="color:var(--txt)">일정한 모양 없이</b> 모여 있다.
+            <b style="color:#9fc0ff">파란색의 젊은 별</b>로 구성되어 있으며 대부분 우리은하의 <b style="color:var(--txt)">나선팔</b>에 분포한다.</p>
+        </div>
+      </div>
+      <div class="photo-card">
+        <img src="img/globular_cluster.jpg" alt="NGC 6093 — 붉은색 별들이 공 모양으로 빽빽하게 모인 구상 성단">
+        <div class="pc-body">
+          <h4 style="color:#ffb066">구상 성단 <span class="pill">NGC 6093</span></h4>
+          <p>수만 ~ 수십만 개의 별들이 빽빽하게 모여 <b style="color:var(--txt)">공 모양</b>을 이룬다.
+            <b style="color:#ffb066">붉은색의 늙은 별</b>로 구성되어 있으며 우리은하의 <b style="color:var(--txt)">중심부와 은하 원반을 둘러싼 구형의 공간</b>에 많이 분포한다.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="mini">성운 — 성간 물질의 구름</h3>
+    <div class="grid g3">
+      <div class="photo-card">
+        <img src="img/neb_emission.jpg" alt="장미성운 — 붉은빛을 내는 방출 성운">
+        <div class="pc-body">
+          <h4 style="color:#ff8a6b">방출 성운 <span class="pill">장미성운</span></h4>
+          <p>근처에 있는 <b style="color:var(--txt)">고온의 별로부터 에너지를 받아 붉은빛</b>을 낸다.</p>
+        </div>
+      </div>
+      <div class="photo-card">
+        <img src="img/neb_reflection.jpg" alt="마귀할멈성운 — 파란빛을 내는 반사 성운">
+        <div class="pc-body">
+          <h4 style="color:#8fc0ff">반사 성운 <span class="pill">마귀할멈성운</span></h4>
+          <p>주변의 <b style="color:var(--txt)">별빛을 반사하여 파란빛</b>을 낸다.</p>
+        </div>
+      </div>
+      <div class="photo-card">
+        <img src="img/neb_dark.jpg" alt="말머리성운 — 뒤에서 오는 별빛을 가려 검게 보이는 암흑 성운">
+        <div class="pc-body">
+          <h4 style="color:#c3a8ff">암흑 성운 <span class="pill">말머리성운</span></h4>
+          <p><b style="color:var(--txt)">뒤에서 오는 별빛을 가리기 때문에 검게</b> 보인다.</p>
+        </div>
+      </div>
+    </div>
+    <p class="note-sm" style="margin-top:8px">| 그림 11 | 성단과 성운 · 성운은 주로 우리은하의 <b>나선팔</b>에 분포합니다.</p>
+
+    <div class="teacher-note">
+      <span class="tlabel">참고 자료</span>
+      <b>방출 성운이 붉게 보이는 이유</b> — 고온의 별에서 나온 자외선을 흡수한 수소 기체가 다시 빛을 낼 때 붉은빛이 가장 강하다.<br>
+      <b>반사 성운이 푸르게 보이는 이유</b> — 작은 입자는 파장이 짧은 푸른빛을 더 잘 산란시킨다.
+      실제로는 산란 효과이지만 중학교 교육과정에서는 ‘반사’로 다룬다.
+    </div>
+  </section>
+
+  <!-- 핵심 정리 -->
+  <section class="block">
+    <h2 class="sec"><span class="num">정리</span> 핵심 정리</h2>
+    <div class="key">
+      <ul>
+        <li><b>우리은하</b> : 태양계가 속해 있는 은하</li>
+        <li><b>우리은하의 모양</b> : 위에서 보면 중심부에 막대 구조가 있고 막대 끝에 소용돌이 모양의 나선팔이 있으며, 옆에서 보면 중심부가 볼록한 원반 모양</li>
+        <li><b>우리은하의 크기와 태양계의 위치</b> : 지름이 약 30000 pc이고, 은하 중심에서 약 8500 pc 떨어진 나선팔의 원반 면에 태양계가 위치</li>
+        <li><b>성단</b> : 별이 집단적으로 모여 있는 것. 일정한 형태가 없는 <b>산개 성단</b>과 구형의 <b>구상 성단</b></li>
+        <li><b>성운</b> : 성간 물질이 구름처럼 모여 있는 것. 붉은빛의 <b>방출 성운</b>, 푸른빛의 <b>반사 성운</b>, 별빛을 차단해 검게 보이는 <b>암흑 성운</b></li>
+        <li><b>여름철 은하수가 더 두꺼운 이유</b> : 여름철 밤하늘은 우리은하 중심 방향을 향하기 때문</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 확인 -->
+  <section class="block" id="check">
+    <h2 class="sec"><span class="num">확인</span> 이것만은 &amp; 문제로 확인</h2>
+    <div class="quiz">
+      <div class="q" data-a="0">
+        <div class="qh"><span class="qn">1</span><span class="qt">우리은하를 옆에서 보면 중심부가 어떤 원반 모양인가?</span></div>
+        <div class="opts"><button class="opt">볼록한 원반 모양</button><button class="opt">납작한 원반 모양</button></div>
+        <div class="sol">우리은하를 옆에서 보면 중심부가 <b>볼록한</b> 원반 모양입니다.</div>
+      </div>
+
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">2</span><span class="qt">수만 ~ 수십만 개의 별들이 공 모양으로 빽빽하게 모여 있는 것을 <span class="blank"></span> 성단이라고 한다.</span></div>
+        <div class="opts"><button class="opt">산개</button><button class="opt">구상</button></div>
+        <div class="sol"><b>구상 성단</b>입니다. 수십~수만 개의 별들이 일정한 모양 없이 모여 있는 성단은 산개 성단입니다.</div>
+      </div>
+
+      <div class="q" data-a="1">
+        <div class="qh"><span class="qn">3</span><span class="qt">우리은하에 대한 설명으로 <b>옳지 않은</b> 것은?</span></div>
+        <div class="opts">
+          <button class="opt">위에서 보면 중심부에 막대 모양의 구조가 있다.</button>
+          <button class="opt">우리은하 중심에는 태양이 있다.</button>
+          <button class="opt">밤하늘에 띠 모양으로 관측되는 은하수는 우리은하의 일부이다.</button>
+        </div>
+        <div class="sol">태양은 우리은하 중심에서 약 <b>8500 pc 떨어진 나선팔</b>에 위치합니다. 중심에 있지 않습니다.</div>
+      </div>
+
+      <div class="q" data-a="3">
+        <div class="qh"><span class="qn">4</span><span class="qt">두 종류의 성단 (가) 산개 성단, (나) 구상 성단에 대한 설명으로 <b>옳지 않은</b> 것은?</span></div>
+        <div class="opts">
+          <button class="opt">① (가)는 산개 성단, (나)는 구상 성단이다.</button>
+          <button class="opt">② (가)는 별들이 비교적 엉성하게 분포한다.</button>
+          <button class="opt">③ (나)는 수만~수십만 개의 별들이 공 모양으로 분포한다.</button>
+          <button class="opt">④ (가)는 주로 늙은 별들로 구성되어 있다.</button>
+          <button class="opt">⑤ (나)는 주로 붉은색 별들로 구성되어 있다.</button>
+        </div>
+        <div class="sol">(가) 산개 성단은 주로 <b>젊은(파란색)</b> 별들로 구성되어 있습니다. 따라서 ④가 옳지 않습니다.</div>
+      </div>
+
+    </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card">
+        <h3><span class="pill">서술형</span> 은하수가 띠 모양으로 관측되는 까닭</h3>
+        <button class="btn amber" data-reveal="qa2" data-label="모범 답안 보기">모범 답안 보기</button>
+        <div class="reveal" id="qa2">
+          태양계는 우리은하 중심으로부터 약 8500 pc 떨어진 나선팔에 위치한다. 나선팔은 별이 집중된 원반이므로,
+          지구에서 관측한 은하의 모습은 <b>띠 모양</b>으로 관측된다.
+        </div>
+      </div>
+      <div class="card">
+        <h3>스스로 정리하기</h3>
+        <p style="margin:0">우리은하를 위에서 보면 중심부에 막대 구조가 있고 막대 끝에 소용돌이 모양의 <span class="kw">ㄴ ㅅ ㅍ</span>이 있다.
+          <button class="btn amber" data-reveal="selfA" data-label="확인">확인</button></p>
+        <div class="reveal" id="selfA"><b class="kw2">나선팔</b></div>
+      </div>
+    </div>
+
+    <div class="score-bar">
+      <span class="s"></span>
+      <button class="btn" data-show-all>모두 정답 보기</button>
+      <button class="btn" data-reset-quiz>다시 풀기</button>
+    </div>
+  </section>
+
+  <div class="pager"></div>
+</main>
+
+<footer class="foot">Ⅷ-2. 우주 · 01 우리은하 | 교사용 교과서 292~297쪽</footer>
+
+<script src="assets/common.js"></script>
+<script>
+/* =========================================================
+   우리은하 입자 모형 (3D 보기 · 은하수 파노라마 공용)
+   ========================================================= */
+var GAL = (function () {
+  function rnd() { return Math.random(); }
+  function gauss() { return (rnd() + rnd() + rnd() + rnd() - 2) * 0.5; }
+  var disk = [], halo = [], SUN_R = 8500 / 15000, SUN_TH;
+
+  var ARMS = 2, TW = 2.55;                 // 나선팔 감김
+  for (var i = 0; i < 4200; i++) {
+    var t = Math.pow(rnd(), 0.62);         // 0~1 (중심→바깥)
+    var r = 0.06 + t * 0.98;
+    var arm = Math.floor(rnd() * ARMS);
+    var th = arm * (6.2832 / ARMS) + TW * Math.log(1 + r * 2.6) * 1.55;
+    th += gauss() * (0.55 + 0.25 / (r + 0.15));
+    // 중심 막대 구조
+    var bar = r < 0.30;
+    if (bar) { th = (rnd() < 0.5 ? 0 : Math.PI) + gauss() * 0.42 * (r / 0.30 + 0.35); }
+    var z = gauss() * (0.020 + 0.115 * Math.exp(-r * 5.2));
+    var young = r > 0.30 && rnd() < 0.62;
+    disk.push({
+      r: r, th: th, z: z,
+      c: young ? [165, 200, 255] : (r < 0.30 ? [255, 205, 140] : [255, 232, 200]),
+      s: 0.5 + rnd() * (young ? 1.35 : 0.9),
+      b: 0.35 + rnd() * 0.65
+    });
+  }
+  /* 중심부의 볼록한 팽대부 + 막대 구조 */
+  for (var i = 0; i < 1100; i++) {
+    var bx = gauss() * 0.30, by = gauss() * 0.105, bz = gauss() * 0.115;
+    var br = Math.sqrt(bx * bx + by * by);
+    if (br > 0.42) continue;
+    disk.push({
+      r: br, th: Math.atan2(by, bx), z: bz,
+      c: [255, 210, 150], s: 0.45 + rnd() * 0.8, b: 0.30 + rnd() * 0.55
+    });
+  }
+
+  for (var i = 0; i < 26; i++) {
+    var rr = 0.22 + Math.pow(rnd(), 0.8) * 1.15;
+    var u = rnd() * 6.2832, v = (rnd() - 0.5) * Math.PI;
+    halo.push({ x: rr * Math.cos(v) * Math.cos(u), y: rr * Math.cos(v) * Math.sin(u), z: rr * Math.sin(v) * 0.9 });
+  }
+  // 태양은 나선팔 위에
+  SUN_TH = TW * Math.log(1 + SUN_R * 2.6) * 1.55 + 0.18;
+  return { disk: disk, halo: halo, sunR: SUN_R, sunTh: SUN_TH };
+})();
+
+/* =========================================================
+   1) 3D 우리은하
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvGal");
+  var C = SU.Canvas(cv, 1.55), U = SU.U;
+  var yaw = 0.4, pitch = Math.PI / 2, pitchT = Math.PI / 2, yawT = null;
+  var spin = true, labels = true;
+  var vName = document.getElementById("gView");
+  var bTop = document.getElementById("gTop"), bSide = document.getElementById("gSide"), bTilt = document.getElementById("gTilt");
+  var bSpin = document.getElementById("gSpin"), bLab = document.getElementById("gLabel");
+
+  function setView(p, el, name) {
+    pitchT = p; vName.textContent = name;
+    [bTop, bSide, bTilt].forEach(function (b) { b.classList.toggle("on", b === el); });
+  }
+  bTop.onclick = function () { setView(Math.PI / 2, bTop, "위에서 본 모습"); };
+  bSide.onclick = function () { yaw = -GAL.sunTh; setView(0, bSide, "옆에서 본 모습"); };
+  bTilt.onclick = function () { setView(0.58, bTilt, "비스듬히 본 모습"); };
+  bSpin.onclick = function () { spin = !spin; bSpin.classList.toggle("on", spin); bSpin.textContent = spin ? "자동 회전 ⏸" : "자동 회전 ▶"; };
+  bLab.onclick = function () { labels = !labels; bLab.classList.toggle("on", labels); };
+
+  // 드래그 회전
+  var drag = false, lx = 0, ly = 0;
+  cv.style.cursor = "grab";
+  cv.addEventListener("pointerdown", function (e) { drag = true; lx = e.clientX; ly = e.clientY; cv.setPointerCapture(e.pointerId); cv.style.cursor = "grabbing"; });
+  cv.addEventListener("pointermove", function (e) {
+    if (!drag) return;
+    yaw += (e.clientX - lx) * 0.008;
+    pitchT = U.clamp(pitchT - (e.clientY - ly) * 0.007, -0.05, Math.PI / 2);
+    lx = e.clientX; ly = e.clientY;
+    vName.textContent = pitchT > 1.3 ? "위에서 본 모습" : (pitchT < 0.14 ? "옆에서 본 모습" : "비스듬히 본 모습");
+    [bTop, bSide, bTilt].forEach(function (b) { b.classList.remove("on"); });
+  });
+  ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) {
+    cv.addEventListener(ev, function () { drag = false; cv.style.cursor = "grab"; });
+  });
+
+  SU.loop(cv, function (dt, t) {
+    if (spin && !drag) yaw += dt * 0.13;
+    pitch = U.approach(pitch, pitchT, dt, 3.2);
+
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var bg = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.7);
+    bg.addColorStop(0, "#080e24"); bg.addColorStop(1, "#04060f");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+
+    var cx = w / 2, cy = h / 2, S = Math.min(w * 0.40, h * 0.58);
+    var cyaw = Math.cos(yaw), syaw = Math.sin(yaw);
+    var cp = Math.cos(pitch), sp = Math.sin(pitch);
+
+    function proj(x, y, z) {
+      var X = x * cyaw - y * syaw, Y = x * syaw + y * cyaw;
+      var sxp = X;
+      var syp = -(Y * sp + z * cp);
+      var dep = Y * cp - z * sp;
+      var k = 1 + dep * 0.12;                 // 약한 원근
+      return [cx + sxp * S * k, cy + syp * S * k, dep];
+    }
+
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+
+    // 원반 별
+    var d = GAL.disk;
+    for (var i = 0; i < d.length; i++) {
+      var s = d[i];
+      var x = Math.cos(s.th) * s.r, y = Math.sin(s.th) * s.r;
+      var p = proj(x, y, s.z);
+      var a = s.b * (0.42 + 0.30 * (p[2] + 1.2) / 2.4);
+      ctx.fillStyle = "rgba(" + s.c[0] + "," + s.c[1] + "," + s.c[2] + "," + a * 0.62 + ")";
+      ctx.beginPath(); ctx.arc(p[0], p[1], s.s * (S / 260), 0, 6.2832); ctx.fill();
+    }
+    // 중심부 빛무리
+    var pc0 = proj(0, 0, 0);
+    var cg = ctx.createRadialGradient(pc0[0], pc0[1], 0, pc0[0], pc0[1], S * 0.30);
+    cg.addColorStop(0, "rgba(255,238,200,.34)");
+    cg.addColorStop(0.45, "rgba(255,205,130,.14)");
+    cg.addColorStop(1, "rgba(255,180,90,0)");
+    ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(pc0[0], pc0[1], S * 0.30, 0, 6.2832); ctx.fill();
+    ctx.restore();
+
+    // 구상 성단
+    for (var i = 0; i < GAL.halo.length; i++) {
+      var g = GAL.halo[i], p = proj(g.x, g.y, g.z);
+      U.glow(ctx, p[0], p[1], 9, "rgba(255,190,120,1)", 0.75);
+    }
+
+    // 태양계
+    var sx = Math.cos(GAL.sunTh + 0) * GAL.sunR, sy = Math.sin(GAL.sunTh) * GAL.sunR;
+    var ps = proj(sx, sy, 0);
+    U.glow(ctx, ps[0], ps[1], 16, "rgba(126,240,200,1)", 1);
+    ctx.strokeStyle = "rgba(126,240,200,.9)"; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(ps[0], ps[1], 11 + 3 * Math.sin(t * 2.4), 0, 6.2832); ctx.stroke();
+
+    if (labels) {
+      U.chip(ctx, ps[0], ps[1] - 26, "태양계", "#7ef0c8", 12);
+      U.chip(ctx, pc0[0], pitch > 0.8 ? pc0[1] - S * 0.12 : pc0[1] + 38, "은하 중심", "#ffd166", 12);
+      // 나선팔
+      var pa = proj(Math.cos(GAL.sunTh + 2.2) * 0.92, Math.sin(GAL.sunTh + 2.2) * 0.92, 0);
+      U.chip(ctx, pa[0], pa[1], "나선팔", "rgba(190,215,255,.95)", 12);
+      // 구상 성단 이름표 — 중심에서 화면상 가장 멀리 떨어진 것에 붙인다
+      var best = null, bd = -1;
+      for (var i = 0; i < GAL.halo.length; i++) {
+        var g2 = GAL.halo[i], q = proj(g2.x, g2.y, g2.z);
+        var dd2 = Math.hypot(q[0] - pc0[0], q[1] - pc0[1]);
+        if (dd2 > bd && q[1] > h * 0.12 && q[1] < h * 0.88) { bd = dd2; best = q; }
+      }
+      if (best) U.chip(ctx, best[0], best[1] - 20, "구상 성단", "#ffb066", 11.5);
+
+      // 크기 표시
+      if (pitch > 0.75) {
+        var e1 = proj(-1.0, 0, 0), e2 = proj(1.0, 0, 0);
+        U.arrow(ctx, e1[0], h - 36, e2[0], h - 36, "rgba(255,255,255,.55)", 1.4, 7);
+        U.arrow(ctx, e2[0], h - 36, e1[0], h - 36, "rgba(255,255,255,.55)", 1.4, 7);
+        U.label(ctx, (e1[0] + e2[0]) / 2, h - 50, "약 30000 pc", "rgba(255,255,255,.9)", 13);
+        ctx.strokeStyle = "rgba(126,240,200,.75)"; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.moveTo(pc0[0], pc0[1]); ctx.lineTo(ps[0], ps[1]); ctx.stroke(); ctx.setLineDash([]);
+        U.label(ctx, (pc0[0] + ps[0]) / 2, (pc0[1] + ps[1]) / 2 - 12, "약 8500 pc", "rgba(126,240,200,.95)", 12);
+      } else {
+        U.label(ctx, w / 2, h - 30, "옆에서 보면 중심부가 볼록한 원반 모양", "rgba(207,218,255,.9)", 13);
+      }
+    }
+
+    U.label(ctx, 14, 18, "3D 우리은하 모형", "rgba(207,218,255,.9)", 13, "left", 800);
+  });
+})();
+
+/* =========================================================
+   2) 은하수 파노라마 (태양계에서 본 하늘)
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvBand");
+  var C = SU.Canvas(cv, 2.6), U = SU.U;
+  var sl = document.getElementById("mwDir"), vDir = document.getElementById("mwDirV");
+  var bS = document.getElementById("mwS"), bW = document.getElementById("mwW");
+  var oB = document.getElementById("mwB"), oW = document.getElementById("mwW2"), oM = document.getElementById("mwMsg");
+  var dirT = 0, dir = 0;
+
+  bS.onclick = function () { dirT = 0; sl.value = 0; bS.classList.add("on"); bW.classList.remove("on"); };
+  bW.onclick = function () { dirT = 180; sl.value = 180; bW.classList.add("on"); bS.classList.remove("on"); };
+  sl.addEventListener("input", function () {
+    dirT = parseFloat(sl.value);
+    bS.classList.remove("on"); bW.classList.remove("on");
+  });
+
+  // 태양 기준 하늘 좌표 미리 계산
+  var sky = [];
+  var sunX = Math.cos(GAL.sunTh) * GAL.sunR, sunY = Math.sin(GAL.sunTh) * GAL.sunR;
+  (function () {
+    var d = GAL.disk;
+    for (var i = 0; i < d.length; i++) {
+      var s = d[i];
+      var x = Math.cos(s.th) * s.r - sunX, y = Math.sin(s.th) * s.r - sunY, z = s.z;
+      var dist = Math.sqrt(x * x + y * y + z * z);
+      if (dist < 0.02) continue;
+      // 은하 중심 방향을 0°로
+      var lon = Math.atan2(y, x) - Math.atan2(-sunY, -sunX);
+      while (lon > Math.PI) lon -= 6.2832;
+      while (lon < -Math.PI) lon += 6.2832;
+      var lat = Math.asin(U.clamp(z / dist, -1, 1));
+      sky.push({ l: lon * 180 / Math.PI, b: lat * 180 / Math.PI, m: s.b / (0.25 + dist * dist * 2.2), c: s.c, s: s.s });
+    }
+  })();
+
+  SU.loop(cv, function (dt, t) {
+    dir = U.approach(dir, dirT, dt, 2.6);
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var bg = ctx.createLinearGradient(0, 0, 0, h);
+    bg.addColorStop(0, "#040814"); bg.addColorStop(0.55, "#07102a"); bg.addColorStop(1, "#050a18");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+
+    var FOVX = 150, FOVY = FOVX * h / w;   // 보이는 하늘 범위(도)
+    var horizon = h * 0.88;
+
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    for (var i = 0; i < sky.length; i++) {
+      var s = sky[i];
+      var dl = s.l - dir;
+      while (dl > 180) dl -= 360;
+      while (dl < -180) dl += 360;
+      if (Math.abs(dl) > FOVX / 2) continue;
+      var x = w / 2 + (dl / (FOVX / 2)) * (w / 2);
+      var y = h * 0.46 - (s.b / (FOVY / 2)) * (h * 0.42);
+      if (y > horizon || y < 0) continue;
+      var a = U.clamp(s.m * 0.42, 0, 0.95);
+      ctx.fillStyle = "rgba(" + s.c[0] + "," + s.c[1] + "," + s.c[2] + "," + a + ")";
+      ctx.beginPath(); ctx.arc(x, y, Math.max(0.55, s.s * 0.75), 0, 6.2832); ctx.fill();
+    }
+    ctx.restore();
+
+    // 지평선과 풍경
+    var gg = ctx.createLinearGradient(0, horizon - 10, 0, h);
+    gg.addColorStop(0, "rgba(10,16,36,0)"); gg.addColorStop(1, "rgba(3,6,14,1)");
+    ctx.fillStyle = gg; ctx.fillRect(0, horizon - 10, w, h - horizon + 10);
+    ctx.fillStyle = "#050810";
+    ctx.beginPath(); ctx.moveTo(0, h);
+    for (var x = 0; x <= w; x += w / 24) {
+      ctx.lineTo(x, horizon + 6 + 9 * Math.sin(x * 0.011) + 6 * Math.sin(x * 0.031 + 1.3));
+    }
+    ctx.lineTo(w, h); ctx.closePath(); ctx.fill();
+
+    // 방향 표시
+    var summer = Math.min(1, Math.max(0, 1 - Math.abs(((dir + 180) % 360) - 180) / 90));
+    var lbl = Math.abs(((dir + 180) % 360) - 180) < 60 ? "우리은하 중심 방향 (A) — 여름철 밤하늘"
+      : (Math.abs(((dir + 180) % 360) - 180) > 120 ? "중심의 반대 방향 (B) — 겨울철 밤하늘" : "은하 원반을 옆으로 바라보는 방향");
+    U.label(ctx, 16, 20, lbl, "rgba(233,237,255,.95)", 14, "left", 800);
+    vDir.textContent = Math.round(dir) + "°";
+
+    var dev = Math.abs(((dir + 180) % 360) - 180);
+    oB.textContent = dev < 60 ? "밝다" : (dev > 120 ? "어둡다" : "보통");
+    oW.textContent = dev < 60 ? "두껍다" : (dev > 120 ? "얇다" : "보통");
+    oM.textContent = dev < 60
+      ? "은하 중심 방향에는 별이 훨씬 많아 은하수가 밝고 두껍게 보입니다. 여름철 밤하늘이 이 방향입니다."
+      : (dev > 120
+        ? "중심의 반대 방향은 별이 적어 은하수가 어둡고 얇게 보입니다. 겨울철 밤하늘이 이 방향입니다."
+        : "은하 원반을 비스듬히 바라보는 방향입니다.");
+  });
+})();
+
+</script>
+</body>
+</html>
