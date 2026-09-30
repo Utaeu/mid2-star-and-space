@@ -133,14 +133,20 @@
   }
 
   /* ---------- 캔버스 / 애니메이션 도우미 ---------- */
+  var CANVASES = [];
   function Canvas(cv, aspect) {
     var ctx = cv.getContext("2d");
     var o = { cv: cv, ctx: ctx, w: 0, h: 0, dpr: 1 };
+    CANVASES.push(o);
     function resize() {
       var rect = cv.parentNode.getBoundingClientRect();
+      // 발표 모드에서 가려진 장면은 크기를 재지 않는다 (보일 때 다시 잰다)
+      if (!rect.width && o.w) return;
       var w = Math.max(280, rect.width);
       var h = aspect ? w / aspect : cv.clientHeight;
-      if (aspect && h > window.innerHeight * 0.78) h = window.innerHeight * 0.78;
+      // 발표 모드에서는 제목·조작 버튼까지 한 화면에 들어오도록 조금 더 낮춘다
+      var cap = window.innerHeight * (document.documentElement.classList.contains("presenting") ? 0.6 : 0.78);
+      if (aspect && h > cap) h = cap;
       o.w = w; o.h = h;
       o.dpr = Math.min(2, window.devicePixelRatio || 1);
       cv.style.width = "100%"; cv.style.height = h + "px";
@@ -311,10 +317,174 @@
     });
   }
 
+  /* ---------- 발표 모드 ----------
+     제목+학습 목표가 1장, <section class="block"> 하나가 1장.
+     주소 끝의 #present-3 은 '발표 모드 3번째 장'. 마지막 장에서 넘기면 다음 차시로 이어진다. */
+  function present() {
+    var main = document.querySelector("main.wrap");
+    var tg = document.querySelector(".tmode");
+    if (!main || !tg) return;
+    var slides = [], head = [];
+    Array.prototype.forEach.call(main.children, function (el) {
+      if (el.matches(".page-head, .goals")) head.push(el);
+      else if (el.matches("section.block")) slides.push([el]);
+    });
+    if (head.length) slides.unshift(head);
+    if (!slides.length) return;
+
+    var root = document.documentElement;
+    var pi = PAGES.findIndex(function (p) { return p.f === here; });
+    var cur = 0, on = false, idleT = 0;
+
+    function title(g) {
+      var h = g[0].querySelector("h2.sec, h1");
+      return h ? h.textContent.replace(/\s+/g, " ").replace(/교과서 \d+(~\d+)?쪽/, "").trim() : "";
+    }
+
+    // 상단 바의 [발표 모드] 버튼
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "theme-btn pres-btn";
+    btn.innerHTML = '<span class="ic">▶</span>발표 모드';
+    btn.title = "한 장씩 넘기며 보기 (← → 키)";
+    btn.addEventListener("click", function () { enter(0); });
+    tg.parentNode.insertBefore(btn, document.querySelector(".topbar .theme-btn:not(.pres-btn)") || tg);
+
+    // 발표 모드 아래쪽 조작 막대
+    var bar = document.createElement("div");
+    bar.className = "pres-bar";
+    bar.innerHTML =
+      '<button type="button" data-k="prev" title="이전 장 (←)">◀</button>' +
+      '<div class="pres-info"><b></b><span></span></div>' +
+      '<div class="pres-dots"></div>' +
+      '<button type="button" data-k="next" title="다음 장 (→)">▶</button>' +
+      '<i class="pres-sep"></i>' +
+      '<button type="button" data-k="teacher" title="교사용 참고 보이기/숨기기">교사</button>' +
+      '<button type="button" data-k="theme" title="어두운/밝은 화면">밝기</button>' +
+      '<button type="button" data-k="full" title="전체 화면 (F) — 차시를 넘겨도 유지하려면 F11">전체 화면</button>' +
+      '<button type="button" data-k="exit" title="발표 모드 끝내기 (Esc)">끝내기 ✕</button>';
+    document.body.appendChild(bar);
+    var dots = bar.querySelector(".pres-dots");
+    slides.forEach(function (g, i) {
+      var d = document.createElement("button");
+      d.type = "button";
+      d.title = (i + 1) + ". " + (title(g) || "");
+      d.addEventListener("click", function () { show(i, i > cur ? 1 : -1); });
+      dots.appendChild(d);
+    });
+    bar.querySelector(".pres-info b").textContent = pi >= 0 ? PAGES[pi].t : document.title;
+
+    bar.addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-k]");
+      if (!b) return;
+      var k = b.getAttribute("data-k");
+      if (k === "prev") go(-1);
+      else if (k === "next") go(1);
+      else if (k === "teacher") { tg.click(); paint(); }
+      else if (k === "theme") { var t = document.querySelector(".topbar .theme-btn:not(.pres-btn)"); if (t) t.click(); }
+      else if (k === "full") full();
+      else if (k === "exit") exit();
+      b.blur();
+    });
+
+    function resizeIn(g) {
+      CANVASES.forEach(function (o) {
+        if (g.some(function (el) { return el.contains(o.cv); })) o.resize();
+      });
+    }
+    function paint() {
+      bar.querySelector(".pres-info span").textContent = (cur + 1) + " / " + slides.length;
+      Array.prototype.forEach.call(dots.children, function (d, i) { d.className = i === cur ? "on" : ""; });
+      bar.querySelector('[data-k="teacher"]').classList.toggle("on", document.body.classList.contains("teacher-on"));
+      bar.querySelector('[data-k="prev"]').disabled = cur === 0 && pi <= 0;
+      bar.querySelector('[data-k="next"]').disabled = cur === slides.length - 1 && pi === PAGES.length - 1;
+    }
+    function show(n, dir, atEnd) {
+      n = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach(function (g, i) {
+        g.forEach(function (el) { el.classList.remove("slide-on", "anim-r", "anim-l"); el.classList.toggle("slide-on", i === n); });
+      });
+      void main.offsetWidth; // 애니메이션을 처음부터 다시 시작
+      if (dir) slides[n].forEach(function (el) { el.classList.add(dir > 0 ? "anim-r" : "anim-l"); });
+      cur = n;
+      resizeIn(slides[n]);
+      window.scrollTo(0, atEnd ? root.scrollHeight : 0);
+      try { history.replaceState(null, "", "#present-" + (n + 1)); } catch (e) { }
+      paint();
+    }
+    function go(d, atEnd) {
+      var n = cur + d;
+      if (n < 0) { if (pi > 0) location.href = PAGES[pi - 1].f + "#present-last"; return; }
+      if (n >= slides.length) { if (pi >= 0 && pi < PAGES.length - 1) location.href = PAGES[pi + 1].f + "#present"; return; }
+      show(n, d, atEnd);
+    }
+    // 리모컨(프레젠터)용: 장이 화면보다 길면 먼저 아래로 내리고, 끝에 닿으면 다음 장
+    function step(d) {
+      var max = root.scrollHeight - root.clientHeight, y = root.scrollTop;
+      if (d > 0 && y < max - 4) { window.scrollBy(0, root.clientHeight * 0.8); return; }
+      if (d < 0 && y > 4) { window.scrollBy(0, -root.clientHeight * 0.8); return; }
+      go(d, d < 0);
+    }
+    function full() {
+      try {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else root.requestFullscreen();
+      } catch (e) { }
+    }
+    function enter(n) {
+      on = true;
+      root.classList.add("presenting");
+      show(n, 0);
+      wake();
+    }
+    function exit() {
+      on = false;
+      root.classList.remove("presenting");
+      var el = slides[cur][0];
+      slides.forEach(function (g) { g.forEach(function (x) { x.classList.remove("slide-on", "anim-r", "anim-l"); }); });
+      try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { }
+      try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) { }
+      CANVASES.forEach(function (o) { o.resize(); });
+      root.style.scrollBehavior = "auto";
+      if (cur > 0) el.scrollIntoView(); else window.scrollTo(0, 0);
+      root.style.scrollBehavior = "";
+    }
+    // 마우스를 한동안 안 움직이면 조작 막대를 흐리게
+    function wake() {
+      bar.classList.remove("idle");
+      clearTimeout(idleT);
+      idleT = setTimeout(function () { if (!bar.matches(":hover")) bar.classList.add("idle"); }, 2600);
+    }
+    document.addEventListener("mousemove", function () { if (on) wake(); }, { passive: true });
+
+    document.addEventListener("keydown", function (e) {
+      if (!on || e.ctrlKey || e.metaKey || e.altKey) return;
+      var t = e.target, k = e.key;
+      var range = t && t.matches && t.matches('input[type="range"]');
+      var pressable = t && t.closest && t.closest("button, a, input, label, select");
+      if (range && /^Arrow/.test(k)) return;              // 슬라이더 조작은 그대로
+      if (pressable && (k === " " || k === "Enter")) return; // 버튼 누르기는 그대로
+      if (k === "ArrowRight") go(1);
+      else if (k === "ArrowLeft") go(-1);
+      else if (k === "PageDown" || k === "ArrowDown" || k === " ") step(1);
+      else if (k === "PageUp" || k === "ArrowUp") step(-1);
+      else if (k === "Home") show(0, -1);
+      else if (k === "End") show(slides.length - 1, 1);
+      else if (k === "Escape") exit();
+      else if (k === "f" || k === "F") full();
+      else return;
+      e.preventDefault();
+    });
+
+    // 주소가 #present / #present-3 / #present-last 이면 바로 발표 모드로
+    var m = /^#present(?:-(\d+|last))?$/.exec(location.hash);
+    if (m) enter(m[1] === "last" ? slides.length - 1 : (m[1] ? parseInt(m[1], 10) - 1 : 0));
+  }
+
   /* ---------- 공개 ---------- */
   window.SU = { Canvas: Canvas, loop: loop, tick: tick, scenes: SCENES, U: U, PAGES: PAGES };
 
   document.addEventListener("DOMContentLoaded", function () {
-    buildChrome(); background(); quiz(); reveals();
+    buildChrome(); background(); quiz(); reveals(); present();
   });
 })();

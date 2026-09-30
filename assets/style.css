@@ -527,3 +527,67 @@ a.unit-card .meta { font-size: 0.76rem; color: var(--dim-2); font-weight: 700; }
   .card { padding: 18px 16px; }
   .ctl input[type="range"] { width: 120px; }
 }
+
+/* ---------- 발표 모드 (한 장씩 넘기기) ---------- */
+.pres-btn .ic { font-size: 0.7rem; }
+.pres-btn:hover { color: var(--accent-3); border-color: var(--accent-3); }
+.pres-bar { display: none; }
+
+html.presenting { scroll-behavior: auto; scroll-padding-top: 0; }
+html.presenting body { font-size: 18.5px; }
+html.presenting .topbar,
+html.presenting #progress,
+html.presenting .pager { display: none; }
+html.presenting main.wrap {
+  max-width: 1320px; min-height: 100vh; padding: 34px 44px 100px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+html.presenting main.wrap > :not(.slide-on) { display: none; }
+html.presenting section.block { margin: 0; }
+html.presenting .page-head { padding: 0 0 26px; }
+html.presenting .page-head h1 { font-size: clamp(2.6rem, 6vw, 4.4rem); }
+html.presenting .page-head .lede { font-size: 1.22rem; }
+html.presenting h2.sec { font-size: 1.85rem; }
+html.presenting .score-bar { bottom: 84px; }
+
+html.presenting .slide-on.anim-r { animation: presR 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+html.presenting .slide-on.anim-l { animation: presL 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes presR { from { opacity: 0; transform: translateX(46px); } to { opacity: 1; transform: none; } }
+@keyframes presL { from { opacity: 0; transform: translateX(-46px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  html.presenting .slide-on.anim-r, html.presenting .slide-on.anim-l { animation: none; }
+}
+
+html.presenting .pres-bar {
+  position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 70;
+  display: flex; align-items: center; gap: 6px; max-width: calc(100vw - 24px);
+  padding: 7px 8px; border-radius: 999px;
+  background: var(--float-bg); border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow); backdrop-filter: blur(14px);
+  transition: opacity 0.4s ease;
+}
+html.presenting .pres-bar.idle { opacity: 0.18; }
+html.presenting .pres-bar:hover { opacity: 1; }
+.pres-bar button {
+  font-family: inherit; font-size: 0.78rem; font-weight: 800; color: var(--dim);
+  background: var(--soft); border: 1px solid var(--line); border-radius: 999px;
+  padding: 6px 12px; cursor: pointer; white-space: nowrap; transition: all 0.15s ease;
+}
+.pres-bar button:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
+.pres-bar button:disabled { opacity: 0.35; cursor: default; }
+.pres-bar button.on { color: var(--on-accent); background: var(--accent-2); border-color: var(--accent-2); }
+.pres-bar [data-k="prev"], .pres-bar [data-k="next"] { padding: 6px 14px; color: var(--txt); }
+.pres-info { display: flex; flex-direction: column; line-height: 1.2; padding: 0 6px; min-width: 0; }
+.pres-info b { font-size: 0.78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 24ch; }
+.pres-info span { font-size: 0.7rem; color: var(--dim-2); font-weight: 700; }
+.pres-dots { display: flex; gap: 5px; padding: 0 4px; }
+.pres-bar .pres-dots button {
+  width: 9px; height: 9px; padding: 0; border-radius: 50%;
+  background: var(--line-strong); border: 0;
+}
+.pres-bar .pres-dots button.on { background: var(--accent); width: 22px; border-radius: 5px; }
+.pres-sep { width: 1px; height: 22px; background: var(--line-strong); margin: 0 2px; }
+@media (max-width: 760px) {
+  html.presenting main.wrap { padding: 20px 14px 100px; }
+  .pres-dots, .pres-sep, .pres-bar [data-k="theme"], .pres-bar [data-k="full"] { display: none !important; }
+}
