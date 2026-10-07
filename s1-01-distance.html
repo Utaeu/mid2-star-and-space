@@ -124,22 +124,24 @@
     <div class="sim">
       <div class="sim-head">
         <h4>연주 시차 시뮬레이션 — 지구가 공전하면 별은 어떻게 움직여 보일까?</h4>
-        <span class="hint">위: 배경 하늘에서 보이는 위치 · 아래: 위에서 본 태양계</span>
+        <span class="hint">위: 배경 하늘 · 양옆: A, B에서 본 모습 · 아래: 태양과 지구 궤도</span>
       </div>
       <canvas id="cvAnnual"></canvas>
       <div class="sim-controls">
         <button class="btn on" id="anPlay">공전 재생 ⏸</button>
         <button class="btn" id="anJump">6개월 이동 ⏭</button>
+        <button class="btn on" id="anS">별 S 보이기</button>
+        <button class="btn on" id="anT">별 T 보이기</button>
         <label class="ctl">별 S까지의 거리
-          <input type="range" id="anDist" min="13" max="80" value="26">
+          <input type="range" id="anDist" min="10" max="100" value="26">
           <span class="val" id="anDistV">2.6 pc</span></label>
-        <label class="ctl"><input type="checkbox" id="anT" checked style="accent-color:var(--accent-2)"> 더 멀리 있는 별 T 함께 보기</label>
       </div>
       <div class="readout">
         <div class="stat"><div class="k">별 S의 시차 (∠ASB)</div><div class="v" id="anPar">—</div></div>
         <div class="stat amber"><div class="k">별 S의 연주 시차</div><div class="v" id="anAnn">—</div></div>
         <div class="stat"><div class="k">별 S까지의 거리</div><div class="v" id="anD">—</div></div>
         <div class="stat warm"><div class="k">별 T의 연주 시차</div><div class="v" id="anTann">—</div></div>
+        <div class="stat warm"><div class="k">별 T까지의 거리</div><div class="v" id="anTd">—</div></div>
       </div>
     </div>
     <p class="note-sm" style="margin-top:8px">
@@ -292,25 +294,73 @@
   }
   sync();
 
-  var HOUSE = [
-    [255, 110, 110], [255, 180, 90], [120, 220, 150], [110, 170, 255], [190, 140, 255],
-    [255, 110, 110], [255, 180, 90], [120, 220, 150], [110, 170, 255], [190, 140, 255]
-  ];
+  // 배경 물체: 서로 뚜렷이 구분되도록 모양·색이 다른 과일 4가지
+  var FRUIT = ["사과", "바나나", "체리", "파인애플"], GAP = 2.3;  // GAP: 과일 사이 간격(hs 배)
 
-  function drawHouse(ctx, x, y, w, col, dim) {
-    var h = w * 0.62;
-    ctx.globalAlpha = dim ? 0.42 : 1;
-    ctx.fillStyle = "#2a3157";
-    ctx.fillRect(x - w / 2, y - h, w, h);
-    ctx.strokeStyle = "rgba(255,255,255,.14)"; ctx.lineWidth = 1;
-    ctx.strokeRect(x - w / 2, y - h, w, h);
-    ctx.fillStyle = "rgba(" + col[0] + "," + col[1] + "," + col[2] + ",1)";
-    ctx.beginPath();
-    ctx.moveTo(x - w * 0.62, y - h); ctx.lineTo(x, y - h - w * 0.42); ctx.lineTo(x + w * 0.62, y - h);
-    ctx.closePath(); ctx.fill();
-    ctx.fillStyle = "rgba(255,230,160,.55)";
-    ctx.fillRect(x - w * 0.18, y - h * 0.72, w * 0.36, h * 0.34);
-    ctx.globalAlpha = 1;
+  // (x, y) = 과일이 놓인 바닥 가운데, H = 과일 높이
+  function drawFruit(ctx, kind, x, y, H, dim) {
+    ctx.save();
+    ctx.globalAlpha = dim ? 0.6 : 1;
+    ctx.lineCap = "round"; ctx.lineJoin = "round";
+    if (kind === 0) {                                   // 사과
+      var r = H * 0.4, cy = y - r;
+      ctx.strokeStyle = "#7a4a22"; ctx.lineWidth = Math.max(1.5, H * 0.06);
+      ctx.beginPath(); ctx.moveTo(x, cy - r * 0.7); ctx.quadraticCurveTo(x + r * 0.05, cy - r * 1.2, x + r * 0.25, cy - r * 1.4); ctx.stroke();
+      ctx.fillStyle = "#e8323c";
+      ctx.beginPath(); ctx.arc(x - r * 0.38, cy, r * 0.78, 0, 6.2832); ctx.arc(x + r * 0.38, cy, r * 0.78, 0, 6.2832); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(x, cy + r * 0.15, r * 0.8, r * 0.82, 0, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = "#5fc46a";
+      ctx.beginPath(); ctx.ellipse(x + r * 0.5, cy - r * 1.05, r * 0.38, r * 0.17, -0.5, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,.45)";
+      ctx.beginPath(); ctx.ellipse(x - r * 0.55, cy - r * 0.25, r * 0.14, r * 0.26, 0.4, 0, 6.2832); ctx.fill();
+    } else if (kind === 1) {                            // 바나나
+      var L = H * 0.62;
+      ctx.fillStyle = "#ffd84a"; ctx.strokeStyle = "#b8901c"; ctx.lineWidth = Math.max(1, H * 0.035);
+      ctx.beginPath();
+      ctx.moveTo(x - L, y - H * 0.72);
+      ctx.quadraticCurveTo(x, y + H * 0.62, x + L, y - H * 0.72);
+      ctx.quadraticCurveTo(x, y + H * 0.02, x - L, y - H * 0.72);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#5a3d1a";
+      ctx.beginPath(); ctx.arc(x - L, y - H * 0.72, H * 0.05, 0, 6.2832); ctx.arc(x + L, y - H * 0.72, H * 0.05, 0, 6.2832); ctx.fill();
+    } else if (kind === 2) {                            // 체리
+      var cr = H * 0.21, top = [x + H * 0.06, y - H * 0.98];
+      ctx.strokeStyle = "#4f8a3a"; ctx.lineWidth = Math.max(1.2, H * 0.04);
+      ctx.beginPath();
+      ctx.moveTo(x - H * 0.22, y - cr * 2); ctx.quadraticCurveTo(x - H * 0.18, y - H * 0.7, top[0], top[1]);
+      ctx.moveTo(x + H * 0.22, y - cr * 2); ctx.quadraticCurveTo(x + H * 0.24, y - H * 0.7, top[0], top[1]);
+      ctx.stroke();
+      ctx.fillStyle = "#5fc46a";
+      ctx.beginPath(); ctx.ellipse(top[0] + H * 0.14, top[1] + H * 0.04, H * 0.15, H * 0.06, 0.35, 0, 6.2832); ctx.fill();
+      [[x - H * 0.22, "#c8102e"], [x + H * 0.22, "#e01a3c"]].forEach(function (c) {
+        ctx.fillStyle = c[1];
+        ctx.beginPath(); ctx.arc(c[0], y - cr, cr, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,.45)";
+        ctx.beginPath(); ctx.arc(c[0] - cr * 0.35, y - cr * 1.35, cr * 0.22, 0, 6.2832); ctx.fill();
+      });
+    } else {                                            // 파인애플
+      var bx0 = x, by = y - H * 0.3, rx = H * 0.24, ry = H * 0.3;
+      ctx.fillStyle = "#3f9d4e";
+      [-0.55, -0.25, 0, 0.25, 0.55].forEach(function (a, j) {
+        var len = H * (j === 2 ? 0.46 : 0.36);
+        ctx.beginPath();
+        ctx.moveTo(bx0 - H * 0.06, by - ry * 0.85); ctx.lineTo(bx0 + H * 0.06, by - ry * 0.85);
+        ctx.lineTo(bx0 + Math.sin(a) * len, by - ry * 0.85 - Math.cos(a) * len);
+        ctx.closePath(); ctx.fill();
+      });
+      ctx.fillStyle = "#e8a530";
+      ctx.beginPath(); ctx.ellipse(bx0, by, rx, ry, 0, 0, 6.2832); ctx.fill();
+      ctx.save(); ctx.clip();
+      ctx.strokeStyle = "rgba(120,70,10,.55)"; ctx.lineWidth = Math.max(1, H * 0.025);
+      ctx.beginPath();
+      for (var s = -3; s <= 3; s++) {
+        var o = s * H * 0.13;
+        ctx.moveTo(bx0 - rx + o, by - ry); ctx.lineTo(bx0 + rx + o, by + ry);
+        ctx.moveTo(bx0 + rx + o, by - ry); ctx.lineTo(bx0 - rx + o, by + ry);
+      }
+      ctx.stroke(); ctx.restore();
+    }
+    ctx.restore();
   }
   function drawTree(ctx, x, y, s) {
     ctx.fillStyle = "#6b4a2a";
@@ -338,10 +388,13 @@
     vBase.textContent = bs < 0.4 ? "좁다" : (bs < 0.7 ? "보통" : "넓다");
 
     /* ---- 위에서 본 모습 ---- */
-    var bgY = topH * 0.11;                       // 배경(집들이 늘어선 줄)
+    // 배경·나무 크기는 영역 높이에도 맞춘다 (창이 낮으면 위가 잘리던 문제)
+    var hs = Math.min(w * 0.062, topH * 0.16), n = FRUIT.length;
+    var ts = Math.min(w * 0.055, topH * 0.17);
+    var bgY = 34 + hs * 0.84;                    // 배경(과일이 늘어선 줄) — 꼭대기까지 들어오게
     var obsY = topH * 0.91;                      // 관측 지점
     var cx = w * 0.5;
-    var half = (w * 0.095) * bs;
+    var half = (hs * 1.53) * bs;                 // 창이 낮아도 각이 지나치게 커지지 않도록 배경 크기에 맞춘다
     var ax = cx - half, bx = cx + half;
     var objY = obsY - (obsY - bgY) * (0.28 + d * 0.64);  // 물체(나무) 위치
 
@@ -349,13 +402,13 @@
     ctx.fillRect(0, 0, w, topH);
     ctx.strokeStyle = "rgba(132,162,255,.2)"; ctx.setLineDash([4, 5]); ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(0, bgY); ctx.lineTo(w, bgY); ctx.stroke(); ctx.setLineDash([]);
-    U.label(ctx, w - 12, bgY - 13, "배경 (멀리 있는 집들)", "rgba(166,176,212,.85)", 12, "right");
+    U.label(ctx, w - 12, bgY - 13, "배경 (멀리 있는 과일들)", "rgba(166,176,212,.85)", 12, "right");
 
-    // 배경 집들
-    var hs = w * 0.062, n = 9;
+    // 배경 과일
     for (var i = 0; i < n; i++) {
-      var hx = cx + (i - (n - 1) / 2) * hs * 1.32;
-      drawHouse(ctx, hx, bgY, hs * 0.8, HOUSE[i], true);
+      var hx = cx + (i - (n - 1) / 2) * hs * GAP;
+      drawFruit(ctx, i, hx, bgY, hs * 0.84, true);
+      U.label(ctx, hx, bgY + 12, FRUIT[i], "rgba(166,176,212,.75)", 11);
     }
 
     // 시선 교점 계산
@@ -370,15 +423,25 @@
       ctx.beginPath(); ctx.moveTo(L[0], obsY); ctx.lineTo(L[1], bgY); ctx.stroke();
     });
 
-    // 시차 각 표시
-    var a1 = Math.atan2(obsY - objY, ax - cx), a2 = Math.atan2(obsY - objY, bx - cx);
-    ctx.strokeStyle = "rgba(255,138,107,.95)"; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.arc(cx, objY, 34, -a2, -a1, false); ctx.stroke();
-    var ang = Math.abs(Math.atan2(ax - cx, obsY - objY) - Math.atan2(bx - cx, obsY - objY)) * 180 / Math.PI;
-    U.chip(ctx, cx, objY - 50, "시차 " + ang.toFixed(1) + "°", "#ff8a6b", 13);
-
     // 나무
-    drawTree(ctx, cx, objY + 4, w * 0.055);
+    drawTree(ctx, cx, objY + 4, ts);
+
+    // 시차 = A – 나무 – B 가 이루는 각 (나무에서 A, B 쪽으로 뻗은 두 시선 사이)
+    var a1 = Math.atan2(obsY - objY, ax - cx), a2 = Math.atan2(obsY - objY, bx - cx);  // a2 < a1
+    var ang = (a1 - a2) * 180 / Math.PI;
+    var r = Math.min(64, (obsY - objY) * 0.55);
+    ctx.fillStyle = "rgba(255,138,107,.3)";
+    ctx.beginPath(); ctx.moveTo(cx, objY); ctx.arc(cx, objY, r, a2, a1, false); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "rgba(255,138,107,.95)"; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.arc(cx, objY, r, a2, a1, false); ctx.stroke();
+    // 각에서 수치 상자까지 이어 주는 선
+    var am = a2 + (a1 - a2) * 0.3;
+    var lx = cx + ts * 0.8 + 85, ly = objY + r * 0.55 + 8;
+    ctx.strokeStyle = "rgba(255,138,107,.6)"; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(cx + Math.cos(am) * r, objY + Math.sin(am) * r); ctx.lineTo(lx - 44, ly); ctx.stroke();
+    ctx.setLineDash([]);
+    U.label(ctx, lx, ly - 22, "∠A–나무–B", "#ff8a6b", 12);
+    U.chip(ctx, lx, ly, "시차 " + ang.toFixed(1) + "°", "#ff8a6b", 14);
 
     // 관측 지점
     [[ax, "A", "#7ef0c8", 0, "rgba(126,240,200,1)"], [bx, "B", "#ffd166", 1, "rgba(255,209,102,1)"]].forEach(function (P) {
@@ -411,15 +474,17 @@
       var g = ctx.createLinearGradient(0, py, 0, py + ph);
       g.addColorStop(0, "#0a1230"); g.addColorStop(1, "#131c40");
       ctx.fillStyle = g; ctx.fillRect(px, py, pw, ph);
-      // 배경 집: 시선이 닿는 지점이 화면 중앙에 오도록
-      var scale = pw / (w * 0.9);
+      // 배경 과일: 시선이 닿는 지점이 화면 중앙에 오도록
+      // 위쪽 크기(hs)가 줄어도 아래 창에서는 일정한 크기로 보이도록 배율을 맞춘다
+      var k = pw / (w * 0.9) * 1.8 * (w * 0.062 / hs);
       var off = (P[4] - cx);
-      var base = py + ph * 0.78;
+      var base = py + ph * 0.74;
       for (var i = 0; i < n; i++) {
-        var hx0 = (i - (n - 1) / 2) * hs * 1.32;
-        drawHouse(ctx, P[0] + (hx0 - off) * scale * 1.8, base, hs * 0.8 * scale * 1.8, HOUSE[i], false);
+        var fx = P[0] + ((i - (n - 1) / 2) * hs * GAP - off) * k;
+        drawFruit(ctx, i, fx, base, hs * 0.84 * k, false);
+        U.label(ctx, fx, base + 14, FRUIT[i], "rgba(207,218,255,.8)", 12);
       }
-      drawTree(ctx, P[0], base + 3, w * 0.055 * scale * 1.85);
+      drawTree(ctx, P[0], base + 3, w * 0.055 * pw / (w * 0.9) * 1.85);
       ctx.restore();
       ctx.strokeStyle = on ? P[3] : "rgba(132,162,255,.25)";
       ctx.lineWidth = on ? 2.4 : 1;
@@ -429,8 +494,8 @@
 
     /* ---- 수치 ---- */
     vAng.textContent = ang.toFixed(1) + "°";
-    var shift = Math.abs(hitA - hitB) / (hs * 1.32);
-    vShift.textContent = "집 " + shift.toFixed(1) + " 채";
+    var shift = Math.abs(hitA - hitB) / (hs * GAP);
+    vShift.textContent = "과일 " + shift.toFixed(1) + " 개 간격";
     vMsg.textContent = d < 0.4
       ? "물체가 가까워 시차가 큽니다. 배경이 크게 달라 보여요."
       : (d < 0.72 ? "물체가 멀어질수록 시차가 작아집니다." : "물체가 아주 멀면 시차가 매우 작아 두 모습이 거의 같아 보입니다.");
@@ -438,16 +503,19 @@
 })();
 
 /* =========================================================
-   2) 연주 시차 시뮬레이션
+   2) 연주 시차 시뮬레이션 — 교과서 그림 2(282쪽)를 따른 배치
+   태양 위 점선(지구 궤도 A–B에 수직) 위에 별 S, T가 놓인다.
    ========================================================= */
 (function () {
   var cv = document.getElementById("cvAnnual");
   var C = SU.Canvas(cv, 1.55), U = SU.U;
   var bPlay = document.getElementById("anPlay"), bJump = document.getElementById("anJump");
-  var sD = document.getElementById("anDist"), vD = document.getElementById("anDistV"), cT = document.getElementById("anT");
+  var bS = document.getElementById("anS"), bT = document.getElementById("anT");
+  var sD = document.getElementById("anDist"), vD = document.getElementById("anDistV");
   var oPar = document.getElementById("anPar"), oAnn = document.getElementById("anAnn"),
-      oDd = document.getElementById("anD"), oT = document.getElementById("anTann");
+      oDd = document.getElementById("anD"), oT = document.getElementById("anTann"), oTd = document.getElementById("anTd");
   var playing = true, phase = 0, jumpTo = null;
+  var showS = true, showT = true, aS = 1, aT = 1;   // aS, aT: 나타나고 사라지는 정도(0~1)
 
   bPlay.onclick = function () {
     playing = !playing;
@@ -455,16 +523,37 @@
     bPlay.textContent = playing ? "공전 재생 ⏸" : "공전 재생 ▶";
   };
   bJump.onclick = function () { playing = false; bPlay.classList.remove("on"); bPlay.textContent = "공전 재생 ▶"; jumpTo = phase + Math.PI; };
+  bS.onclick = function () { showS = !showS; bS.classList.toggle("on", showS); bS.textContent = showS ? "별 S 보이기" : "별 S 숨김"; };
+  bT.onclick = function () { showT = !showT; bT.classList.toggle("on", showT); bT.textContent = showT ? "별 T 보이기" : "별 T 숨김"; };
 
-  // 고정된 먼 배경별
+  // 고정된 먼 배경별 (x: 0~1 화면 가로, y: 0~1 하늘 띠 안)
   var bg = [];
-  for (var i = 0; i < 90; i++) bg.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.2 + 0.3, a: Math.random() * 0.5 + 0.25 });
+  for (var i = 0; i < 110; i++) bg.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.2 + 0.4, a: Math.random() * 0.5 + 0.3 });
+
+  var COL = {
+    S: { txt: "#ff8a7a", rgb: "rgba(255,105,85,1)", line: "rgba(235,90,170," },   // 교과서처럼 S는 붉은 별, 시선은 자홍색
+    T: { txt: "#ffd84a", rgb: "rgba(255,214,90,1)", line: "rgba(255,220,90," }    // T는 노란 별, 시선은 노란색
+  };
+
+  // 아래첨자 라벨 (S_A 같은 표기)
+  function sub(ctx, x, y, main, s, col, size) {
+    size = size || 13;
+    var font = getComputedStyle(document.body).fontFamily;
+    ctx.font = "800 " + size + "px " + font;
+    var mw = ctx.measureText(main).width;
+    ctx.font = "800 " + Math.round(size * 0.72) + "px " + font;
+    var sw = ctx.measureText(s).width, x0 = x - (mw + sw) / 2;
+    U.label(ctx, x0, y, main, col, size, "left", 800);
+    U.label(ctx, x0 + mw + 1, y + size * 0.32, s, col, Math.round(size * 0.72), "left", 800);
+  }
 
   SU.loop(cv, function (dt, t) {
     if (jumpTo !== null) {
       phase = U.approach(phase, jumpTo, dt, 4.5);
       if (Math.abs(jumpTo - phase) < 0.01) { phase = jumpTo % 6.2832; jumpTo = null; }
     } else if (playing) phase += dt * 0.55;
+    aS = U.approach(aS, showS ? 1 : 0, dt, 8);
+    aT = U.approach(aT, showT ? 1 : 0, dt, 8);
 
     var ctx = C.ctx, w = C.w, h = C.h;
     ctx.clearRect(0, 0, w, h);
@@ -472,107 +561,166 @@
     bgGrad.addColorStop(0, "#050a1c"); bgGrad.addColorStop(1, "#0a1026");
     ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, w, h);
 
-    var dpc = parseFloat(sD.value) / 10;        // 1.3 ~ 8.0 pc
-    var par = 1 / dpc;                           // 별 S의 연주 시차(″)
-    var dT = dpc * 2.6;                          // 별 T는 2.6배 더 멀리
+    var dpc = parseFloat(sD.value) / 10;        // 1.0 ~ 10.0 pc
+    var pS = 1 / dpc;                            // 별 S의 연주 시차(″) — 표 1의 값 쌍과 맞춘다
+    var dT = dpc * 2.6, pT = 1 / dT;             // 별 T는 2.6배 더 멀리
     vD.textContent = dpc.toFixed(1) + " pc";
 
     /* ---- 기준 좌표 ---- */
-    var sunY = h * 0.86, sunX = w * 0.5;
-    var orbX = w * 0.16, orbY = h * 0.045;
-    var Ax = sunX - orbX, Bx = sunX + orbX;
-    var yBG = h * 0.17;                          // 아주 멀리 있는 배경 하늘
+    var cx = w * 0.5;
+    var sunY = h * 0.86;
+    var orbX = Math.min(w * 0.17, h * 0.3), orbY = h * 0.055;
+    var Ax = cx - orbX, Bx = cx + orbX;
+    var yBG = h * 0.2;                           // 아주 멀리 있는 배경 하늘
     var SPAN = sunY - yBG;
+    var SMAX = Math.min(w * 0.3, orbX * 1.9);    // 연주 시차 1″(1 pc)일 때 배경에서 보이는 위치가 벗어나는 폭
 
-    /* 겉보기 이동 폭은 연주 시차에 비례하도록 정한다 */
-    var SMAX = w * 0.26;
-    function place(p) {                          // 연주 시차 p(″) → 화면상의 위치
-      var s = SMAX * (p / 0.77);
-      var k = 1 + s / (2 * orbX);
-      return { y: sunY - SPAN / k, s: s, k: k };
+    /* 배경에서 벗어나는 폭을 연주 시차에 비례시키고, 거기서 별의 높이를 정한다 */
+    function place(p) {
+      var s = SMAX * p;
+      var k = 1 + s / orbX;                      // 시선이 별을 지나 배경까지 늘어나는 비율
+      return { y: sunY - SPAN / k, s: s };
     }
+    var S = place(pS), T = place(pT);
 
     /* ---- 배경 하늘 ---- */
+    var sky = ctx.createLinearGradient(0, 0, 0, yBG + 10);
+    sky.addColorStop(0, "rgba(60,90,170,.10)"); sky.addColorStop(1, "rgba(60,90,170,.22)");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, w, yBG);
     for (var i = 0; i < bg.length; i++) {
       var st = bg[i];
-      ctx.fillStyle = "rgba(255,255,255," + st.a * 0.5 + ")";
-      ctx.beginPath(); ctx.arc(st.x * w, st.y * yBG * 1.55, st.r, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255," + st.a + ")";
+      ctx.beginPath(); ctx.arc(st.x * w, 30 + st.y * (yBG - 40), st.r, 0, 6.2832); ctx.fill();
     }
-    ctx.strokeStyle = "rgba(132,162,255,.28)"; ctx.setLineDash([4, 6]); ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(0, yBG); ctx.lineTo(w, yBG); ctx.stroke(); ctx.setLineDash([]);
-    U.label(ctx, 14, yBG + 16, "← 아주 멀리 있어 움직이지 않는 배경 별들", "rgba(166,176,212,.75)", 12, "left");
+    ctx.strokeStyle = "rgba(132,162,255,.35)"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, yBG); ctx.lineTo(w, yBG); ctx.stroke();
+    U.label(ctx, w - 14, yBG + 14, "아주 멀리 있어 움직이지 않는 배경 별들", "rgba(166,176,212,.75)", 12, "right");
 
-    /* ---- 별 그리기 ---- */
-    function drawStar(sx, p, name, col, rgb, showArc) {
-      var P = place(p), sy = P.y;
-      var appA = Ax + (sx - Ax) * P.k, appB = Bx + (sx - Bx) * P.k;
-      // 시선 A, B
-      ctx.strokeStyle = "rgba(126,240,200,.30)"; ctx.lineWidth = 1.1;
-      ctx.beginPath(); ctx.moveTo(Ax, sunY); ctx.lineTo(appA, yBG); ctx.stroke();
-      ctx.strokeStyle = "rgba(255,209,102,.30)";
-      ctx.beginPath(); ctx.moveTo(Bx, sunY); ctx.lineTo(appB, yBG); ctx.stroke();
-      // 겉보기 위치
-      ctx.strokeStyle = "rgba(255,255,255,.35)"; ctx.setLineDash([2, 4]); ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(appA, yBG); ctx.lineTo(appB, yBG); ctx.stroke(); ctx.setLineDash([]);
-      U.glow(ctx, appA, yBG, 10, "rgba(126,240,200,1)", 0.85);
-      U.glow(ctx, appB, yBG, 10, "rgba(255,209,102,1)", 0.85);
-      U.label(ctx, appA, yBG - 34, name + " (A에서 볼 때)", "#7ef0c8", 11.5);
-      U.label(ctx, appB, yBG - 17, name + " (B에서 볼 때)", "#ffd166", 11.5);
-      // 시차 각
-      if (showArc) {
-        var aA = -Math.atan2(sunY - sy, Ax - sx), aB = -Math.atan2(sunY - sy, Bx - sx);
-        ctx.strokeStyle = "rgba(255,138,107,.95)"; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(sx, sy, 34, Math.min(aA, aB), Math.max(aA, aB), false); ctx.stroke();
-        U.chip(ctx, sx, sy + 52, "시차 = ∠A" + name.replace("별 ", "") + "B", "#ff8a6b", 12);
-      }
-      // 본체
-      U.glow(ctx, sx, sy, 17, rgb, 1);
-      U.label(ctx, sx + 22, sy - 2, name, col, 13, "left");
-      return { sy: sy, k: P.k };
+    // 태양에서 위로 뻗은 점선 (지구 궤도 A–B에 수직)
+    ctx.strokeStyle = "rgba(255,255,255,.45)"; ctx.setLineDash([5, 5]); ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(cx, sunY - 14); ctx.lineTo(cx, yBG); ctx.stroke(); ctx.setLineDash([]);
+
+    /* ---- 별 하나의 시선과 배경 위치 ---- */
+    function sightLines(P, c, a) {
+      if (a < 0.01) return;
+      ctx.globalAlpha = a;
+      ctx.strokeStyle = c.line + ".85)"; ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(Ax, sunY); ctx.lineTo(cx + P.s, yBG);   // A에서 본 별 → 오른쪽 배경
+      ctx.moveTo(Bx, sunY); ctx.lineTo(cx - P.s, yBG);   // B에서 본 별 → 왼쪽 배경
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    function skyMarks(P, name, c, a) {
+      if (a < 0.01) return;
+      ctx.globalAlpha = a;
+      U.glow(ctx, cx + P.s, yBG, 9, c.rgb, 0.9);
+      U.glow(ctx, cx - P.s, yBG, 9, c.rgb, 0.9);
+      sub(ctx, cx + P.s, yBG - (name === "S" ? 20 : 34), name, "A", c.txt, 13);
+      sub(ctx, cx - P.s, yBG - (name === "S" ? 20 : 34), name, "B", c.txt, 13);
+      ctx.globalAlpha = 1;
+    }
+    // 연주 시차 = 별–태양을 잇는 점선과 별–지구(B)를 잇는 선 사이의 각 (시차 ∠ASB의 ½)
+    function parallaxArc(P, name, c, p, a, side) {
+      if (a < 0.01) return;
+      ctx.globalAlpha = a;
+      var down = Math.PI / 2, toB = Math.atan2(sunY - P.y, Bx - cx), toA = Math.PI - toB;
+      var r = Math.min(46, (sunY - P.y) * 0.32);
+      ctx.fillStyle = "rgba(255,255,255,.07)";      // 시차 ∠ASB 전체 (옅게)
+      ctx.beginPath(); ctx.moveTo(cx, P.y); ctx.arc(cx, P.y, r * 0.75, toB, toA, false); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = c.line + ".35)";               // 연주 시차 (½)
+      ctx.beginPath(); ctx.moveTo(cx, P.y); ctx.arc(cx, P.y, r, toB, down, false); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = c.txt; ctx.lineWidth = 2.2;
+      ctx.beginPath(); ctx.arc(cx, P.y, r, toB, down, false); ctx.stroke();
+      // 수치 상자
+      var am = (toB + down) / 2, px = cx + Math.cos(am) * r, py = P.y + Math.sin(am) * r;
+      var lx = cx + side * (orbX * 0.55 + 70), ly = P.y + r * 0.7;
+      ctx.strokeStyle = c.txt; ctx.globalAlpha = a * 0.6; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(lx - side * 62, ly); ctx.stroke(); ctx.setLineDash([]);
+      ctx.globalAlpha = a;
+      U.chip(ctx, lx, ly, "별 " + name + "의 연주 시차 " + p.toFixed(2) + "″", c.txt, 13);
+      ctx.globalAlpha = 1;
+    }
+    function starBody(P, name, c, a) {
+      if (a < 0.01) return;
+      ctx.globalAlpha = a;
+      U.glow(ctx, cx, P.y, 16, c.rgb, 1);
+      U.label(ctx, cx + 18, P.y - 10, name, c.txt, 14, "left", 800);
+      ctx.globalAlpha = 1;
     }
 
-    if (cT.checked) {
-      drawStar(w * 0.76, 1 / dT, "별 T", "#ff8a6b", "rgba(255,180,150,1)", false);
-      oT.textContent = (1 / dT).toFixed(2) + "″";
-    } else { oT.textContent = "—"; }
-
-    var sx = w * 0.42;
-    var S = drawStar(sx, par, "별 S", "#cfdaff", "rgba(190,215,255,1)", true);
+    sightLines(T, COL.T, aT); sightLines(S, COL.S, aS);
+    skyMarks(T, "T", COL.T, aT); skyMarks(S, "S", COL.S, aS);
+    parallaxArc(T, "T", COL.T, pT, aT, -1);       // T는 왼쪽, S는 오른쪽에 수치 표시
+    parallaxArc(S, "S", COL.S, pS, aS, 1);
+    starBody(T, "T", COL.T, aT); starBody(S, "S", COL.S, aS);
 
     /* ---- 궤도 · 태양 · 지구 ---- */
-    ctx.strokeStyle = "rgba(132,162,255,.35)"; ctx.lineWidth = 1.4; ctx.setLineDash([5, 5]);
-    ctx.beginPath(); ctx.ellipse(sunX, sunY, orbX, orbY, 0, 0, 6.2832); ctx.stroke(); ctx.setLineDash([]);
-
-    U.glow(ctx, sunX, sunY, 28, "rgba(255,190,80,1)", 1);
-    ctx.fillStyle = "#ffd166"; ctx.beginPath(); ctx.arc(sunX, sunY, 9, 0, 6.2832); ctx.fill();
-    U.label(ctx, sunX, sunY + 26, "태양", "#ffd166", 12);
-
-    [[Ax, "A", "#7ef0c8"], [Bx, "B", "#ffd166"]].forEach(function (P) {
-      ctx.strokeStyle = P[2]; ctx.lineWidth = 1.5;
+    ctx.strokeStyle = "rgba(132,162,255,.45)"; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.ellipse(cx, sunY, orbX, orbY, 0, 0, 6.2832); ctx.stroke();
+    U.glow(ctx, cx, sunY, 30, "rgba(255,170,60,1)", 1);
+    ctx.fillStyle = "#ffb347"; ctx.beginPath(); ctx.arc(cx, sunY, 11, 0, 6.2832); ctx.fill();
+    U.label(ctx, cx, sunY + orbY + 16, "태양", "#ffd166", 12);
+    [[Ax, "A", -1], [Bx, "B", 1]].forEach(function (P) {
+      ctx.strokeStyle = "rgba(207,218,255,.8)"; ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.arc(P[0], sunY, 7, 0, 6.2832); ctx.stroke();
-      U.label(ctx, P[0], sunY + 24, P[1], P[2], 12);
+      U.label(ctx, P[0] + P[2] * 18, sunY, P[1], "#cfdaff", 14, "center", 800);
     });
 
-    var ex = sunX + Math.cos(phase) * orbX, ey = sunY - Math.sin(phase) * orbY;
-    // 지금 보이는 위치
-    var kNow = (sunY - yBG) / (sunY - S.sy);
-    var appNow = ex + (sx - ex) * kNow;
-    ctx.strokeStyle = "rgba(255,255,255,.55)"; ctx.lineWidth = 1.5; ctx.setLineDash([3, 4]);
-    ctx.beginPath(); ctx.moveTo(ex, ey); ctx.lineTo(appNow, yBG); ctx.stroke(); ctx.setLineDash([]);
-    U.glow(ctx, appNow, yBG, 14, "rgba(255,255,255,1)", 1);
-    U.spike(ctx, appNow, yBG, 24, "rgba(255,255,255,.5)", 1.2);
-
+    // 지금 지구의 위치와, 지금 지구에서 본 별의 위치
+    var ex = cx + Math.cos(phase + Math.PI) * orbX, ey = sunY - Math.sin(phase + Math.PI) * orbY;  // phase 0 = A
+    function nowSky(P) { return ex + (cx - ex) * (ey - yBG) / (ey - P.y); }
+    [[T, COL.T, aT], [S, COL.S, aS]].forEach(function (Q) {
+      if (Q[2] < 0.01) return;
+      var x = nowSky(Q[0]);
+      ctx.globalAlpha = Q[2];
+      ctx.strokeStyle = "rgba(255,255,255,.5)"; ctx.lineWidth = 1.2; ctx.setLineDash([3, 4]);
+      ctx.beginPath(); ctx.moveTo(ex, ey); ctx.lineTo(x, yBG); ctx.stroke(); ctx.setLineDash([]);
+      U.glow(ctx, x, yBG, 13, Q[1].rgb, 1);
+      U.spike(ctx, x, yBG, 22, "rgba(255,255,255,.55)", 1.2);
+      ctx.globalAlpha = 1;
+    });
     ctx.fillStyle = "#6ea8ff";
-    ctx.beginPath(); ctx.arc(ex, ey, 7, 0, 6.2832); ctx.fill();
-    ctx.strokeStyle = "rgba(255,255,255,.8)"; ctx.lineWidth = 1.4; ctx.stroke();
-    U.label(ctx, ex, ey + 22, "지구", "#cfdaff", 12);
+    ctx.beginPath(); ctx.arc(ex, ey, 7.5, 0, 6.2832); ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = 1.4; ctx.stroke();
+    U.label(ctx, ex, ey + 20, "지구", "#cfdaff", 12);
 
-    U.label(ctx, 14, 18, "지구가 공전하면 별은 배경 하늘에서 좌우로 움직여 보인다", "rgba(207,218,255,.9)", 13, "left", 800);
-    U.label(ctx, 14, h - 14, "위에서 본 태양계 (각도와 거리는 과장한 모형)", "rgba(166,176,212,.7)", 12, "left");
+    /* ---- A에서 본 모습 / B에서 본 모습 (교과서 그림 2의 양옆 창) ---- */
+    var pw = Math.min(w * 0.22, 260), ph = Math.min(h * 0.2, pw * 0.55), py0 = h * 0.4;
+    var winL = cx - SMAX * 1.2, winR = cx + SMAX * 1.2;   // 창에 담을 하늘의 가로 범위
+    var near = (Math.cos(phase) + 1) / 2;                 // 1 = A에 있음, 0 = B에 있음
+    [[w * 0.03, "A", 1, near], [w * 0.97 - pw, "B", -1, 1 - near]].forEach(function (Pn) {
+      var px0 = Pn[0], on = Pn[3] > 0.85;
+      ctx.fillStyle = "rgba(8,14,40,.92)"; ctx.fillRect(px0, py0, pw, ph);
+      ctx.save(); ctx.beginPath(); ctx.rect(px0, py0, pw, ph); ctx.clip();
+      for (var i = 0; i < bg.length; i++) {
+        var X = bg[i].x * w;
+        if (X < winL || X > winR) continue;
+        ctx.fillStyle = "rgba(255,255,255," + bg[i].a + ")";
+        ctx.beginPath(); ctx.arc(px0 + (X - winL) / (winR - winL) * pw, py0 + 8 + bg[i].y * (ph - 16), bg[i].r + 0.4, 0, 6.2832); ctx.fill();
+      }
+      [[T, "T", COL.T, aT, 0.3], [S, "S", COL.S, aS, 0.62]].forEach(function (Q) {
+        if (Q[3] < 0.01) return;
+        var X = cx + Pn[2] * Q[0].s, x = px0 + (X - winL) / (winR - winL) * pw, y = py0 + ph * Q[4];
+        ctx.globalAlpha = Q[3];
+        U.glow(ctx, x, y, 11, Q[2].rgb, 1);
+        sub(ctx, x, y + 17, Q[1], Pn[1], Q[2].txt, 12);
+        ctx.globalAlpha = 1;
+      });
+      ctx.restore();
+      ctx.strokeStyle = on ? "#cfdaff" : "rgba(132,162,255,.45)"; ctx.lineWidth = on ? 2 : 1;
+      ctx.strokeRect(px0, py0, pw, ph);
+      U.label(ctx, px0 + pw / 2, py0 - 12, Pn[1] + "에서 본 모습", on ? "#ffffff" : "rgba(207,218,255,.85)", 12.5);
+    });
 
-    oPar.textContent = (par * 2).toFixed(2) + "″";
-    oAnn.textContent = par.toFixed(2) + "″";
-    oDd.textContent = dpc.toFixed(1) + " pc";
+    U.label(ctx, 14, 16, "지구가 공전하면 가까운 별은 배경 하늘에서 좌우로 움직여 보인다", "rgba(207,218,255,.92)", 13, "left", 800);
+    U.label(ctx, 14, h - 14, "각도와 거리는 과장한 모형", "rgba(166,176,212,.7)", 12, "left");
+
+    oPar.textContent = showS ? (pS * 2).toFixed(2) + "″" : "—";
+    oAnn.textContent = showS ? pS.toFixed(2) + "″" : "—";
+    oDd.textContent = showS ? dpc.toFixed(1) + " pc" : "—";
+    oT.textContent = showT ? pT.toFixed(2) + "″" : "—";
+    oTd.textContent = showT ? dT.toFixed(1) + " pc" : "—";
   });
 })();
 
