@@ -84,15 +84,16 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-padding-top: 92px; }
+/* 글자 크기는 화면 폭에 따라 커진다 (1280 → 약 18px, 1920 → 약 24px). 교실 TV에서 뒷자리까지 보이도록. */
+html { scroll-behavior: smooth; scroll-padding-top: 92px; font-size: clamp(16px, calc(0.9vw + 7px), 28px); }
 
 body {
   margin: 0;
   font-family: var(--font);
   background: var(--bg);
   color: var(--txt);
-  font-size: 17px;
-  line-height: 1.75;
+  font-size: 1.06rem;
+  line-height: 1.7;
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
 }
@@ -127,9 +128,9 @@ body {
   border-bottom: 1px solid var(--line);
 }
 .topbar-inner {
-  max-width: 1240px;
+  max-width: 1800px;
   margin: 0 auto;
-  padding: 10px 20px;
+  padding: 8px 2.5vw;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -213,9 +214,9 @@ body.teacher-on .tmode .sw::after { left: 15px; background: #1b1403; }
 }
 
 /* ---------- 레이아웃 ---------- */
-.wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px 90px; }
+.wrap { max-width: 1760px; margin: 0 auto; padding: 0 2.5vw 90px; }
 
-.page-head { padding: 54px 0 22px; }
+.page-head { padding: 1.8rem 0 1rem; }
 .page-head .eyebrow {
   display: inline-block;
   font-size: 0.78rem; font-weight: 800; letter-spacing: 0.14em;
@@ -224,7 +225,7 @@ body.teacher-on .tmode .sw::after { left: 15px; background: #1b1403; }
   border-radius: 999px; padding: 4px 14px; margin-bottom: 16px;
 }
 .page-head h1 {
-  font-size: clamp(2rem, 4.6vw, 3.1rem);
+  font-size: clamp(2.2rem, 4.6vw, 3.4rem);
   line-height: 1.18; margin: 0 0 12px; font-weight: 900;
   letter-spacing: -0.035em;
 }
@@ -233,11 +234,11 @@ body.teacher-on .tmode .sw::after { left: 15px; background: #1b1403; }
   background: linear-gradient(120deg, var(--accent-3), var(--accent) 55%, var(--accent-2));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.page-head .lede { color: var(--dim); font-size: 1.06rem; max-width: 66ch; margin: 0; }
+.page-head .lede { color: var(--dim); font-size: 1.15rem; max-width: 60ch; margin: 0; }
 
-section.block { margin: 46px 0 0; scroll-margin-top: 92px; }
+section.block { margin: 2.6rem 0 0; scroll-margin-top: 92px; }
 h2.sec {
-  font-size: 1.55rem; font-weight: 850; margin: 0 0 6px;
+  font-size: 1.7rem; font-weight: 850; margin: 0 0 0.5rem;
   display: flex; align-items: center; gap: 12px; letter-spacing: -0.03em;
 }
 h2.sec .num {
@@ -248,10 +249,10 @@ h2.sec .num {
 h2.sec .qq {
   font-size: 0.9rem; font-weight: 600; color: var(--dim-2);
 }
-.sec-sub { color: var(--dim); margin: 0 0 20px; max-width: 74ch; }
+.sec-sub { color: var(--txt); font-size: 1.12rem; margin: 0 0 1rem; max-width: 92ch; }
 
 h3.mini {
-  font-size: 1.08rem; font-weight: 800; margin: 26px 0 10px;
+  font-size: 1.2rem; font-weight: 800; margin: 1.4rem 0 0.6rem;
   color: var(--head-2); letter-spacing: -0.02em;
 }
 
@@ -264,7 +265,7 @@ h3.mini {
   box-shadow: var(--shadow);
 }
 .card + .card { margin-top: 16px; }
-.card h3 { margin: 0 0 10px; font-size: 1.12rem; font-weight: 800; letter-spacing: -0.02em; }
+.card h3 { margin: 0 0 10px; font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
 .card p:last-child { margin-bottom: 0; }
 
 .grid { display: grid; gap: 16px; }
@@ -289,8 +290,12 @@ h3.mini {
   background: rgba(255, 209, 102, 0.08);
   border-radius: 0 14px 14px 0;
   padding: 16px 20px; margin: 0 0 18px;
+  font-size: 1.25rem; line-height: 1.7;
 }
 .hook strong { color: var(--accent-2); }
+/* 그림 옆 카드에 말풍선만 있으면 세로 가운데로 */
+.grid > .card:has(> .hook) { display: flex; flex-direction: column; justify-content: center; }
+.grid > .card > .hook:last-child { margin-bottom: 0; }
 
 /* 핵심 정리 */
 .key {
@@ -302,6 +307,9 @@ h3.mini {
 .key ul { margin: 0; padding-left: 20px; }
 .key li { margin: 7px 0; }
 .key b { color: var(--strong); }
+/* 그림 옆에 놓인 핵심 상자는 내용을 세로 가운데에 크게 */
+.grid > .key { display: flex; flex-direction: column; justify-content: center; font-size: 1.3rem; }
+.grid > .key li { margin: 0.5em 0; }
 
 /* 교사용 메모 */
 .teacher-note {
@@ -328,7 +336,7 @@ figure.fig img {
   border: 1px solid var(--line); background: #000;
 }
 figure.fig figcaption {
-  font-size: 0.83rem; color: var(--dim-2); margin-top: 8px; text-align: center; line-height: 1.5;
+  font-size: 0.95rem; color: var(--dim); margin-top: 8px; text-align: center; line-height: 1.5;
 }
 figure.fig figcaption b { color: var(--dim); }
 .src { font-size: 0.74rem; color: var(--dim-2); opacity: 0.8; }
@@ -339,8 +347,8 @@ figure.fig figcaption b { color: var(--dim); }
 }
 .photo-card img { width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover; background: #000; }
 .photo-card .pc-body { padding: 13px 15px 16px; }
-.photo-card .pc-body h4 { margin: 0 0 5px; font-size: 1rem; font-weight: 800; }
-.photo-card .pc-body p { margin: 0; font-size: 0.88rem; color: var(--dim); line-height: 1.6; }
+.photo-card .pc-body h4 { margin: 0 0 5px; font-size: 1.15rem; font-weight: 800; }
+.photo-card .pc-body p { margin: 0; font-size: 1rem; color: var(--dim); line-height: 1.5; }
 
 /* ---------- 시뮬레이션 ---------- */
 .sim {
@@ -355,26 +363,26 @@ figure.fig figcaption b { color: var(--dim); }
   padding: 13px 20px; border-bottom: 1px solid var(--line);
   background: rgba(110, 168, 255, 0.07); flex-wrap: wrap;
 }
-.sim-head h4 { margin: 0; font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 9px; }
+.sim-head h4 { margin: 0; font-size: 1.12rem; font-weight: 800; display: flex; align-items: center; gap: 9px; }
 .sim-head h4::before {
   content: "▶"; font-size: 0.6rem; color: var(--accent-3);
 }
-.sim-head .hint { font-size: 0.8rem; color: var(--dim-2); }
+.sim-head .hint { font-size: 0.9rem; color: var(--dim); }
 .sim canvas { display: block; width: 100%; touch-action: none; }
 .sim-controls {
   display: flex; align-items: center; gap: 12px 18px; flex-wrap: wrap;
   padding: 14px 20px; border-top: 1px solid var(--line);
   background: rgba(0, 0, 0, 0.25);
 }
-.ctl { display: flex; align-items: center; gap: 9px; font-size: 0.86rem; color: var(--dim); font-weight: 600; }
-.ctl input[type="range"] { width: 160px; accent-color: var(--accent); cursor: pointer; }
+.ctl { display: flex; align-items: center; gap: 9px; font-size: 1rem; color: var(--dim); font-weight: 600; }
+.ctl input[type="range"] { width: 11rem; height: 1.2rem; accent-color: var(--accent); cursor: pointer; }
 .ctl .val { font-variant-numeric: tabular-nums; color: var(--accent-3); font-weight: 800; min-width: 54px; }
 
 .btn {
-  font-family: inherit; font-size: 0.85rem; font-weight: 700;
+  font-family: inherit; font-size: 1rem; font-weight: 700;
   color: var(--txt); background: rgba(110, 168, 255, 0.14);
   border: 1px solid var(--line-strong); border-radius: 10px;
-  padding: 7px 15px; cursor: pointer; transition: all 0.16s ease;
+  padding: 0.4em 0.9em; cursor: pointer; transition: all 0.16s ease;
 }
 .btn:hover { background: rgba(110, 168, 255, 0.28); border-color: var(--accent); }
 .btn.on { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
@@ -389,20 +397,20 @@ figure.fig figcaption b { color: var(--dim); }
 }
 .stat {
   background: var(--soft); border: 1px solid var(--line);
-  border-radius: 11px; padding: 8px 14px; min-width: 112px;
+  border-radius: 11px; padding: 0.4rem 0.9rem; min-width: 7rem;
 }
-.stat .k { font-size: 0.71rem; color: var(--dim-2); font-weight: 700; letter-spacing: 0.02em; }
-.stat .v { font-size: 1.08rem; font-weight: 850; color: var(--accent-3); font-variant-numeric: tabular-nums; }
+.stat .k { font-size: 0.85rem; color: var(--dim-2); font-weight: 700; letter-spacing: 0.02em; }
+.stat .v { font-size: 1.75rem; line-height: 1.3; font-weight: 850; color: var(--accent-3); font-variant-numeric: tabular-nums; }
 .stat.amber .v { color: var(--accent-2); }
 .stat.warm .v { color: var(--warm); }
 
 /* ---------- 표 ---------- */
 table.data {
-  width: 100%; border-collapse: collapse; font-size: 0.93rem;
+  width: 100%; border-collapse: collapse; font-size: 1.08rem;
   background: var(--table-bg); border-radius: 12px; overflow: hidden;
 }
-table.data th, table.data td { padding: 10px 13px; text-align: center; border-bottom: 1px solid var(--line); }
-table.data th { background: rgba(110, 168, 255, 0.14); font-weight: 800; font-size: 0.85rem; color: var(--head-2); }
+table.data th, table.data td { padding: 0.5rem 0.8rem; text-align: center; border-bottom: 1px solid var(--line); }
+table.data th { background: rgba(110, 168, 255, 0.14); font-weight: 800; font-size: 1rem; color: var(--head-2); }
 table.data tbody tr:last-child td { border-bottom: none; }
 table.data tbody tr:hover { background: rgba(110, 168, 255, 0.07); }
 table.data td.name { text-align: left; font-weight: 700; }
@@ -426,7 +434,7 @@ table.data td.name { text-align: left; font-weight: 700; }
 }
 .opts { display: grid; gap: 8px; }
 .opt {
-  text-align: left; font-family: inherit; font-size: 0.95rem; color: var(--txt);
+  text-align: left; font-family: inherit; font-size: 1.05rem; color: var(--txt);
   background: var(--soft); border: 1px solid var(--line);
   border-radius: 11px; padding: 10px 15px; cursor: pointer; transition: all 0.15s ease;
 }
@@ -437,7 +445,7 @@ table.data td.name { text-align: left; font-weight: 700; }
 .sol {
   display: none; margin-top: 12px; padding: 12px 16px;
   background: rgba(126, 240, 200, 0.08); border-left: 3px solid var(--accent-3);
-  border-radius: 0 10px 10px 0; font-size: 0.9rem; color: var(--dim);
+  border-radius: 0 10px 10px 0; font-size: 1rem; color: var(--dim);
 }
 .sol.show { display: block; }
 .sol b { color: var(--accent-3); }
@@ -446,7 +454,7 @@ table.data td.name { text-align: left; font-weight: 700; }
 .reveal {
   display: none; margin-top: 10px; padding: 12px 16px;
   background: rgba(255, 209, 102, 0.09); border-left: 3px solid var(--accent-2);
-  border-radius: 0 10px 10px 0; font-size: 0.93rem;
+  border-radius: 0 10px 10px 0; font-size: 1.05rem;
 }
 .reveal.show { display: block; }
 
@@ -462,7 +470,7 @@ table.data td.name { text-align: left; font-weight: 700; }
 
 /* ---------- 기타 ---------- */
 .pill {
-  display: inline-block; font-size: 0.74rem; font-weight: 800;
+  display: inline-block; font-size: 0.9rem; font-weight: 800;
   border-radius: 999px; padding: 3px 11px; margin: 0 4px 4px 0;
   background: rgba(110, 168, 255, 0.16); color: var(--pill-txt); border: 1px solid var(--line);
 }
@@ -476,7 +484,7 @@ mark {
   color: inherit; padding: 0 2px;
 }
 
-.note-sm { font-size: 0.85rem; color: var(--dim-2); }
+.note-sm { font-size: 0.95rem; color: var(--dim); }
 
 hr.sep { border: none; border-top: 1px solid var(--line); margin: 34px 0; }
 
@@ -517,8 +525,8 @@ a.unit-card:hover::after { opacity: 1; }
 a.unit-card .cno {
   font-size: 0.72rem; font-weight: 900; letter-spacing: 0.1em; color: var(--accent-3);
 }
-a.unit-card h3 { margin: 6px 0 8px; font-size: 1.22rem; font-weight: 850; letter-spacing: -0.025em; }
-a.unit-card p { margin: 0 0 12px; font-size: 0.9rem; color: var(--dim); line-height: 1.65; }
+a.unit-card h3 { margin: 6px 0 8px; font-size: 1.4rem; font-weight: 850; letter-spacing: -0.025em; }
+a.unit-card p { margin: 0 0 12px; font-size: 1rem; color: var(--dim); line-height: 1.65; }
 a.unit-card .meta { font-size: 0.76rem; color: var(--dim-2); font-weight: 700; }
 
 @media (max-width: 640px) {
@@ -528,26 +536,32 @@ a.unit-card .meta { font-size: 0.76rem; color: var(--dim-2); font-weight: 700; }
   .ctl input[type="range"] { width: 120px; }
 }
 
+/* ---------- 교사에게만 보이는 것 ----------
+   학생 화면(TV)에는 그림·시뮬레이션·수치만 크게 남기고, 학습 목표·교과서 쪽수·교사용 구역은 교사 모드에서만 보인다. */
+.goals, h2.sec .qq, .t-only { display: none; }
+body.teacher-on .goals, body.teacher-on .t-only { display: block; }
+body.teacher-on h2.sec .qq { display: inline; }
+
 /* ---------- 발표 모드 (한 장씩 넘기기) ---------- */
 .pres-btn .ic { font-size: 0.7rem; }
 .pres-btn:hover { color: var(--accent-3); border-color: var(--accent-3); }
 .pres-bar { display: none; }
 
 html.presenting { scroll-behavior: auto; scroll-padding-top: 0; }
-html.presenting body { font-size: 18.5px; }
+html.presenting body { font-size: 1.12rem; }
 html.presenting .topbar,
 html.presenting #progress,
 html.presenting .pager { display: none; }
 html.presenting main.wrap {
-  max-width: 1320px; min-height: 100vh; padding: 34px 44px 100px;
+  max-width: 1840px; min-height: 100vh; padding: 1.4rem 2.5vw 90px;
   display: flex; flex-direction: column; justify-content: center;
 }
 html.presenting main.wrap > :not(.slide-on) { display: none; }
 html.presenting section.block { margin: 0; }
 html.presenting .page-head { padding: 0 0 26px; }
 html.presenting .page-head h1 { font-size: clamp(2.6rem, 6vw, 4.4rem); }
-html.presenting .page-head .lede { font-size: 1.22rem; }
-html.presenting h2.sec { font-size: 1.85rem; }
+html.presenting .page-head .lede { font-size: 1.3rem; }
+html.presenting h2.sec { font-size: 1.9rem; }
 html.presenting .score-bar { bottom: 84px; }
 
 html.presenting .slide-on.anim-r { animation: presR 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }

@@ -136,7 +136,7 @@
   var CANVASES = [];
   function Canvas(cv, aspect) {
     var ctx = cv.getContext("2d");
-    var o = { cv: cv, ctx: ctx, w: 0, h: 0, dpr: 1 };
+    var o = { cv: cv, ctx: ctx, w: 0, h: 0, dpr: 1, k: 1 };
     CANVASES.push(o);
     function resize() {
       var rect = cv.parentNode.getBoundingClientRect();
@@ -145,13 +145,17 @@
       var w = Math.max(280, rect.width);
       var h = aspect ? w / aspect : cv.clientHeight;
       // 발표 모드에서는 제목·조작 버튼까지 한 화면에 들어오도록 조금 더 낮춘다
-      var cap = window.innerHeight * (document.documentElement.classList.contains("presenting") ? 0.6 : 0.78);
+      var cap = window.innerHeight * (document.documentElement.classList.contains("presenting") ? 0.68 : 0.78);
       if (aspect && h > cap) h = cap;
-      o.w = w; o.h = h;
+      // 큰 화면(TV)에서는 장면 전체를 확대한다: 그리는 좌표는 폭 약 1000 기준(o.w, o.h)이고,
+      // 실제 캔버스는 k배로 키워서 글자·선·별이 함께 커진다. 마우스 좌표는 k로 나눠 쓸 것.
+      // 높이 상한에 걸린 캔버스는 세로가 원래 비율의 90%보다 납작해지지 않을 만큼만 키운다.
+      var k = Math.max(1, Math.min(w / 1000, h / (0.9 * (aspect ? 1000 / aspect : 600))));
+      o.k = k; o.w = w / k; o.h = h / k;
       o.dpr = Math.min(2, window.devicePixelRatio || 1);
       cv.style.width = "100%"; cv.style.height = h + "px";
       cv.width = Math.round(w * o.dpr); cv.height = Math.round(h * o.dpr);
-      ctx.setTransform(o.dpr, 0, 0, o.dpr, 0, 0);
+      ctx.setTransform(o.dpr * k, 0, 0, o.dpr * k, 0, 0);
       if (o.onResize) o.onResize(o);
     }
     o.resize = resize;
@@ -234,8 +238,10 @@
       ctx.lineTo(x2 - Math.cos(a + 0.4) * head, y2 - Math.sin(a + 0.4) * head);
       ctx.closePath(); ctx.fill();
     },
+    /* 캔버스 글자 배율 — 교실 TV 뒷자리에서도 읽히도록 모든 라벨을 이만큼 키운다 */
+    TXT: 1.3,
     label: function (ctx, x, y, text, col, size, align, weight) {
-      ctx.font = (weight || 700) + " " + (size || 13) + "px " + getComputedStyle(document.body).fontFamily;
+      ctx.font = (weight || 700) + " " + Math.round((size || 13) * U.TXT) + "px " + getComputedStyle(document.body).fontFamily;
       ctx.textAlign = align || "center";
       ctx.textBaseline = "middle";
       ctx.fillStyle = "rgba(0,0,0,0.55)";
@@ -244,7 +250,7 @@
       ctx.fillText(text, x, y);
     },
     chip: function (ctx, x, y, text, col, size) {
-      size = size || 12;
+      size = Math.round((size || 12) * U.TXT);
       ctx.font = "800 " + size + "px " + getComputedStyle(document.body).fontFamily;
       var w = ctx.measureText(text).width + 14, h = size + 10;
       ctx.fillStyle = "rgba(6,10,24,0.82)";
@@ -327,7 +333,7 @@
     var slides = [], head = [];
     Array.prototype.forEach.call(main.children, function (el) {
       if (el.matches(".page-head, .goals")) head.push(el);
-      else if (el.matches("section.block")) slides.push([el]);
+      else if (el.matches("section.block:not(.t-only)")) slides.push([el]);   // 교사용 구역은 장에서 뺀다
     });
     if (head.length) slides.unshift(head);
     if (!slides.length) return;

@@ -10,14 +10,14 @@
   .hotspot { position: relative; }
   .hotspot .mk {
     position: absolute; transform: translate(-50%, -50%);
-    width: 30px; height: 30px; border-radius: 50%;
-    border: 2px solid #ffd166; box-shadow: 0 0 0 4px rgba(255,209,102,.16);
+    width: 2.4rem; height: 2.4rem; border-radius: 50%;
+    border: 3px solid #ffd166; box-shadow: 0 0 0 4px rgba(255,209,102,.16);
     animation: ping 2.4s ease-out infinite;
   }
   .hotspot .mk.blue { border-color: #8fc0ff; box-shadow: 0 0 0 4px rgba(143,192,255,.16); animation-delay: 1.2s; }
   .hotspot .tag {
     position: absolute; transform: translate(-50%, 0); white-space: nowrap;
-    font-size: .76rem; font-weight: 800; padding: 3px 9px; border-radius: 8px;
+    font-size: 1.05rem; font-weight: 800; padding: 3px 10px; border-radius: 8px;
     background: rgba(6,10,24,.82); border: 1px solid #ffd166; color: #ffd166;
   }
   .hotspot .tag.blue { border-color: #8fc0ff; color: #b9d7ff; }
@@ -39,8 +39,7 @@
   <div class="page-head">
     <span class="eyebrow">Ⅷ-1. 별 · 03 · 5차시</span>
     <h1>별의 표면 <em>온도</em>와 색</h1>
-    <p class="lede">뜨거운 용암은 흘러가면서 온도가 내려가고, 그때 색이 노란색 → 빨간색 → 검은색으로 달라집니다.
-      밤하늘의 별들도 다양한 색으로 관측됩니다.</p>
+    <p class="lede">별의 <b>색</b>을 보면 <b>표면 온도</b>를 비교할 수 있다</p>
     <div style="margin-top:10px">
       <span class="pill a2">#별의 표면 온도</span><span class="pill a2">#별의 색</span>
     </div>
@@ -55,13 +54,12 @@
   <section class="block">
     <h2 class="sec"><span class="num">도입</span> 용암의 색이 흐르면서 달라지는 까닭은?</h2>
     <div class="hook">
-      “화산에서 엄청난 양의 용암이 계속 흘러나오고 있대.” → “그런데 용암의 색이 흐르면서 달라지네!”<br>
-      <strong>용암이 흘러내려 가면서 색이 달라지는 까닭은 무엇일까요?</strong>
+      용암의 색이 노란색 → 빨간색 → 검은색으로 달라진다!<br>
+      <strong>흐르면서 색이 달라지는 까닭은?</strong>
     </div>
-    <p style="color:var(--dim); max-width:74ch">용암이 흘러내려 가면서 <b style="color:var(--txt)">용암의 온도가 달라지기 때문</b>입니다.
-      물체의 색을 보면 온도를 비교할 수 있습니다. 별도 마찬가지입니다.</p>
     <div class="teacher-note">
       <span class="tlabel">지도 안내</span>
+      용암이 흘러내려 가면서 온도가 달라지기 때문이다. 물체의 색을 보면 온도를 비교할 수 있고, 별도 마찬가지이다.<br>
       이전 차시의 등급 개념을 확인한 다음, 용암 분출 장면에서 색이 다른 것이 어떤 의미인지 생각해 보도록 지도한다.
       별의 표면 온도는 <b>별의 색을 이용하여 비교하는 수준으로만</b> 다룬다.
     </div>
@@ -70,34 +68,29 @@
   <!-- 오리온자리 -->
   <section class="block" id="orion">
     <h2 class="sec"><span class="num">개념 1</span> 오리온자리의 두 별 <span class="qq">교과서 288쪽 | 그림 7 |</span></h2>
-    <p class="sec-sub">겨울철에 잘 관측되는 오리온자리의 <span class="kw">베텔게우스</span>와 <span class="kw">리겔</span>은 색이 다릅니다.
-      적색을 띠는 베텔게우스의 표면 온도는 청백색을 띠는 리겔보다 <span class="kw">낮습니다</span>.</p>
+    <p class="sec-sub">적색 <span class="kw">베텔게우스</span>는 청백색 <span class="kw">리겔</span>보다 표면 온도가 <b>낮다</b></p>
 
-    <div class="grid g2">
+    <div style="max-width:980px; margin:0 auto">
       <figure class="fig hotspot">
         <img src="img/orion.jpg" alt="오리온자리 사진. 왼쪽 위의 붉은 별이 베텔게우스, 오른쪽 아래의 푸른 별이 리겔">
         <div class="mk" style="left:30%; top:18%"></div>
         <div class="tag" style="left:30%; top:calc(18% + 22px)">베텔게우스 · 적색 · 온도 낮다</div>
         <div class="mk blue" style="left:70%; top:75%"></div>
         <div class="tag blue" style="left:70%; top:calc(75% + 22px)">리겔 · 청백색 · 온도 높다</div>
-        <figcaption><b>| 그림 7 |</b> 오리온자리 — 같은 별자리 안에서도 별의 색은 뚜렷하게 다르다.</figcaption>
+        <figcaption><b>| 그림 7 |</b> 오리온자리 (겨울철)</figcaption>
       </figure>
-      <div class="card">
-        <h3>별의 색을 관측하면?</h3>
-        <p style="color:var(--dim)">별의 표면 온도에 따라 별의 색이 다릅니다.
-          따라서 <b style="color:var(--accent-2)">별의 색을 관측하여 표면 온도를 비교</b>할 수 있습니다.</p>
-        <p style="color:var(--dim); margin-bottom:0">
-          별까지의 거리를 몰라도, 망원경으로 색만 확인하면 그 별의 표면이 얼마나 뜨거운지 짐작할 수 있다는 뜻입니다.
-          오른쪽 아래 시뮬레이션에서 온도를 직접 바꿔 보세요.</p>
-      </div>
+    </div>
+    <div class="teacher-note">
+      <span class="tlabel">설명</span>
+      별의 표면 온도에 따라 별의 색이 다르므로 별의 색을 관측하여 표면 온도를 비교할 수 있다.
+      별까지의 거리를 몰라도 색만 확인하면 표면이 얼마나 뜨거운지 짐작할 수 있다.
     </div>
   </section>
 
   <!-- 온도-색 시뮬레이션 -->
   <section class="block" id="sim">
     <h2 class="sec"><span class="num">개념 2</span> 표면 온도에 따라 색은 어떻게 달라질까? <span class="qq">교과서 289쪽 | 그림 8 |</span></h2>
-    <p class="sec-sub">표면 온도가 매우 높은 별은 <span class="kw">청색</span>을 띠고, 표면 온도가 낮아지면서 점차
-      청백색 → 백색 → 황백색 → 황색 → 주황색 → <span class="kw">적색</span>을 띠게 됩니다.</p>
+    <p class="sec-sub">온도 높음 <b style="color:var(--sc-blue)">청색</b> → <b style="color:var(--sc-bluewhite)">청백색</b> → <b style="color:var(--sc-white)">백색</b> → <b style="color:var(--sc-yellowwhite)">황백색</b> → <b style="color:var(--sc-yellow)">황색</b> → <b style="color:var(--sc-orange)">주황색</b> → <b style="color:var(--sc-red)">적색</b> 온도 낮음</p>
 
     <div class="sim">
       <div class="sim-head">
@@ -139,7 +132,7 @@
       </tbody>
     </table>
     </div>
-    <p class="note-sm" style="margin-top:8px">예를 들어 황색 별인 태양은 표면 온도가 약 6000 K입니다.</p>
+    <p class="note-sm" style="margin-top:8px">황색 별인 태양 ≈ 6000 K</p>
 
     <div class="grid g2" style="margin-top:18px">
       <figure class="fig hotspot">
@@ -148,14 +141,14 @@
         <div class="tag" style="left:32%; top:calc(51% + 24px)">알비레오 A · 약 4000 K</div>
         <div class="mk blue" style="left:57%; top:49%"></div>
         <div class="tag blue" style="left:74%; top:calc(49% - 44px)">알비레오 B · 약 14000 K</div>
-        <figcaption>백조자리의 알비레오 — 나란히 보이는 두 별의 색이 다르다.</figcaption>
+        <figcaption>백조자리의 알비레오</figcaption>
       </figure>
-      <div class="card">
-        <h3>색만 보고도 알 수 있는 것</h3>
-        <p style="color:var(--dim)">알비레오 A는 <b style="color:var(--sc-orange)">주황색</b>, 알비레오 B는 <b style="color:var(--sc-bluewhite)">청백색</b>입니다.
-          따라서 <b style="color:var(--txt)">알비레오 B가 알비레오 A보다 표면 온도가 높습니다.</b></p>
-        <p style="color:var(--dim); margin-bottom:0">황색인 태양(약 6000 K)과 비교하면 표면 온도는
-          <b style="color:var(--accent-2)">알비레오 A → 태양 → 알비레오 B</b> 순으로 높아집니다.</p>
+      <div class="key">
+        <h3>표면 온도 비교</h3>
+        <p style="margin:0; font-size:1.25rem; font-weight:800; line-height:1.9">
+          <span style="color:var(--sc-orange)">알비레오 A</span> (주황색)<br>
+          &lt; <span style="color:var(--sc-yellow)">태양</span> (황색)<br>
+          &lt; <span style="color:var(--sc-bluewhite)">알비레오 B</span> (청백색)</p>
         <div class="teacher-note">
           <span class="tlabel">지도상의 유의점</span>
           중학교 교육과정에서는 분광형(O·B·A·F·G·K·M)을 다루지 않고, <b>색으로 표면 온도를 비교하는 수준</b>으로만 지도한다.
@@ -169,10 +162,8 @@
     <h2 class="sec"><span class="num">정리</span> 핵심 정리</h2>
     <div class="key">
       <ul>
-        <li><b>별의 색</b> : 별의 표면 온도에 따라 별의 색이 달라진다.</li>
-        <li><b>표면 온도에 따른 별의 색</b> : 표면 온도가 매우 높은 별은 <b>청색</b>이며, 표면 온도가 낮아질수록
-          청백색 → 백색 → 황백색 → 황색 → 주황색 → <b>적색</b>이다.</li>
-        <li>따라서 <b>별의 색을 관측하면 표면 온도를 비교</b>할 수 있다.</li>
+        <li>별의 색은 <b>표면 온도</b>에 따라 달라진다.</li>
+        <li>온도 높음 <b>청색</b> → 청백색 → 백색 → 황백색 → 황색 → 주황색 → <b>적색</b> 온도 낮음</li>
       </ul>
     </div>
   </section>
@@ -215,12 +206,6 @@
           태양은 현재 황색이며 황색보다 표면 온도가 낮은 별은 주황색, 적색 별이다.
           표면 온도가 점점 낮아지면 별의 색이 <b>주황색에서 적색까지</b> 변하게 될 것이다.
         </div>
-      </div>
-      <div class="card">
-        <h3>스스로 정리하기</h3>
-        <p style="margin:0">별의 표면 <span class="kw">ㅇ ㄷ</span>에 따라 별의 색이 달라진다.
-          <button class="btn amber" data-reveal="selfA" data-label="확인">확인</button></p>
-        <div class="reveal" id="selfA"><b class="kw2">온도</b></div>
       </div>
     </div>
 

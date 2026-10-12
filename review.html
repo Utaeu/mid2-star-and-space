@@ -18,7 +18,7 @@
     display:flex; gap:12px; align-items:center; cursor:pointer; transition:.16s; }
   .clue:hover { border-color:var(--accent); }
   .clue .no { font-weight:900; color:var(--accent-3); flex:none; min-width:22px; }
-  .clue .tx { flex:1; font-size:.93rem; }
+  .clue .tx { flex:1; font-size:1.05rem; }
   .clue .an { font-weight:900; color:var(--accent-2); opacity:0; transition:.2s; }
   .clue.on .an { opacity:1; }
 </style>
@@ -38,14 +38,13 @@
   <div class="page-head">
     <span class="eyebrow">중단원 점검 · 대단원 마무리</span>
     <h1>단원 <em>정리</em>와 평가</h1>
-    <p class="lede">개념 정리 쏙쏙 · 생각 그물 쓱쓱 · 꿀잼 퀴즈 도전 · 문제로 확인 콕콕 · 실력 향상 쑥쑥을
-      한곳에 모았습니다. 빈칸과 문항을 눌러 스스로 점검해 보세요.</p>
+    <p class="lede">생각 그물 · 개념 정리 · 퀴즈 · 확인 문제</p>
   </div>
 
   <!-- 생각 그물 -->
   <section class="block" id="map">
     <h2 class="sec"><span class="num">쓱쓱</span> 생각 그물 <span class="qq">교과서 308쪽</span></h2>
-    <p class="sec-sub">단원 전체의 개념이 어떻게 연결되는지 한눈에 살펴보세요. 마디를 누르면 설명이 나타납니다.</p>
+    <p class="sec-sub">마디를 누르면 설명이 나타납니다</p>
     <div class="sim">
       <div class="sim-head">
         <h4>Ⅷ. 별과 우주 — 개념 지도</h4>
@@ -398,12 +397,12 @@ document.querySelectorAll(".clue").forEach(function (c) {
   }
   cv.addEventListener("pointermove", function (e) {
     var r = cv.getBoundingClientRect();
-    hover = pick(e.clientX - r.left, e.clientY - r.top);
+    hover = pick((e.clientX - r.left) / C.k, (e.clientY - r.top) / C.k);
     cv.style.cursor = hover >= 0 ? "pointer" : "default";
   });
   cv.addEventListener("click", function (e) {
     var r = cv.getBoundingClientRect();
-    var i = pick(e.clientX - r.left, e.clientY - r.top);
+    var i = pick((e.clientX - r.left) / C.k, (e.clientY - r.top) / C.k);
     if (i >= 0) { sel = i; nN.textContent = N[i].t; nD.textContent = N[i].d; }
   });
 

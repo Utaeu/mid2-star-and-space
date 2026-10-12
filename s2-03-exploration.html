@@ -11,13 +11,13 @@
   .tl-line { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; }
   @media(max-width:860px){ .tl-line{ grid-template-columns:1fr 1fr; } }
   .tl-item { text-align:center; }
-  .tl-item .yr { font-weight:900; color:var(--accent-2); letter-spacing:.06em; font-size:.92rem; }
+  .tl-item .yr { font-weight:900; color:var(--accent-2); letter-spacing:.06em; font-size:1.3rem; }
   .tl-item .bar { height:3px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); border-radius:3px; margin:8px 0 10px; position:relative; }
   .tl-item .bar::after { content:""; position:absolute; left:50%; top:-3.5px; width:10px; height:10px; border-radius:50%;
     background:var(--accent-2); transform:translateX(-50%); box-shadow:0 0 10px rgba(255,209,102,.8); }
   .tl-item img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:50%; border:2px solid var(--line-strong); background:#000; }
-  .tl-item .nm { font-weight:800; margin-top:9px; font-size:.95rem; }
-  .tl-item .ds { font-size:.8rem; color:var(--dim); }
+  .tl-item .nm { font-weight:800; margin-top:9px; font-size:1.15rem; }
+  .tl-item .ds { font-size:1rem; color:var(--dim); }
 
   .flip { perspective:1000px; }
   .flip .inner { position:relative; transition:transform .6s cubic-bezier(.2,.8,.3,1); transform-style:preserve-3d; aspect-ratio:1/1; }
@@ -26,8 +26,8 @@
     border:1px solid var(--line); background:var(--panel); }
   .flip .front img { width:100%; height:100%; object-fit:contain; background:#0b1026; padding:10px; }
   .flip .front .cap { position:absolute; left:0; right:0; bottom:0; padding:8px 10px; font-weight:800; font-size:.9rem;
-    background:linear-gradient(transparent,rgba(5,8,20,.92)); color:#e9edff; text-align:center; }
-  .flip .back { transform:rotateY(180deg); display:flex; align-items:center; padding:16px; font-size:.88rem; color:var(--dim); line-height:1.6;
+    background:linear-gradient(transparent,rgba(5,8,20,.92)); color:#e9edff; text-align:center; font-size:1.15rem; }
+  .flip .back { transform:rotateY(180deg); display:flex; align-items:center; padding:1.2rem; font-size:1.15rem; color:var(--txt); line-height:1.55;
     background:linear-gradient(135deg,rgba(110,168,255,.16),rgba(126,240,200,.08)); }
 </style>
 </head>
@@ -46,8 +46,7 @@
   <div class="page-head">
     <span class="eyebrow">Ⅷ-2. 우주 · 03 · 4~5차시</span>
     <h1>우주 <em>탐사</em></h1>
-    <p class="lede">인류는 우주에 대한 탐사 활동을 계속하고 있으며, 이를 위한 기술 발전이 우리의 삶도 변화시키고 있습니다.
-      우주 탐사는 어떤 의의가 있으며 인류에게 어떤 영향을 주었을까요?</p>
+    <p class="lede">우주 탐사는 우리 삶을 어떻게 바꾸었을까?</p>
     <div style="margin-top:10px">
       <span class="pill a2">#인공위성</span><span class="pill a2">#화성 탐사</span><span class="pill a2">#로켓</span><span class="pill a2">#로봇</span>
     </div>
@@ -63,31 +62,28 @@
     <h2 class="sec"><span class="num">도입</span> 우주를 탐사하는 까닭은 무엇일까?</h2>
     <div class="grid g2">
       <div class="card">
-        <div class="hook">“우리나라는 세계에서 <strong>7번째로 달을 탐사한 나라</strong>가 되었어!”<br>
-          “달을 향해 쏘아 올릴 탐사선 <strong>다누리</strong>야!”</div>
-        <p style="margin:0; color:var(--dim)">
-          우주를 탐사함으로써 우리는 우주의 기원과 탄생, 외계 행성과 생명체 등 <b style="color:var(--txt)">우주에 대한 호기심을 충족</b>할 수 있으며,
-          미래의 인류가 살아갈 <b style="color:var(--txt)">새로운 터전</b>을 마련할 수도 있습니다.</p>
+        <div class="hook">우리나라는 세계에서 <strong>7번째로 달을 탐사한 나라</strong>!<br>
+          달 궤도 탐사선 <strong>다누리</strong></div>
       </div>
       <figure class="fig">
         <img src="img/danuri.jpg" alt="달 궤도 탐사선 다누리호">
-        <figcaption>다누리호 — 2022년 달 궤도 진입에 성공한 우리나라 최초의 달 궤도 탐사선</figcaption>
+        <figcaption>다누리호 — 우리나라 최초의 달 궤도 탐사선 (2022)</figcaption>
       </figure>
     </div>
     <div class="grid g2" style="margin-top:16px">
       <div class="card" style="border-color:rgba(126,240,200,.3)">
         <h3 style="color:var(--accent-3)">우주 탐사의 의의</h3>
-        <p style="margin:0; color:var(--dim)">우주의 기원과 구조를 이해하고, 외계 생명체의 존재 가능성을 탐색하며,
-          지구 환경과 인류 생존에 대한 연구를 수행하는 중요한 활동입니다.</p>
+        <p style="margin:0; font-size:1.15rem; font-weight:700">우주의 기원·구조 이해 · 외계 생명체 탐색 · 지구 환경 연구</p>
       </div>
       <div class="card" style="border-color:rgba(255,209,102,.3)">
         <h3 style="color:var(--accent-2)">인류에게 미친 영향</h3>
-        <p style="margin:0; color:var(--dim)">기후 변화·소행성 충돌 등 위험 요소를 감시하고 우주 자원 활용 가능성을 모색할 수 있습니다.
-          또한 GPS·반도체·의료 기술 등 혁신 기술을 탄생시켜 우리 생활을 편리하게 만듭니다.</p>
+        <p style="margin:0; font-size:1.15rem; font-weight:700">위험(기후 변화·소행성) 감시 · 우주 자원 · GPS·의료 기술</p>
       </div>
     </div>
     <div class="teacher-note">
       <span class="tlabel">도입 안내</span>
+      우주를 탐사함으로써 우주의 기원과 탄생, 외계 행성과 생명체 등 우주에 대한 호기심을 충족할 수 있으며,
+      미래의 인류가 살아갈 새로운 터전을 마련할 수도 있다.
       우리나라는 1992년 우리별 1호를 시작으로 2022년 누리호와 다누리호 발사에 성공했다.
       세계 주요국이 우주 탐사에 힘쓰는 이유를 학생들이 자유롭게 이야기해 보게 한 뒤 성과를 살펴본다.
     </div>
@@ -96,7 +92,7 @@
   <!-- 태양계 탐사 애니메이션 -->
   <section class="block" id="probes">
     <h2 class="sec"><span class="num">개념 1</span> 우주 탐사선은 어디까지 갔을까? <span class="qq">교과서 302~303쪽</span></h2>
-    <p class="sec-sub">태양계 천체를 탐사할 목적으로 쏘아 올린 탐사선들이 어느 천체까지 도달했는지 살펴봅시다.</p>
+    <p class="sec-sub">탐사선들이 태양계 어디까지 갔을까?</p>
 
     <div class="sim">
       <div class="sim-head">
@@ -198,7 +194,7 @@
   <!-- 일상 속 기술 -->
   <section class="block" id="tech">
     <h2 class="sec"><span class="num">개념 3</span> 우주 탐사 기술이 일상생활에 이용된 예 <span class="qq">교과서 301쪽 | 그림 13 |</span></h2>
-    <p class="sec-sub">카드에 마우스를 올리거나 눌러 보세요. 어떤 기술인지 설명이 나타납니다.</p>
+    <p class="sec-sub">카드를 누르면 설명이 나타납니다</p>
     <div class="grid g3" id="techGrid">
       <div class="flip"><div class="inner">
         <div class="face front"><img src="img/tech_satellite.jpg" alt="인공위성 활용"><div class="cap">인공위성</div></div>
@@ -238,11 +234,9 @@
     <h2 class="sec"><span class="num">정리</span> 핵심 정리</h2>
     <div class="key">
       <ul>
-        <li><b>우주 탐사의 의의</b> : 우주에 대한 지식과 이해의 폭 확대, 혁신적인 탐사 기술을 일상생활에 이용,
-          지구의 기후와 환경의 변화·자원 고갈 등의 현상 이해, 다국적 우주 탐사 프로젝트를 통한 국가 간 협력 촉진</li>
-        <li><b>우주 탐사가 우리 삶에 미친 영향</b> : 새로운 과학 기술의 개발과 발전,
-          우주 탐사에 활용된 기술의 실생활 이용(GPS, MRI, CT, 폴리카보네이트, 전자레인지, 기능성 옷감 등)</li>
-        <li><b>우주 탐사의 성과</b> : 우주 탐사선, 로켓·인공위성, 우주 망원경·국제 우주 정거장, 우주 탐사 로봇, 우리나라의 우주 탐사</li>
+        <li><b>의의</b> : 우주에 대한 이해 확대 · 지구 환경 이해 · 국가 간 협력</li>
+        <li><b>일상 속 기술</b> : GPS · MRI · 폴리카보네이트 · 전자레인지 · 기능성 옷감 · 형상 기억 합금</li>
+        <li><b>성과</b> : 탐사선 · 로켓·인공위성 · 우주 망원경·ISS · 탐사 로봇 · 누리호·다누리호</li>
       </ul>
     </div>
   </section>
@@ -276,23 +270,6 @@
       </div>
     </div>
 
-    <div class="grid g2" style="margin-top:16px">
-      <div class="card">
-        <h3><span class="pill">과학 유용성</span> 서술형</h3>
-        <p class="note-sm" style="margin:0 0 10px">그림에 제시된 것 외에 우주 탐사 기술이 일상생활에 쓰이는 예를 두 가지 이상 서술하시오.</p>
-        <button class="btn amber" data-reveal="qa1" data-label="모범 답안 보기">모범 답안 보기</button>
-        <div class="reveal" id="qa1">
-          자기 공명 영상(MRI)으로 질병을 진단한다. 폴리카보네이트가 안전모에 이용된다.
-          우주복으로 개발된 신소재가 기능성 옷감으로 쓰인다. (그 밖에 동결 건조 식품, 벨크로, 테프론, 바코드 기술 등)
-        </div>
-      </div>
-      <div class="card">
-        <h3>스스로 정리하기</h3>
-        <p style="margin:0">인류는 끊임없이 우주를 <span class="kw">ㅌ ㅅ</span>하고 있으며, 이로부터 발달한 과학 기술은 우리의 삶에 유용하게 쓰인다.
-          <button class="btn amber" data-reveal="selfA" data-label="확인">확인</button></p>
-        <div class="reveal" id="selfA"><b class="kw2">탐사</b></div>
-      </div>
-    </div>
 
     <div class="score-bar">
       <span class="s"></span>
@@ -371,7 +348,7 @@
     // 태양
     U.glow(ctx, cx, cy, 52, "rgba(255,190,70,1)", 1);
     ctx.fillStyle = "#ffdc8a"; ctx.beginPath(); ctx.arc(cx, cy, 15, 0, 6.2832); ctx.fill();
-    U.label(ctx, cx, cy + 32, "태양", "#ffd166", 12);
+    U.label(ctx, cx, cy - 34, "태양", "#ffd166", 12);   // 수성 이름표와 겹치지 않게 위쪽에
 
     // 행성
     var pos = PLANETS.map(function (p, i) {
@@ -425,7 +402,8 @@
         U.glow(ctx, q[0], q[1], 11, "rgba(255,255,255,1)", 0.9);
         ctx.fillStyle = pr.c;
         ctx.beginPath(); ctx.arc(q[0], q[1], 3.6, 0, 6.2832); ctx.fill();
-        if (k === pr.to.length - 1 || sel >= 0) U.label(ctx, q[0], q[1] - 16, pr.n, pr.c, 11.5);
+        // 보이저 1호와 카시니호는 둘 다 토성에서 끝나므로 카시니호 이름표를 한 줄 위로 올린다
+        if (k === pr.to.length - 1 || sel >= 0) U.label(ctx, q[0], q[1] - (pi === 3 && sel < 0 ? 38 : 16), pr.n, pr.c, 11.5);
       });
     });
 
