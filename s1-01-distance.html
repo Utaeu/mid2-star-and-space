@@ -60,6 +60,68 @@
     </div>
   </section>
 
+  <!-- ================= 거리 단위 ================= -->
+  <section class="block" id="units">
+    <h2 class="sec"><span class="num">단위</span> 우주의 거리는 어떤 단위로 나타낼까? <span class="qq">교과서 283쪽 참고 자료</span></h2>
+    <p class="sec-sub">우주는 너무 넓어서 km 대신 <span class="kw">AU · 광년 · pc</span>을 쓴다</p>
+
+    <div class="grid g3">
+      <div class="card unit-card">
+        <div class="u-name">1 AU <small>(천문단위)</small></div>
+        <div class="u-val">≈ 1억 5천만 km</div>
+        <div class="u-desc">태양 ~ 지구 평균 거리</div>
+      </div>
+      <div class="card unit-card">
+        <div class="u-name">1 광년 <small>(ly)</small></div>
+        <div class="u-val">≈ 9.46 × 10<sup>12</sup> km</div>
+        <div class="u-desc">빛이 1년 동안 가는 거리 · ≈ 63240 AU</div>
+      </div>
+      <div class="card unit-card">
+        <div class="u-name">1 pc <small>(파섹)</small></div>
+        <div class="u-val">≈ 3.26 광년</div>
+        <div class="u-desc">연주 시차 1″인 별까지의 거리 · ≈ 206265 AU</div>
+      </div>
+    </div>
+
+    <div class="sim" style="margin-top:18px">
+      <div class="sim-head">
+        <h4>거리 단위 변환기</h4>
+        <span class="hint">값을 넣으면 네 단위로 바로 바뀝니다</span>
+      </div>
+      <div class="sim-controls">
+        <label class="ctl">거리
+          <input type="number" id="ucIn" class="num-in" value="1" min="0" step="any"></label>
+        <span class="ctl" style="gap:6px">단위
+          <button class="btn amber" data-unit="km">km</button>
+          <button class="btn amber on" data-unit="au">AU</button>
+          <button class="btn amber" data-unit="ly">광년</button>
+          <button class="btn amber" data-unit="pc">pc</button>
+        </span>
+      </div>
+      <div class="sim-controls">
+        <span class="ctl" style="gap:6px; flex-wrap:wrap">예시
+          <button class="btn" data-ex="1,au">태양 ~ 지구</button>
+          <button class="btn" data-ex="30,au">태양 ~ 해왕성</button>
+          <button class="btn" data-ex="1.3,pc">프록시마 센타우리</button>
+          <button class="btn" data-ex="2.6,pc">시리우스</button>
+          <button class="btn" data-ex="30000,pc">우리은하 지름</button>
+        </span>
+      </div>
+      <div class="readout uc-out">
+        <div class="stat" data-out="km"><div class="k">km</div><div class="v">—</div></div>
+        <div class="stat" data-out="au"><div class="k">AU</div><div class="v">—</div></div>
+        <div class="stat" data-out="ly"><div class="k">광년</div><div class="v">—</div></div>
+        <div class="stat" data-out="pc"><div class="k">pc</div><div class="v">—</div></div>
+      </div>
+    </div>
+    <div class="teacher-note">
+      <span class="tlabel">참고 자료</span>
+      AU: 지구의 평균 궤도 장반경, 1 AU = 1.496×10<sup>8</sup> km. 해왕성은 약 30 AU.
+      광년: 1 광년 = 9.46×10<sup>12</sup> km = 6.324×10<sup>4</sup> AU. 파섹: 1 pc = 3.086×10<sup>13</sup> km = 206265 AU = 3.26 광년.
+      변환기는 AU를 기준(1 광년 = 63240 AU, 1 pc = 206265 AU)으로 계산하므로 마지막 자리는 교과서 값과 조금 다를 수 있다.
+    </div>
+  </section>
+
   <!-- ================= 시차 ================= -->
   <section class="block" id="parallax">
     <h2 class="sec"><span class="num">개념 1</span> 시차란 무엇일까? <span class="qq">교과서 280쪽</span></h2>
@@ -697,6 +759,54 @@
     oT.textContent = showT ? pT.toFixed(2) + "″" : "—";
     oTd.textContent = showT ? dT.toFixed(1) + " pc" : "—";
   });
+})();
+
+
+/* =========================================================
+   3) 거리 단위 변환기 — AU를 기준으로 계산 (1 광년 = 63240 AU, 1 pc = 206265 AU)
+   ========================================================= */
+(function () {
+  var inp = document.getElementById("ucIn");
+  var AU = { km: 1 / 1.496e8, au: 1, ly: 63240, pc: 206265 };   // 각 단위 1이 몇 AU인지
+  var unit = "au";
+  var SUP = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
+
+  // 1000만 이상·0.01 미만은 "a × 10ⁿ", 그 사이는 쉼표 숫자
+  function fmt(v) {
+    if (!isFinite(v)) return "—";
+    if (v === 0) return "0";
+    var a = Math.abs(v);
+    if (a >= 0.01 && a < 1e7) {
+      var d = a >= 1000 ? 0 : (a >= 100 ? 1 : (a >= 1 ? 3 : 4));
+      return Number(v.toFixed(d)).toLocaleString("ko-KR", { maximumFractionDigits: d });
+    }
+    var e = Math.floor(Math.log10(a)), m = v / Math.pow(10, e);
+    if (Math.abs(m) >= 9.9995) { m /= 10; e += 1; }
+    return m.toFixed(3).replace(/\.?0+$/, "") + " × 10" + String(e).replace(/./g, function (c) { return SUP[c]; });
+  }
+
+  function update() {
+    var v = parseFloat(inp.value);
+    var au = v * AU[unit];
+    document.querySelectorAll(".uc-out [data-out]").forEach(function (el) {
+      var u = el.getAttribute("data-out");
+      el.classList.toggle("amber", u === unit);       // 입력한 단위는 노란색
+      el.querySelector(".v").textContent = isNaN(v) ? "—" : fmt(au / AU[u]);
+    });
+  }
+  function setUnit(u) {
+    unit = u;
+    document.querySelectorAll("[data-unit]").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-unit") === u); });
+    update();
+  }
+  document.querySelectorAll("[data-unit]").forEach(function (b) {
+    b.onclick = function () { setUnit(b.getAttribute("data-unit")); };
+  });
+  document.querySelectorAll("[data-ex]").forEach(function (b) {
+    b.onclick = function () { var p = b.getAttribute("data-ex").split(","); inp.value = p[0]; setUnit(p[1]); };
+  });
+  inp.addEventListener("input", update);
+  update();
 })();
 
 </script>

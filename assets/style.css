@@ -377,6 +377,22 @@ figure.fig figcaption b { color: var(--dim); }
 .ctl { display: flex; align-items: center; gap: 9px; font-size: 1rem; color: var(--dim); font-weight: 600; }
 .ctl input[type="range"] { width: 11rem; height: 1.2rem; accent-color: var(--accent); cursor: pointer; }
 .ctl .val { font-variant-numeric: tabular-nums; color: var(--accent-3); font-weight: 800; min-width: 54px; }
+/* 숫자 입력 칸 (거리 단위 변환기) */
+.num-in {
+  font-family: inherit; font-size: 1.5rem; font-weight: 800; width: 9em;
+  color: var(--txt); background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line-strong); border-radius: 10px; padding: 0.15em 0.5em;
+}
+.num-in:focus { outline: 2px solid var(--accent-2); }
+.uc-out .stat { flex: 1; min-width: 12rem; }
+.uc-out .stat .k { font-size: 1rem; }
+.uc-out .stat .v { font-size: 2rem; }
+/* 단위 카드 */
+.unit-card { text-align: center; }
+.unit-card .u-name { font-size: 1.9rem; font-weight: 900; color: var(--accent-2); }
+.unit-card .u-name small { font-size: 0.55em; color: var(--dim); font-weight: 700; }
+.unit-card .u-val { font-size: 1.35rem; font-weight: 800; margin: 0.3em 0; }
+.unit-card .u-desc { color: var(--dim); font-size: 1rem; }
 
 .btn {
   font-family: inherit; font-size: 1rem; font-weight: 700;
