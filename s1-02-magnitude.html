@@ -60,14 +60,14 @@
     <div class="sim">
       <div class="sim-head">
         <h4>3차원으로 보는 빛의 퍼짐</h4>
-        <span class="hint">천천히 회전합니다 · 슬라이더로 거리를 바꿔 보세요</span>
+        <span class="hint">끌어서 돌려 보세요 · 슬라이더로 거리를 바꿔 보세요</span>
       </div>
       <canvas id="cvInv"></canvas>
       <div class="sim-controls">
         <label class="ctl">광원으로부터의 거리
           <input type="range" id="ivD" min="100" max="300" value="100">
           <span class="val" id="ivDV">1배</span></label>
-        <button class="btn on" id="ivSpin">회전 ⏸</button>
+        <button class="btn" id="ivReset">처음 각도</button>
         <button class="btn amber" id="ivGrid">1 · 4 · 9 칸 보기</button>
       </div>
       <div class="readout">
@@ -240,20 +240,33 @@
   var cv = document.getElementById("cvInv");
   var C = SU.Canvas(cv, 1.85), U = SU.U;
   var sD = document.getElementById("ivD"), vD = document.getElementById("ivDV");
-  var bSpin = document.getElementById("ivSpin"), bGrid = document.getElementById("ivGrid");
+  var bReset = document.getElementById("ivReset"), bGrid = document.getElementById("ivGrid");
   var r1 = document.getElementById("ivR1"), r2 = document.getElementById("ivR2"),
       r3 = document.getElementById("ivR3"), r4 = document.getElementById("ivR4");
-  var spin = true, showGrid = true, A = -0.55, dNow = 1;
+  var A0 = -1.02, B0 = 0.26;
+  var showGrid = true, A = A0, B = B0, dNow = 1;   // A: 좌우 회전, B: 시선 기울기
 
-  bSpin.onclick = function () { spin = !spin; bSpin.classList.toggle("on", spin); bSpin.textContent = spin ? "회전 ⏸" : "회전 ▶"; };
+  bReset.onclick = function () { A = A0; B = B0; };
   bGrid.onclick = function () { showGrid = !showGrid; bGrid.classList.toggle("on", showGrid); };
   bGrid.classList.add("on");
 
   var HS = 0.26;   // 빔의 반각 (거리 1에서 반지름)
-  var B = 0.26;    // 시선 기울기
+
+  // 끌어서 회전 (마우스·터치)
+  var drag = false, lx = 0, ly = 0;
+  cv.style.cursor = "grab";
+  cv.addEventListener("pointerdown", function (e) { drag = true; lx = e.clientX; ly = e.clientY; cv.setPointerCapture(e.pointerId); cv.style.cursor = "grabbing"; });
+  cv.addEventListener("pointermove", function (e) {
+    if (!drag) return;
+    A = U.clamp(A - (e.clientX - lx) * 0.008, -2.85, -0.2);   // 이 범위 밖이면 패널 앞뒤 순서가 뒤집힘
+    B = U.clamp(B + (e.clientY - ly) * 0.006, -0.6, 1.2);
+    lx = e.clientX; ly = e.clientY;
+  });
+  ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) {
+    cv.addEventListener(ev, function () { drag = false; cv.style.cursor = "grab"; });
+  });
 
   SU.loop(cv, function (dt, t) {
-    if (spin) A = -1.02 + 0.22 * Math.sin(t * 0.22);
     var dT = parseFloat(sD.value) / 100;
     dNow = U.approach(dNow, dT, dt, 8);
 
