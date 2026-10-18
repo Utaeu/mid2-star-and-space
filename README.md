@@ -5,4 +5,5 @@
 바로 접속 링크: https://utaeu.github.io/mid2-star-and-space/
 
 v1.0 2026.09.28 (초기 버전)
-<br> v2.0 진행 중
+<br> v2.0 발표 모드 추가
+<br> v2.1 내용 간소화, 글씨 크기 증가
