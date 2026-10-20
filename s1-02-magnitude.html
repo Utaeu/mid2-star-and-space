@@ -60,9 +60,15 @@
     <div class="sim">
       <div class="sim-head">
         <h4>3차원으로 보는 빛의 퍼짐</h4>
-        <span class="hint">끌어서 돌려 보세요 · 슬라이더로 거리를 바꿔 보세요</span>
+        <span class="hint">끌어서 돌려 보세요 · 슬라이더로 구의 반지름(거리)을 바꿔 보세요</span>
       </div>
-      <canvas id="cvInv"></canvas>
+      <div class="sim-row">
+      <div class="sim-stage"><canvas id="cvInv"></canvas></div>
+      <div class="formula">
+        <span>관찰되는 별의 밝기</span><span class="f-eq">=</span>
+        <span class="frac"><span class="f-num">별이 내는 빛의 세기</span><span class="f-den">구의 겉넓이 <b>4πr²</b></span></span>
+      </div>
+      </div>
       <div class="sim-controls">
         <label class="ctl">광원으로부터의 거리
           <input type="range" id="ivD" min="100" max="300" value="100">
@@ -71,11 +77,11 @@
         <button class="btn amber" id="ivGrid">1 · 4 · 9 칸 보기</button>
       </div>
       <div class="readout">
-        <div class="stat"><div class="k">거리</div><div class="v" id="ivR1">1배</div></div>
-        <div class="stat amber"><div class="k">빛이 퍼진 넓이</div><div class="v" id="ivR2">1배</div></div>
-        <div class="stat warm"><div class="k">단위 면적당 밝기</div><div class="v" id="ivR3">1배</div></div>
+        <div class="stat"><div class="k">거리 (반지름 r)</div><div class="v" id="ivR1">1배</div></div>
+        <div class="stat amber"><div class="k">구의 겉넓이 4πr²</div><div class="v" id="ivR2">4π</div></div>
+        <div class="stat warm"><div class="k">관찰되는 밝기</div><div class="v" id="ivR3">1배</div></div>
         <div class="stat" style="flex:1; min-width:220px"><div class="k">한 문장으로</div>
-          <div class="v" id="ivR4" style="font-size:.93rem; font-weight:700; color:var(--txt); line-height:1.5">거리가 1배일 때의 밝기입니다.</div></div>
+          <div class="v" id="ivR4" style="font-size:1.25rem; font-weight:700; color:var(--txt); line-height:1.5">r = 1일 때 구의 겉넓이는 4π, 이때의 밝기를 1로 봅니다.</div></div>
       </div>
     </div>
   </section>
@@ -234,23 +240,23 @@
 <script src="assets/common.js"></script>
 <script>
 /* =========================================================
-   1) 3D 빛의 퍼짐 (거리의 제곱에 반비례)
+   1) 3D 빛의 퍼짐 — 광원을 둘러싼 구 (밝기 = 빛의 세기 / 4πr²)
    ========================================================= */
 (function () {
   var cv = document.getElementById("cvInv");
-  var C = SU.Canvas(cv, 1.85), U = SU.U;
+  var C = SU.Canvas(cv, 1.4), U = SU.U;
   var sD = document.getElementById("ivD"), vD = document.getElementById("ivDV");
   var bReset = document.getElementById("ivReset"), bGrid = document.getElementById("ivGrid");
   var r1 = document.getElementById("ivR1"), r2 = document.getElementById("ivR2"),
       r3 = document.getElementById("ivR3"), r4 = document.getElementById("ivR4");
-  var A0 = -1.02, B0 = 0.26;
+  var A0 = -0.28, B0 = 0.28;
   var showGrid = true, A = A0, B = B0, dNow = 1;   // A: 좌우 회전, B: 시선 기울기
 
   bReset.onclick = function () { A = A0; B = B0; };
   bGrid.onclick = function () { showGrid = !showGrid; bGrid.classList.toggle("on", showGrid); };
   bGrid.classList.add("on");
 
-  var HS = 0.26;   // 빔의 반각 (거리 1에서 반지름)
+  var HS = 0.3;   // 구 표면 조각의 반폭 (방향 (1, u, v) 의 u·v 범위)
 
   // 끌어서 회전 (마우스·터치)
   var drag = false, lx = 0, ly = 0;
@@ -258,13 +264,28 @@
   cv.addEventListener("pointerdown", function (e) { drag = true; lx = e.clientX; ly = e.clientY; cv.setPointerCapture(e.pointerId); cv.style.cursor = "grabbing"; });
   cv.addEventListener("pointermove", function (e) {
     if (!drag) return;
-    A = U.clamp(A - (e.clientX - lx) * 0.008, -2.85, -0.2);   // 이 범위 밖이면 패널 앞뒤 순서가 뒤집힘
-    B = U.clamp(B + (e.clientY - ly) * 0.006, -0.6, 1.2);
+    A -= (e.clientX - lx) * 0.008;
+    B = U.clamp(B + (e.clientY - ly) * 0.006, -1.3, 1.3);
     lx = e.clientX; ly = e.clientY;
   });
   ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) {
     cv.addEventListener(ev, function () { drag = false; cv.style.cursor = "grab"; });
   });
+
+  // 사방으로 퍼지는 빛줄기 방향 (구 위에 고르게)
+  var DIRS = [];
+  for (var i = 0; i < 46; i++) {
+    var yy = 1 - 2 * (i + 0.5) / 46, rr = Math.sqrt(1 - yy * yy), ph = i * 2.39996;
+    DIRS.push([rr * Math.cos(ph), yy, rr * Math.sin(ph), (i * 0.618) % 1]);
+  }
+
+  function frac(x) {   // 1/x² 를 분수 글자로
+    if (Math.abs(x - 1) < 0.02) return "1";
+    if (Math.abs(x - 2) < 0.02) return "¼";
+    if (Math.abs(x - 3) < 0.02) return "⅑";
+    return "1/" + (x * x).toFixed(1);
+  }
+  function num(v) { return Math.abs(v - Math.round(v)) < 0.05 ? String(Math.round(v)) : v.toFixed(1); }
 
   SU.loop(cv, function (dt, t) {
     var dT = parseFloat(sD.value) / 100;
@@ -276,88 +297,133 @@
     g.addColorStop(0, "#060b1e"); g.addColorStop(1, "#0b1128");
     ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
 
-    var cx = w * 0.5, cy = h * 0.46, FOV = Math.min(w, h * 1.8) * 0.70, CAM = 4.0;
+    var cx = w * 0.36, cy = h * 0.5, CAM = 10, FOV = Math.min(h * 2.1, w * 1.5);
+    var ca = Math.cos(A), sa = Math.sin(A), cb = Math.cos(B), sb = Math.sin(B);
     function pr(x, y, z) {
-      var X = x - 1.55;
-      var ca = Math.cos(A), sa = Math.sin(A);
-      var x1 = X * ca + z * sa, z1 = -X * sa + z * ca;
-      var cb = Math.cos(B), sb = Math.sin(B);
+      var x1 = x * ca + z * sa, z1 = -x * sa + z * ca;
       var y1 = y * cb - z1 * sb, z2 = y * sb + z1 * cb;
       var zz = z2 + CAM;
-      return [cx + x1 * FOV / zz, cy - y1 * FOV / zz, zz];
+      return [cx + x1 * FOV / zz, cy - y1 * FOV / zz, z2];
     }
+    function sp(d, u, v) { var n = d / Math.sqrt(1 + u * u + v * v); return [n, u * n, v * n]; }
+    function P(q) { return pr(q[0], q[1], q[2]); }
 
-    // 빔 모서리
-    ctx.strokeStyle = "rgba(255,225,150,.30)"; ctx.lineWidth = 1.2;
-    [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(function (c) {
-      var p0 = pr(0, 0, 0), p1 = pr(3.25, c[0] * HS * 3.25, c[1] * HS * 3.25);
-      ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
-    });
+    var R = dNow, o = pr(0, 0, 0);
 
-    // 기준 패널 (1, 2, 3배)
-    function panel(d, n, alpha, hi) {
-      var s = HS * d;
-      var pts = [pr(d, s, s), pr(d, s, -s), pr(d, -s, -s), pr(d, -s, s)];
-      var bright = 1 / (d * d);
-      // 격자 칸
-      if (showGrid) {
-        for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) {
-          var y0 = s - (2 * s) * i / n, y1 = s - (2 * s) * (i + 1) / n;
-          var z0 = -s + (2 * s) * j / n, z1 = -s + (2 * s) * (j + 1) / n;
-          var q = [pr(d, y0, z0), pr(d, y0, z1), pr(d, y1, z1), pr(d, y1, z0)];
-          ctx.beginPath(); ctx.moveTo(q[0][0], q[0][1]);
-          for (var k = 1; k < 4; k++) ctx.lineTo(q[k][0], q[k][1]);
-          ctx.closePath();
-          ctx.fillStyle = "rgba(255,226,150," + (bright * 0.78 * alpha) + ")";
-          ctx.fill();
-          ctx.strokeStyle = "rgba(255,226,150," + 0.35 * alpha + ")"; ctx.lineWidth = 1; ctx.stroke();
-        }
-      } else {
-        ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
-        for (var k = 1; k < 4; k++) ctx.lineTo(pts[k][0], pts[k][1]);
-        ctx.closePath();
-        ctx.fillStyle = "rgba(255,226,150," + (bright * 0.78 * alpha) + ")"; ctx.fill();
-        ctx.strokeStyle = "rgba(255,226,150," + 0.4 * alpha + ")"; ctx.lineWidth = 1; ctx.stroke();
+    // 구 윤곽 (반투명 유리구)
+    var pR = R * FOV / Math.sqrt(CAM * CAM - R * R);
+    var sg = ctx.createRadialGradient(o[0] - pR * 0.3, o[1] - pR * 0.35, pR * 0.1, o[0], o[1], pR);
+    sg.addColorStop(0, "rgba(126,170,255,.10)"); sg.addColorStop(1, "rgba(126,170,255,.03)");
+    ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(o[0], o[1], pR, 0, 6.2832); ctx.fill();
+
+    // 구의 위도·경도선 — 뒤쪽(front=false) / 앞쪽(front=true)
+    function wire(r, front, a) {
+      var N = 64, k, j, lat, lon, prev;
+      function seg(p, q) {
+        if (((p[2] + q[2]) / 2 < 0) !== front) return;
+        ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]);
       }
-      // 테두리
-      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
-      for (var k = 1; k < 4; k++) ctx.lineTo(pts[k][0], pts[k][1]);
-      ctx.closePath();
-      ctx.strokeStyle = hi ? "rgba(126,240,200,.95)" : "rgba(255,255,255," + 0.22 * alpha + ")";
-      ctx.lineWidth = hi ? 2.4 : 1; ctx.stroke();
-      return pts;
+      ctx.beginPath();
+      for (j = -2; j <= 2; j++) {              // 위도선
+        lat = j * Math.PI / 6; prev = null;
+        var y0 = r * Math.sin(lat), cr = r * Math.cos(lat);
+        for (k = 0; k <= N; k++) {
+          lon = k / N * 6.2832;
+          var p = pr(cr * Math.cos(lon), y0, cr * Math.sin(lon));
+          if (prev) seg(prev, p); prev = p;
+        }
+      }
+      for (j = 0; j < 12; j++) {               // 경도선
+        lon = j * Math.PI / 6; prev = null;
+        for (k = 0; k <= N / 2; k++) {
+          lat = -Math.PI / 2 + k / (N / 2) * Math.PI;
+          var q = pr(r * Math.cos(lat) * Math.cos(lon), r * Math.sin(lat), r * Math.cos(lat) * Math.sin(lon));
+          if (prev) seg(prev, q); prev = q;
+        }
+      }
+      ctx.strokeStyle = "rgba(150,190,255," + a + ")"; ctx.lineWidth = front ? 1.3 : 1; ctx.stroke();
+    }
+    wire(R, false, 0.16);
+
+    // 사방으로 퍼져 나가는 빛 (광원 → 구 표면)
+    for (var i = 0; i < DIRS.length; i++) {
+      var D = DIRS[i], e = pr(D[0] * R, D[1] * R, D[2] * R);
+      ctx.strokeStyle = "rgba(255,220,140,.10)"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(o[0], o[1]); ctx.lineTo(e[0], e[1]); ctx.stroke();
+      var f = (t * 0.35 + D[3]) % 1, m = pr(D[0] * R * f, D[1] * R * f, D[2] * R * f);
+      ctx.fillStyle = "rgba(255,226,150," + (0.85 * (1 - f * 0.6)) + ")";
+      ctx.beginPath(); ctx.arc(m[0], m[1], 3, 0, 6.2832); ctx.fill();
     }
 
-    // 뒤쪽부터
-    panel(3, 3, 0.55, false);
-    panel(2, 2, 0.7, false);
-    panel(1, 1, 0.9, false);
-
-    // 움직이는 패널
-    var mv = panel(dNow, Math.max(1, Math.round(dNow)), 1, true);
+    // 구 표면의 조각 (거리 1·2·3배 + 움직이는 조각)
+    function poly(d, u0, v0, u1, v1) {
+      var S = 4, pts = [], k;
+      for (k = 0; k < S; k++) pts.push(P(sp(d, u0 + (u1 - u0) * k / S, v0)));
+      for (k = 0; k < S; k++) pts.push(P(sp(d, u1, v0 + (v1 - v0) * k / S)));
+      for (k = 0; k < S; k++) pts.push(P(sp(d, u1 - (u1 - u0) * k / S, v1)));
+      for (k = 0; k < S; k++) pts.push(P(sp(d, u0, v1 - (v1 - v0) * k / S)));
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+      for (k = 1; k < pts.length; k++) ctx.lineTo(pts[k][0], pts[k][1]);
+      ctx.closePath();
+    }
+    function patch(d, n, alpha, hi) {
+      var bright = 1 / (d * d), cells = showGrid ? n : 1;
+      for (var a = 0; a < cells; a++) for (var b = 0; b < cells; b++) {
+        var u0 = -HS + 2 * HS * a / cells, u1 = -HS + 2 * HS * (a + 1) / cells;
+        var v0 = -HS + 2 * HS * b / cells, v1 = -HS + 2 * HS * (b + 1) / cells;
+        poly(d, u0, v0, u1, v1);
+        ctx.fillStyle = "rgba(255,226,150," + (bright * 0.8 * alpha) + ")"; ctx.fill();
+        ctx.strokeStyle = "rgba(255,226,150," + 0.38 * alpha + ")"; ctx.lineWidth = 1; ctx.stroke();
+      }
+      poly(d, -HS, -HS, HS, HS);
+      ctx.strokeStyle = hi ? "rgba(126,240,200,.95)" : "rgba(255,255,255," + 0.25 * alpha + ")";
+      ctx.lineWidth = hi ? 3.2 : 1.3; ctx.stroke();
+    }
+    // 조각을 감싸는 빛 다발 모서리
+    ctx.strokeStyle = "rgba(255,225,150,.32)"; ctx.lineWidth = 1.2;
+    [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(function (c) {
+      var p1 = P(sp(3.15, c[0] * HS, c[1] * HS));
+      ctx.beginPath(); ctx.moveTo(o[0], o[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
+    });
+    var list = [{ d: 1, n: 1, a: 0.85 }, { d: 2, n: 2, a: 0.65 }, { d: 3, n: 3, a: 0.5 },
+                { d: dNow, n: Math.max(1, Math.round(dNow)), a: 1, hi: true }];
+    list.forEach(function (it) { it.z = P(sp(it.d, 0, 0))[2] - (it.hi ? 0.001 : 0); });
+    list.sort(function (p, q) { return q.z - p.z; });
+    list.forEach(function (it) { patch(it.d, it.n, it.a, it.hi); });
 
     // 광원
-    var p0 = pr(0, 0, 0);
-    U.glow(ctx, p0[0], p0[1], 44, "rgba(255,210,110,1)", 1);
-    ctx.fillStyle = "#fff6d8"; ctx.beginPath(); ctx.arc(p0[0], p0[1], 7, 0, 6.2832); ctx.fill();
-    U.label(ctx, p0[0], p0[1] + 34, "광원", "#ffd166", 13);
+    U.glow(ctx, o[0], o[1], 58, "rgba(255,210,110,1)", 1);
+    ctx.fillStyle = "#fff6d8"; ctx.beginPath(); ctx.arc(o[0], o[1], 9, 0, 6.2832); ctx.fill();
 
-    // 거리 라벨
+    // 반지름 r
+    var rd = [-0.62, 0.55, -0.56], rn = Math.hypot(rd[0], rd[1], rd[2]);
+    var re = pr(rd[0] / rn * R, rd[1] / rn * R, rd[2] / rn * R);
+    ctx.setLineDash([8, 6]); ctx.strokeStyle = "rgba(126,240,200,.9)"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(o[0], o[1]); ctx.lineTo(re[0], re[1]); ctx.stroke(); ctx.setLineDash([]);
+    U.label(ctx, (o[0] + re[0]) / 2 - 26, (o[1] + re[1]) / 2 - 14, "r", "#7ef0c8", 32, "center", 800);
+
+    wire(R, true, 0.42);
+    ctx.strokeStyle = "rgba(150,190,255,.55)"; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.arc(o[0], o[1], pR, 0, 6.2832); ctx.stroke();
+
+    U.label(ctx, o[0], o[1] + 50, "광원(별)", "#ffd166", 24, "center", 800);
+    U.chip(ctx, o[0], Math.max(30, o[1] - pR - 30), "구의 겉넓이 = 4πr²", "rgba(150,190,255,.95)", 23);
+
+    // 거리·밝기 이름표 (조각 위아래)
     [1, 2, 3].forEach(function (d) {
-      var q = pr(d, -HS * d - 0.17, 0);
-      U.label(ctx, q[0], q[1], d + "배", "rgba(166,176,212,.85)", 12);
-      var b = pr(d, HS * d + 0.10 + d * 0.24, 0);
-      U.chip(ctx, b[0], b[1], d === 1 ? "밝기 1배" : (d === 2 ? "밝기 ¼배" : "밝기 ⅑배"), "rgba(255,226,150,.9)", 11);
+      var top = P(sp(d, HS, 0)), bot = P(sp(d, -HS, 0));
+      var up = top[1] < bot[1] ? top : bot, dn = top[1] < bot[1] ? bot : top;
+      U.label(ctx, dn[0], dn[1] + 30, d + "배", "rgba(186,196,232,.95)", 23, "center", 800);
+      U.chip(ctx, up[0], up[1] - 30, "밝기 " + frac(d), "rgba(255,226,150,.95)", 21);
     });
 
-    var dd = dNow;
+    var dd = dNow, br = 1 / (dd * dd);
     vD.textContent = dd.toFixed(1) + "배";
     r1.textContent = dd.toFixed(1) + "배";
-    r2.textContent = (dd * dd).toFixed(1) + "배";
-    var br = 1 / (dd * dd);
-    r3.textContent = br >= 0.995 ? "1배" : ("1/" + (1 / br).toFixed(1) + "배");
-    r4.textContent = dd < 1.1 ? "거리가 1배일 때의 밝기입니다."
-      : "거리가 " + dd.toFixed(1) + "배 → 넓이 " + (dd * dd).toFixed(1) + "배 → 밝기는 " + (100 * br).toFixed(0) + "%로 줄어듭니다.";
+    r2.textContent = num(4 * dd * dd) + "π";
+    r3.textContent = br >= 0.995 ? "1배" : (frac(dd) + "배");
+    r4.textContent = dd < 1.05 ? "r = 1일 때 구의 겉넓이는 4π, 이때의 밝기를 1로 봅니다."
+      : "r이 " + num(dd) + "배 → 겉넓이 " + num(dd * dd) + "배 → 같은 빛이 넓게 퍼져 밝기 " + frac(dd) + "배";
   });
 })();
 

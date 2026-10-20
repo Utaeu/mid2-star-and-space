@@ -621,3 +621,23 @@ html.presenting .pres-bar:hover { opacity: 1; }
   html.presenting main.wrap { padding: 20px 14px 100px; }
   .pres-dots, .pres-sep, .pres-bar [data-k="theme"], .pres-bar [data-k="full"] { display: none !important; }
 }
+
+/* 1-02 공식 상자 (밝기 = 빛의 세기 / 4πr²) */
+.formula { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.6em;
+  margin: 0.6rem 0; padding: 0.6em 1em; border: 1px solid rgba(255,209,102,.35); border-radius: 12px;
+  background: rgba(255,209,102,.06); font-size: 1.7rem; font-weight: 800; color: var(--txt); }
+.formula .f-eq { color: var(--accent-2); }
+.formula .frac { display: inline-flex; flex-direction: column; align-items: center; text-align: center; }
+.formula .frac > span { padding: 0.1em 0.6em; }
+.formula .f-num { border-bottom: 2px solid currentColor; }
+.formula b { color: var(--accent-2); }
+/* 캔버스와 공식 상자를 좌우로 (좁은 화면에서는 위아래) */
+.sim-row { display: flex; align-items: center; gap: 1rem; }
+.sim-row .sim-stage { flex: 1 1 0; min-width: 0; }
+.sim-row .formula { flex: 0 0 30%; flex-direction: column; gap: 0.5em; margin: 0 0.8rem 0 0; padding: 1em 0.6em; font-size: 1.5rem; }
+.sim-row .formula > span, .sim-row .formula .frac > span { white-space: nowrap; }
+.sim-row .formula .f-eq { font-size: 1.3em; line-height: 1; }
+@media (max-width: 900px) {
+  .sim-row { flex-direction: column; align-items: stretch; }
+  .sim-row .formula { flex: none; flex-direction: row; margin: 0.6rem 0; font-size: 1.3rem; }
+}
