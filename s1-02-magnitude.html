@@ -400,7 +400,7 @@
     var re = pr(rd[0] / rn * R, rd[1] / rn * R, rd[2] / rn * R);
     ctx.setLineDash([8, 6]); ctx.strokeStyle = "rgba(126,240,200,.9)"; ctx.lineWidth = 3;
     ctx.beginPath(); ctx.moveTo(o[0], o[1]); ctx.lineTo(re[0], re[1]); ctx.stroke(); ctx.setLineDash([]);
-    U.label(ctx, (o[0] + re[0]) / 2 - 26, (o[1] + re[1]) / 2 - 14, "r", "#7ef0c8", 32, "center", 800);
+    U.label(ctx, (o[0] + re[0]) / 2 - 22, (o[1] + re[1]) / 2 + 8, "r = " + R.toFixed(1) + "배", "#7ef0c8", 28, "right", 800);
 
     wire(R, true, 0.42);
     ctx.strokeStyle = "rgba(150,190,255,.55)"; ctx.lineWidth = 1.4;
