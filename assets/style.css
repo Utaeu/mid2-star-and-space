@@ -265,6 +265,7 @@ h3.mini {
   box-shadow: var(--shadow);
 }
 .card + .card { margin-top: 16px; }
+.grid > .card + .card { margin-top: 0; }   /* 격자 안 카드는 높이를 맞춘다 */
 .card h3 { margin: 0 0 10px; font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
 .card p:last-child { margin-bottom: 0; }
 
