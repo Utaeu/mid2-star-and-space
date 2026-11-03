@@ -84,21 +84,43 @@
       </div>
     </div>
 
-    <div class="grid g2" style="margin-top:18px">
-      <figure class="fig">
-        <img src="img/milkyway_model.jpg" alt="위에서 본 우리은하와 옆에서 본 우리은하 모식도">
-        <figcaption><b>| 그림 10 |</b> 위에서 본 모습(위) · 옆에서 본 모습(아래)</figcaption>
-      </figure>
-      <div class="key">
-        <ul>
-          <li>지름 약 <b>30000 pc</b></li>
-          <li>태양계 : 중심에서 약 <b>8500 pc</b>, 나선팔의 원반 면</li>
-        </ul>
-        <div class="teacher-note">
-          <span class="tlabel">지도상의 유의점</span>
-          우리은하의 크기는 <b>은하가 얼마나 큰지에 대한 인식을 가지는 데 초점</b>을 맞추고, 지나치게 수치를 암기하지 않도록 지도한다.
-          우리은하의 구조는 위에서 본 모습과 옆에서 본 모습을 각각 이해하도록 지도한다.
+    <figure class="fig" id="mwFig" style="margin-top:18px">
+      <div class="grid g2">
+        <div class="diam-wrap">
+          <img src="img/milkyway_top.jpg" alt="위에서 본 우리은하 모식도">
+          <!-- 지름 표시: 좌표는 이미지 픽셀(730×630) 기준 -->
+          <svg class="diam-ov" viewBox="0 0 730 630" aria-hidden="true">
+            <defs><marker id="mwHead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#ffd166"/></marker></defs>
+            <line x1="100" y1="270" x2="100" y2="370" class="tick"/><line x1="632" y1="270" x2="632" y2="370" class="tick"/>
+            <line x1="104" y1="320" x2="628" y2="320" class="arw" marker-start="url(#mwHead)" marker-end="url(#mwHead)"/>
+            <text x="366" y="612">지름 약 30000 pc</text>
+          </svg>
+          <div class="diam-cap">위에서 본 모습</div>
         </div>
+        <div class="diam-wrap">
+          <img src="img/milkyway_side.jpg" alt="옆에서 본 우리은하 모식도">
+          <svg class="diam-ov" viewBox="0 0 730 630" aria-hidden="true">
+            <line x1="100" y1="293" x2="100" y2="440" class="tick"/><line x1="632" y1="293" x2="632" y2="440" class="tick"/>
+            <line x1="104" y1="425" x2="628" y2="425" class="arw" marker-start="url(#mwHead)" marker-end="url(#mwHead)"/>
+            <text x="366" y="487">지름 약 30000 pc</text>
+          </svg>
+          <div class="diam-cap">옆에서 본 모습</div>
+        </div>
+      </div>
+      <figcaption><b>| 그림 10 |</b> 위에서 본 모습(왼쪽) · 옆에서 본 모습(오른쪽)</figcaption>
+      <div style="text-align:center; margin-top:8px"><button class="btn amber" id="mwDiam">은하 지름 보기</button></div>
+    </figure>
+
+    <div class="key">
+      <ul>
+        <li>지름 약 <b>30000 pc</b></li>
+        <li>태양계 : 중심에서 약 <b>8500 pc</b>, 나선팔의 원반 면</li>
+      </ul>
+      <div class="teacher-note">
+        <span class="tlabel">지도상의 유의점</span>
+        우리은하의 크기는 <b>은하가 얼마나 큰지에 대한 인식을 가지는 데 초점</b>을 맞추고, 지나치게 수치를 암기하지 않도록 지도한다.
+        우리은하의 구조는 위에서 본 모습과 옆에서 본 모습을 각각 이해하도록 지도한다.
       </div>
     </div>
 
@@ -275,6 +297,15 @@
 
 <script src="assets/common.js"></script>
 <script>
+/* 그림 10 — 은하 지름 표시 켜고 끄기 */
+(function () {
+  var fig = document.getElementById("mwFig"), b = document.getElementById("mwDiam");
+  b.onclick = function () {
+    var on = fig.classList.toggle("show-diam");
+    b.classList.toggle("on", on); b.textContent = on ? "은하 지름 숨기기" : "은하 지름 보기";
+  };
+})();
+
 /* =========================================================
    우리은하 입자 모형 (3D 보기 · 은하수 파노라마 공용)
    ========================================================= */
@@ -436,10 +467,6 @@ var GAL = (function () {
 
       // 크기 표시
       if (pitch > 0.75) {
-        var e1 = proj(-1.0, 0, 0), e2 = proj(1.0, 0, 0);
-        U.arrow(ctx, e1[0], h - 36, e2[0], h - 36, "rgba(255,255,255,.55)", 1.4, 7);
-        U.arrow(ctx, e2[0], h - 36, e1[0], h - 36, "rgba(255,255,255,.55)", 1.4, 7);
-        U.label(ctx, (e1[0] + e2[0]) / 2, h - 50, "약 30000 pc", "rgba(255,255,255,.9)", 13);
         ctx.strokeStyle = "rgba(126,240,200,.75)"; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.4;
         ctx.beginPath(); ctx.moveTo(pc0[0], pc0[1]); ctx.lineTo(ps[0], ps[1]); ctx.stroke(); ctx.setLineDash([]);
         U.label(ctx, (pc0[0] + ps[0]) / 2, (pc0[1] + ps[1]) / 2 - 12, "약 8500 pc", "rgba(126,240,200,.95)", 12);
