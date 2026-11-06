@@ -59,7 +59,7 @@
     <div class="sim">
       <div class="sim-head">
         <h4>풍선 모형 — 직접 불어 보기</h4>
-        <span class="hint">풍선 표면 = 우주 공간 · 붙임딱지 = 은하</span>
+        <span class="hint">풍선 표면 = 우주 공간 · 붙임딱지 = 은하 · 좌우로 끌어서 돌리기</span>
       </div>
       <canvas id="cvBalloon"></canvas>
       <div class="sim-controls">
@@ -67,6 +67,7 @@
           <input type="range" id="blS" min="0" max="100" value="0">
           <span class="val" id="blV">작게</span></label>
         <button class="btn on" id="blAuto">자동으로 불기 ▶</button>
+        <button class="btn" id="blReset">처음 각도</button>
         <span class="ctl" style="gap:6px">기준 은하
           <button class="btn amber on" data-ref="0">1번</button>
           <button class="btn amber" data-ref="1">2번</button>
@@ -260,13 +261,16 @@
 
   /* 붙임딱지: 구면 좌표 (theta=극각, phi=방위각) */
   var FR = Math.PI / 2;                 // 정면(관측자 쪽)을 향하는 방위각
+  /* 1·2·3 은 적도(대원 = 구면 위의 직선) 위에 왼쪽부터 차례로 붙인다.
+     방위각이 클수록 화면 왼쪽. 1↔2 = 0.45 rad, 1↔3 = 0.90 rad → 처음 2 cm / 4 cm */
+  var EQ = Math.PI / 2;
   var DOTS = [
-    { th: 1.25, ph: FR, n: "1" },
-    { th: 1.25, ph: FR + 0.4744, n: "2" },   // 1에서 0.45 rad 떨어짐
-    { th: 2.15, ph: FR, n: "3" },            // 1에서 0.90 rad 떨어짐 (2배)
+    { th: EQ, ph: FR + 0.45, n: "1" },
+    { th: EQ, ph: FR,        n: "2" },
+    { th: EQ, ph: FR - 0.45, n: "3" },
     { th: 0.72, ph: 0.95, n: "" }, { th: 1.90, ph: 0.30, n: "" },
     { th: 0.95, ph: -1.25, n: "" }, { th: 2.05, ph: -0.85, n: "" },
-    { th: 1.55, ph: 2.10, n: "" }, { th: 0.55, ph: -2.4, n: "" },
+    { th: 0.80, ph: 2.25, n: "" }, { th: 0.55, ph: -2.4, n: "" },
     { th: 2.35, ph: 1.50, n: "" }, { th: 1.10, ph: 2.85, n: "" },
     { th: 1.95, ph: -2.2, n: "" }
   ];
@@ -279,6 +283,22 @@
     return Math.acos(U.clamp(dot, -1, 1));
   }
   var K = 2.0 / angBetween(DOTS[0], DOTS[1]);   // 처음 1↔2 가 2.0 cm가 되도록
+
+  /* 좌우로 끌어서 돌리기 (자동 회전 없음) */
+  var spin = 0, drag = null;
+  cv.style.cursor = "grab"; cv.style.touchAction = "pan-y";
+  cv.addEventListener("pointerdown", function (e) {
+    drag = { x: e.clientX, s: spin }; cv.style.cursor = "grabbing";
+    try { cv.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  cv.addEventListener("pointermove", function (e) {
+    if (!drag) return;
+    spin = drag.s + (e.clientX - drag.x) * 0.008;   // 오른쪽으로 끌면 풍선 앞면이 오른쪽으로
+  });
+  function endDrag() { drag = null; cv.style.cursor = "grab"; }
+  cv.addEventListener("pointerup", endDrag);
+  cv.addEventListener("pointercancel", endDrag);
+  document.getElementById("blReset").onclick = function () { spin = 0; };
 
   SU.loop(cv, function (dt, t) {
     if (auto) {
@@ -297,7 +317,6 @@
 
     var cx = w * 0.40, cy = h * 0.50;
     var R = Math.min(w * 0.17, h * 0.30) * scale;
-    var spin = 0.42 * Math.sin(t * 0.22);   // 번호 붙임딱지가 계속 보이도록 좌우로만 흔든다
 
     // 풍선 몸체
     var gg = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.38, R * 0.1, cx, cy, R);
@@ -323,6 +342,18 @@
       return { x: cx + x * R, y: cy - p[1] * R, z: z };
     }
 
+    // 붙임딱지를 붙인 직선(적도 대원) — 앞면만 옅은 점선
+    ctx.save();
+    ctx.strokeStyle = "rgba(255,255,255,.35)"; ctx.lineWidth = 1.5; ctx.setLineDash([6, 6]);
+    ctx.beginPath();
+    var started = false;
+    for (var q = 0; q <= 72; q++) {
+      var pq = pr({ th: EQ, ph: q / 72 * 6.2832 });
+      if (pq.z > 0) { if (!started) { ctx.moveTo(pq.x, pq.y); started = true; } else ctx.lineTo(pq.x, pq.y); }
+      else started = false;
+    }
+    ctx.stroke(); ctx.restore();
+
     // 붙임딱지
     var pts = DOTS.map(pr);
     DOTS.forEach(function (d, i) {
@@ -341,22 +372,29 @@
     });
 
     // 기준 은하에서의 호(거리) 표시
-    function arc(i, j, col) {
+    // 세 딱지가 한 직선 위에 있어 호가 겹치므로 위(off<0)·아래(off>0)로 띄워 그린다
+    function arc(i, j, col, off) {
       var A = toXYZ(DOTS[i]), B = toXYZ(DOTS[j]);
-      ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath();
+      var tk = off < 0 ? 7 : -7, on = false;   // 뒷면으로 넘어간 부분은 그리지 않는다
+      ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.beginPath();
       for (var s = 0; s <= 24; s++) {
         var u = s / 24;
         var x = A[0] + (B[0] - A[0]) * u, y = A[1] + (B[1] - A[1]) * u, z = A[2] + (B[2] - A[2]) * u;
         var L = Math.sqrt(x * x + y * y + z * z); x /= L; y /= L; z /= L;
         var xr = x * Math.cos(spin) + z * Math.sin(spin);
-        var px = cx + xr * R, py = cy - y * R;
-        if (s === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        var zr = -x * Math.sin(spin) + z * Math.cos(spin);
+        var px = cx + xr * R, py = cy - y * R + off;
+        if (zr <= 0) { on = false; continue; }
+        if (!on) { ctx.moveTo(px, py); on = true; } else ctx.lineTo(px, py);
+        if (s === 0 || s === 24) {            // 양 끝 눈금(딱지 쪽으로)
+          ctx.moveTo(px, py); ctx.lineTo(px, py + tk); ctx.moveTo(px, py);
+        }
       }
       ctx.stroke();
     }
     var others = [0, 1, 2].filter(function (i) { return i !== ref; });
-    arc(ref, others[0], "rgba(126,240,200,.9)");
-    arc(ref, others[1], "rgba(255,209,102,.9)");
+    arc(ref, others[0], "rgba(126,240,200,.9)", -20);
+    arc(ref, others[1], "rgba(255,209,102,.9)", 20);
 
     // 오른쪽 그래프 (거리 변화)
     var gx = w * 0.66, gy = h * 0.18, gw = w * 0.30, gh = h * 0.62;
