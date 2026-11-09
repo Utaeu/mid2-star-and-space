@@ -98,6 +98,50 @@
     </div>
   </section>
 
+  <!-- 공간이 늘어난다 -->
+  <section class="block" id="stretch">
+    <h2 class="sec"><span class="num">개념 1-2</span> 공간 자체가 늘어난다</h2>
+    <p class="sec-sub">공간 <span class="kw">한 칸 한 칸</span>이 똑같이 늘어난다 → 칸이 <span class="kw">많을수록</span>(멀수록) 더 많이 늘어난다</p>
+
+    <div class="sim">
+      <div class="sim-head">
+        <h4>공간 늘이기 — 입자 사이 간격이 모두 늘어난다면?</h4>
+        <span class="hint">은하 사이 공간에 입자가 일정한 간격으로 있다고 생각해 보자</span>
+      </div>
+      <canvas id="cvStretch"></canvas>
+      <div class="sim-controls">
+        <label class="ctl">공간 늘이기
+          <input type="range" id="stS" min="0" max="100" value="0">
+          <span class="val" id="stV">처음</span></label>
+        <button class="btn" id="stAuto">자동으로 늘이기 ▶</button>
+      </div>
+      <div class="readout">
+        <div class="stat"><div class="k">입자 사이 간격 (모두 같음)</div><div class="v" id="stGap">0.20 cm</div></div>
+        <div class="stat"><div class="k">입자 10개 구간</div><div class="v" id="stA">2.0 cm</div></div>
+        <div class="stat amber"><div class="k">입자 15개 구간</div><div class="v" id="stB">3.0 cm</div></div>
+        <div class="stat warm" style="flex:1; min-width:280px"><div class="k">관찰</div>
+          <div class="v" id="stMsg" style="font-size:.93rem; color:var(--txt); font-weight:700; line-height:1.5">
+            공간을 늘여 보세요. 두 구간은 각각 얼마나 늘어날까요?</div></div>
+      </div>
+    </div>
+
+    <div class="key" style="margin-top:18px">
+      <ul>
+        <li>입자 사이 간격은 <b>모두 똑같이</b> 늘어난다 (0.2 cm → 0.3 cm)</li>
+        <li>입자 10개 : 2 cm → <b>3 cm</b> (+1 cm) · 입자 15개 : 3 cm → <b>4.5 cm</b> (+1.5 cm)</li>
+        <li>공간이 클수록(멀리 있을수록) <b>더 많이</b> 멀어진다</li>
+      </ul>
+    </div>
+
+    <div class="teacher-note">
+      <span class="tlabel">지도 안내</span>
+      은하가 스스로 움직이는 것이 아니라 <b>은하 사이의 공간 자체가 늘어난다</b>는 것을 보여 주는 모형이다.
+      공간을 일정한 간격의 입자로 나누어 생각하면, 각 간격이 같은 비율로 늘어날 때
+      간격의 개수가 많은(먼) 구간일수록 늘어난 길이의 합이 커진다.
+      풍선 모형의 ‘2 cm → 3 cm, 4 cm → 6 cm’ 결과와 연결해 설명한다. 입자는 설명을 위한 가정이며 실제 물질이 아님을 짚어 준다.
+    </div>
+  </section>
+
   <!-- 팽창하는 우주 -->
   <section class="block" id="expand">
     <h2 class="sec"><span class="num">개념 2</span> 우주에는 중심이 없다 <span class="qq">교과서 299쪽</span></h2>
@@ -425,6 +469,128 @@
     msg.textContent = grow < 0.1
       ? "풍선을 불어 보세요. 붙임딱지 사이의 거리가 어떻게 변할까요?"
       : "어느 붙임딱지를 기준으로 보아도 다른 붙임딱지는 모두 멀어집니다. 처음에 더 멀리 있던 것이 더 많이 멀어집니다.";
+  });
+})();
+
+/* =========================================================
+   1-2) 공간 자체가 늘어난다 (입자 사이 간격이 모두 늘어남)
+   ========================================================= */
+(function () {
+  var cv = document.getElementById("cvStretch");
+  var C = SU.Canvas(cv, 2.0), U = SU.U;
+  var sl = document.getElementById("stS"), vS = document.getElementById("stV");
+  var oGap = document.getElementById("stGap"), oA = document.getElementById("stA"), oB = document.getElementById("stB");
+  var msg = document.getElementById("stMsg"), bAuto = document.getElementById("stAuto");
+  var auto = false, dir = 1, grow = 0;
+  var GAP0 = 0.2, MAXS = 1.5;            // 처음 간격 0.2 cm, 최대 1.5배 (풍선 모형과 같은 비율)
+  var ROWS = [
+    { L0: 2, col: "126,240,200" },       // 입자 10개
+    { L0: 3, col: "255,209,102" }        // 입자 15개
+  ];
+
+  function stopAuto() { auto = false; bAuto.classList.remove("on"); bAuto.textContent = "자동으로 늘이기 ▶"; }
+  bAuto.onclick = function () {
+    auto = !auto; bAuto.classList.toggle("on", auto);
+    bAuto.textContent = auto ? "자동으로 늘이기 ⏸" : "자동으로 늘이기 ▶";
+  };
+  sl.addEventListener("input", stopAuto);
+
+  SU.loop(cv, function (dt, t) {
+    if (auto) {
+      grow += dir * dt * 0.3;
+      if (grow > 1) { grow = 1; dir = -1; }
+      if (grow < 0) { grow = 0; dir = 1; }
+      sl.value = grow * 100;
+    } else grow = U.approach(grow, parseFloat(sl.value) / 100, dt, 9);
+
+    var s = 1 + grow * (MAXS - 1);
+    var ctx = C.ctx, w = C.w, h = C.h;
+    ctx.clearRect(0, 0, w, h);
+    var bg = ctx.createLinearGradient(0, 0, 0, h);
+    bg.addColorStop(0, "#070c1e"); bg.addColorStop(1, "#0a1026");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+
+    var x0 = 64, ppc = (w - x0 - 64) / (3 * MAXS);   // 1 cm 당 화면 길이 (가장 긴 4.5 cm 가 꽉 차게)
+
+    ROWS.forEach(function (R, ri) {
+      var y = h * (ri === 0 ? 0.30 : 0.72);
+      var n = Math.round(R.L0 / GAP0), L = R.L0 * s;
+      var x1 = x0 + L * ppc, xOrig = x0 + R.L0 * ppc, cw = GAP0 * s * ppc;
+      var col = "rgba(" + R.col + ",.95)";
+
+      // 구간 이름
+      U.label(ctx, x0 - 18, y - 80, "처음 " + R.L0 + " cm · 입자 " + n + "개", col, 16, "left", 800);
+
+      // 눈금자 (1 cm 마다)
+      ctx.strokeStyle = "rgba(166,176,212,.45)"; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(x0, y + 24); ctx.lineTo(x0 + 3 * MAXS * ppc, y + 24);
+      for (var c = 0; c <= 4.5 + 1e-6; c += 0.5) {
+        var tx = x0 + c * ppc, big = Math.abs(c - Math.round(c)) < 1e-6;
+        ctx.moveTo(tx, y + 24); ctx.lineTo(tx, y + (big ? 34 : 29));
+      }
+      ctx.stroke();
+      for (var c2 = 0; c2 <= 4; c2++) U.label(ctx, x0 + c2 * ppc, y + 45, c2 + "", "rgba(166,176,212,.8)", 11);
+      U.label(ctx, x0 + 4.5 * ppc + 4, y + 45, "cm", "rgba(166,176,212,.8)", 11, "left");
+
+      // 처음 길이 (점선 윤곽)
+      ctx.save(); ctx.setLineDash([5, 5]);
+      ctx.strokeStyle = "rgba(255,255,255,.35)"; ctx.lineWidth = 1.5;
+      ctx.strokeRect(x0, y - 15, R.L0 * ppc, 30);
+      ctx.beginPath(); ctx.moveTo(xOrig, y - 22); ctx.lineTo(xOrig, y + 24); ctx.stroke();
+      ctx.restore();
+
+      // 공간 칸 (칸마다 입자 1개) — 모든 칸이 똑같이 늘어난다
+      for (var i = 0; i < n; i++) {
+        var cx = x0 + i * cw;
+        ctx.fillStyle = "rgba(" + R.col + "," + (i % 2 ? 0.10 : 0.22) + ")";
+        ctx.fillRect(cx, y - 15, cw, 30);
+      }
+      // 첫 칸 강조 (한 칸의 길이)
+      ctx.strokeStyle = "rgba(255,255,255,.9)"; ctx.lineWidth = 2;
+      ctx.strokeRect(x0, y - 15, cw, 30);
+      // 입자
+      for (var j = 0; j < n; j++) {
+        var px = x0 + (j + 0.5) * cw, py = y + Math.sin(t * 2.2 + j * 1.7) * 2.5;
+        ctx.fillStyle = "rgba(220,232,255,.95)";
+        ctx.beginPath(); ctx.arc(px, py, 5, 0, 6.2832); ctx.fill();
+      }
+      // 칸 경계 사이 작은 화살표 (늘어나는 중일 때)
+      if (grow > 0.03) {
+        for (var k = 0; k < n - 1; k++) {
+          var ax = x0 + (k + 0.5) * cw, bx = x0 + (k + 1.5) * cw;
+          ctx.strokeStyle = "rgba(255,255,255,.28)"; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(ax + 7, y); ctx.lineTo(bx - 7, y); ctx.stroke();
+        }
+      }
+
+      // 양 끝 은하
+      U.glow(ctx, x0, y, 22, "rgba(255,220,160,1)");
+      U.glow(ctx, x1, y, 22, "rgba(255,220,160,1)");
+      U.label(ctx, x0, y - 30, "은하", "rgba(255,230,190,.95)", 12);
+      U.label(ctx, x1, y - 30, "은하", "rgba(255,230,190,.95)", 12);
+
+      // 현재 거리 화살표
+      var ay = y - 52;
+      U.arrow(ctx, (x0 + x1) / 2, ay, x0 + 2, ay, col, 2, 9);
+      U.arrow(ctx, (x0 + x1) / 2, ay, x1 - 2, ay, col, 2, 9);
+      U.chip(ctx, (x0 + x1) / 2, ay, L.toFixed(1) + " cm", col, 14);
+
+      // 늘어난 길이
+      if (x1 - xOrig > 1) {
+        ctx.fillStyle = "rgba(" + R.col + ",.85)";
+        ctx.fillRect(xOrig, y + 56, x1 - xOrig, 7);
+        U.label(ctx, (xOrig + x1) / 2, y + 80, "늘어난 길이 +" + (L - R.L0).toFixed(1) + " cm", col, 15, "center", 800);
+      }
+    });
+
+    var gap = GAP0 * s;
+    vS.textContent = grow < 0.02 ? "처음" : s.toFixed(2) + "배";
+    oGap.textContent = gap.toFixed(2) + " cm";
+    oA.textContent = (2 * s).toFixed(1) + " cm (+" + (2 * s - 2).toFixed(1) + ")";
+    oB.textContent = (3 * s).toFixed(1) + " cm (+" + (3 * s - 3).toFixed(1) + ")";
+    msg.textContent = grow < 0.05
+      ? "공간을 늘여 보세요. 두 구간은 각각 얼마나 늘어날까요?"
+      : "입자 사이 간격은 모두 똑같이 " + gap.toFixed(2) + " cm 가 됩니다. 입자(공간)가 더 많은 구간이 더 많이 늘어납니다.";
   });
 })();
 
