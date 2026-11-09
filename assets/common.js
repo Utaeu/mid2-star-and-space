@@ -12,8 +12,7 @@
     { f: "s1-03-temperature.html", t: "1-03 별의 표면 온도와 색", s: "별의 색 · 표면 온도" },
     { f: "s2-01-galaxy.html", t: "2-01 우리은하", s: "우리은하 · 성단 · 성운" },
     { f: "s2-02-expansion.html", t: "2-02 팽창하는 우주", s: "외부 은하 · 우주 팽창" },
-    { f: "s2-03-exploration.html", t: "2-03 우주 탐사", s: "탐사 성과 · 일상 속 기술" },
-    { f: "review.html", t: "단원 정리·평가", s: "개념 정리 · 확인 문제" }
+    { f: "s2-03-exploration.html", t: "2-03 우주 탐사", s: "탐사 성과 · 일상 속 기술" }
   ];
 
   var here = location.pathname.split("/").pop() || "index.html";
